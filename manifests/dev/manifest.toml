@@ -1,0 +1,152 @@
+[world]
+kind = "WorldContract"
+class_hash = "0xf6f44afb3cacbcc01a371aff62c86ca9a45feba065424c99f7cd8637514d8f"
+original_class_hash = "0xf6f44afb3cacbcc01a371aff62c86ca9a45feba065424c99f7cd8637514d8f"
+abi = "manifests/dev/abis/deployments/dojo_world_world.json"
+address = "0x5366256f83748b6fcc73f74f2ad4a6d6c12bdde1f3df1910289de1ff8eaabd3"
+transaction_hash = "0x5b61b1e50f1174829c88d440431c2f0937f8f4cec0f683ab9fa39813d1d2ed0"
+block_number = 3
+seed = "shogun"
+name = "dojo::world::world"
+
+[world.metadata]
+profile_name = "dev"
+rpc_url = "http://localhost:5050/"
+
+[base]
+kind = "Class"
+class_hash = "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46"
+original_class_hash = "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46"
+name = "dojo::base::base"
+
+[[contracts]]
+kind = "DojoContract"
+address = "0x2d7bd1e60a00edb91cd1803edc0852726a58c027d1a202dd73c73b85d41d874"
+class_hash = "0x1a1d8792a68a3c04cab7ce3d828aa06d7b15bc6b703e8511a6b5b6354b585c2"
+original_class_hash = "0x1a1d8792a68a3c04cab7ce3d828aa06d7b15bc6b703e8511a6b5b6354b585c2"
+base_class_hash = "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46"
+abi = "manifests/dev/abis/deployments/contracts/shogun_systems_admin_admin.json"
+reads = []
+writes = []
+computed = []
+init_calldata = []
+name = "shogun::systems::admin::admin"
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x16263b8bd95226f03ae4c6e56706b11437448d33dea3450eb160fb8f4fe5dc9"
+original_class_hash = "0x16263b8bd95226f03ae4c6e56706b11437448d33dea3450eb160fb8f4fe5dc9"
+abi = "manifests/dev/abis/deployments/models/shogun_models_item_item.json"
+name = "shogun::models::item::item"
+
+[[models.members]]
+name = "id"
+type = "usize"
+key = true
+
+[[models.members]]
+name = "name"
+type = "felt252"
+key = false
+
+[[models.members]]
+name = "itemType"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "width"
+type = "usize"
+key = false
+
+[[models.members]]
+name = "height"
+type = "usize"
+key = false
+
+[[models.members]]
+name = "price"
+type = "usize"
+key = false
+
+[[models.members]]
+name = "damage"
+type = "usize"
+key = false
+
+[[models.members]]
+name = "cleansePoison"
+type = "usize"
+key = false
+
+[[models.members]]
+name = "chance"
+type = "usize"
+key = false
+
+[[models.members]]
+name = "cooldown"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "rarity"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "armor"
+type = "usize"
+key = false
+
+[[models.members]]
+name = "armorActivation"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "regen"
+type = "usize"
+key = false
+
+[[models.members]]
+name = "regenActivation"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "reflect"
+type = "usize"
+key = false
+
+[[models.members]]
+name = "reflectActivation"
+type = "u8"
+key = false
+
+[[models.members]]
+name = "poison"
+type = "usize"
+key = false
+
+[[models.members]]
+name = "poisonActivation"
+type = "u8"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x22e5af7e15be3be04e4fb97d7feb758158846c379ff41efc20d10fc71a26313"
+original_class_hash = "0x22e5af7e15be3be04e4fb97d7feb758158846c379ff41efc20d10fc71a26313"
+abi = "manifests/dev/abis/deployments/models/shogun_models_item_items_counter.json"
+name = "shogun::models::item::items_counter"
+
+[[models.members]]
+name = "id"
+type = "felt252"
+key = true
+
+[[models.members]]
+name = "count"
+type = "usize"
+key = false
