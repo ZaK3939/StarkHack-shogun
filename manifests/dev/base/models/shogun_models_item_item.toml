@@ -1,0 +1,100 @@
+kind = "DojoModel"
+class_hash = "0x16263b8bd95226f03ae4c6e56706b11437448d33dea3450eb160fb8f4fe5dc9"
+original_class_hash = "0x16263b8bd95226f03ae4c6e56706b11437448d33dea3450eb160fb8f4fe5dc9"
+abi = "manifests/dev/abis/base/models/shogun_models_item_item.json"
+name = "shogun::models::item::item"
+
+[[members]]
+name = "id"
+type = "usize"
+key = true
+
+[[members]]
+name = "name"
+type = "felt252"
+key = false
+
+[[members]]
+name = "itemType"
+type = "u8"
+key = false
+
+[[members]]
+name = "width"
+type = "usize"
+key = false
+
+[[members]]
+name = "height"
+type = "usize"
+key = false
+
+[[members]]
+name = "price"
+type = "usize"
+key = false
+
+[[members]]
+name = "damage"
+type = "usize"
+key = false
+
+[[members]]
+name = "cleansePoison"
+type = "usize"
+key = false
+
+[[members]]
+name = "chance"
+type = "usize"
+key = false
+
+[[members]]
+name = "cooldown"
+type = "u8"
+key = false
+
+[[members]]
+name = "rarity"
+type = "u8"
+key = false
+
+[[members]]
+name = "armor"
+type = "usize"
+key = false
+
+[[members]]
+name = "armorActivation"
+type = "u8"
+key = false
+
+[[members]]
+name = "regen"
+type = "usize"
+key = false
+
+[[members]]
+name = "regenActivation"
+type = "u8"
+key = false
+
+[[members]]
+name = "reflect"
+type = "usize"
+key = false
+
+[[members]]
+name = "reflectActivation"
+type = "u8"
+key = false
+
+[[members]]
+name = "poison"
+type = "usize"
+key = false
+
+[[members]]
+name = "poisonActivation"
+type = "u8"
+key = false

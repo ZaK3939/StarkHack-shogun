@@ -1,0 +1,42 @@
+use core::traits::Into;
+use core::box::BoxTrait;
+
+fn pseudo_seed() -> (u128, u128, u128, u128, u128, u128) {
+    let txinfo = starknet::get_tx_info().unbox();
+    
+    let tx: u256  = txinfo.transaction_hash.into();
+    let blockInfo = starknet::get_block_info().unbox();
+    let blockTimestamp: u128 = blockInfo.block_timestamp.into();
+    let blockNumber: u128 = blockInfo.block_number.into();
+    let contractAddressBlockTimestamp: u128 = (blockTimestamp + blockTimestamp).into();
+    let blockTimestampBlockNumber: u128 = (blockTimestamp + blockNumber).into();
+    let blockNumberBlockTimestamp: u128 = (blockNumber + blockTimestampBlockNumber).into();
+    let blockTimestampBlockNumberBlockTimestamp: u128 = (blockTimestampBlockNumber + blockNumberBlockTimestamp).into();
+    (tx.low, blockTimestamp, blockNumber, blockTimestampBlockNumber,blockTimestampBlockNumberBlockTimestamp,contractAddressBlockTimestamp)
+}
+
+
+fn random(seed: u128, num: usize) -> usize {
+    let seed: u256 = seed.into();
+    let result = seed.low % num.into();
+    result.try_into().unwrap()
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::{pseudo_seed};
+    use debug::PrintTrait;
+
+    #[test]
+    #[available_gas(100000)]
+    fn test_grid_is_zero() {
+        let (seed1, seed2, seed3, seed4, seed5, seed6) = pseudo_seed();
+        seed1.print();
+        seed2.print();
+        seed3.print();
+        seed4.print();
+        seed5.print();
+        seed6.print();
+    }
+}
