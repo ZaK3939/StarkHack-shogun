@@ -8,6 +8,11 @@ export class SelectItem extends Phaser.Scene {
     preload() {
         console.log('Loading SelectItem Background');
         this.load.image('selectItemBackground', 'assets/background/select.png');
+        this.load.image('charactorMain', 'assets/charactor/main.png');
+        this.load.image('goBattle', 'assets/status/goBattle.png');
+        this.load.image('box', 'assets/components/box.png');
+        this.load.image('shelf', 'assets/components/shelf.png');
+        this.load.image('block', 'assets/components/block.png');
     }
 
     create() {
@@ -15,10 +20,30 @@ export class SelectItem extends Phaser.Scene {
         this.add.image(width / 2, height / 2, 'selectItemBackground').setOrigin(0.5, 0.5);
         console.log('SelectItem Background Loaded');
 
-        // TODO: Add item selection logic here.
-        this.add.text(width / 2, height - 100, 'Select Item', { color: '#0f0' })
-            .setOrigin(0.5, 0.5)
-            .setInteractive()
-            .on('pointerdown', () => this.scene.start('BattleScene'));
+        this.add.image(400, height - 100, 'charactorMain').setOrigin(0.5, 0.5);
+
+        
+        const goBattleButton = this.add.image(width / 2, 200, 'goBattle').setOrigin(0.5, 0.5).setScale(2/3);
+        goBattleButton.setInteractive();
+        goBattleButton.on('pointerdown', () => this.scene.start('BattleScene'));
+
+        
+        this.add.image(width / 2, height - 100, 'box').setOrigin(0.5, 0.5).setScale(2/3);
+
+        
+        this.add.image(width - 320, 400, 'shelf').setOrigin(0.5, 0.5);
+
+        const blockWidth = 70
+        const blockHeight = 70;
+        const startX = 50;
+        const startY = 50;
+
+        for (let row = 0; row < 7; row++) {
+            for (let col = 0; col < 9; col++) {
+                this.add.image(startX + col * blockWidth, startY + row * blockHeight, 'block').setOrigin(0.5, 0.5);
+            }
+        }
+
+        console.log('SelectItem Scene Created');
     }
 }
