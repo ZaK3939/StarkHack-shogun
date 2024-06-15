@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-// TODO: 画像の各使用する枠をImportする
+import { itemData } from '../data/itemData';
 
 export class SelectItem extends Phaser.Scene {
     constructor() {
@@ -60,10 +60,11 @@ export class SelectItem extends Phaser.Scene {
         const itemSpacingX = 200;
         const itemSpacingY = 180;
 
-        const itemPositions: { [key: string]: { x: number, y: number } } = {};
+        const itemPositions: { [key: string]: { x: number, y: number, width: number, height: number } } = {};
 
         selectedItems.forEach((item, index) => {
             console.log(`Displaying item: ${item}`);
+            const itemDataEntry = itemData[index + 1];
             const x = itemStartX + (index % 2) * itemSpacingX;
             const y = itemStartY + Math.floor(index / 2) * itemSpacingY;
             const itemImage = this.add.image(x, y, item).setOrigin(0.5, 0.5).setScale(0.5).setName(item);
@@ -71,72 +72,105 @@ export class SelectItem extends Phaser.Scene {
 
             this.input.setDraggable(itemImage);
 
-            itemPositions[item] = { x, y };
+            itemPositions[item] = { x, y, width: itemDataEntry.width, height: itemDataEntry.height };
 
-            let highlightedBlock: Phaser.GameObjects.Image | null = null;
+            let highlightedBlocks: Phaser.GameObjects.Image[] = [];
 
             itemImage.on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
                 itemImage.x = dragX;
                 itemImage.y = dragY;
 
-                // ブロックのハイライトを更新
+                // ハイライトを更新
+                highlightedBlocks.forEach(block => block.clearTint());
+                highlightedBlocks = [];
+
                 const block = blocks.find(block => Phaser.Math.Distance.Between(block.x, block.y, dragX, dragY) < blockWidth / 2);
                 if (block) {
-                    if (highlightedBlock && highlightedBlock !== block) {
-                        highlightedBlock.clearTint();
+                    const { width, height } = itemDataEntry;
+                    const startCol = Math.floor((block.x - startX) / blockWidth);
+                    const startRow = Math.floor((block.y - startY) / blockHeight);
+
+                    // ブロックが幅を超える場合はハイライトしない
+                    if (startCol + width <= 9 && startRow + height <= 7) {
+                        for (let r = 0; r < height; r++) {
+                            for (let c = 0; c < width; c++) {
+                                const idx = (startRow + r) * 9 + (startCol + c);
+                                if (blocks[idx]) {
+                                    blocks[idx].setTint(0x0000ff); // 青でハイライト
+                                    highlightedBlocks.push(blocks[idx]);
+                                }
+                            }
+                        }
                     }
-                    block.setTint(0x0000ff); // Make it glow blue.
-                    highlightedBlock = block;
-                } else if (highlightedBlock) {
-                    highlightedBlock.clearTint();
-                    highlightedBlock = null;
                 }
             });
 
             itemImage.on('dragend', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
-                // ドロップ位置のブロックを特定する
                 console.log(`Drag ended at: (${dragX}, ${dragY})`);
-                const droppedBlock = blocks.find(block => Phaser.Math.Distance.Between(block.x, block.y, itemImage.x, itemImage.y) < blockWidth / 2);
+                highlightedBlocks.forEach(block => block.clearTint());
+                highlightedBlocks = [];
 
+                const droppedBlock = blocks.find(block => Phaser.Math.Distance.Between(block.x, block.y, itemImage.x, itemImage.y) < blockWidth / 2);
                 if (droppedBlock) {
                     console.log(`Dropped on block at: (${droppedBlock.x}, ${droppedBlock.y})`);
-                    
-                    //  If there are already items in the block, move them to the box
-                    const existingItemKey = Object.keys(itemPositions).find(key => itemPositions[key].x === droppedBlock.x && itemPositions[key].y === droppedBlock.y);
-                    if (existingItemKey) {
-                        const existingItemImage = this.children.getByName(existingItemKey) as Phaser.GameObjects.Image;
-                        if (existingItemImage) {
-                            existingItemImage.x = boxImage.x;
-                            existingItemImage.y = boxImage.y;
-                            // Update itemPositions to record that you have moved to the box.
-                            itemPositions[existingItemKey] = { x: boxImage.x, y: boxImage.y };
+
+                    const { width, height } = itemDataEntry;
+                    const startCol = Math.floor((droppedBlock.x - startX) / blockWidth);
+                    const startRow = Math.floor((droppedBlock.y - startY) / blockHeight);
+
+                    let canPlace = true;
+                    if (startCol + width > 9 || startRow + height > 7) {
+                        canPlace = false;
+                    } else {
+                        for (let r = 0; r < height; r++) {
+                            for (let c = 0; c < width; c++) {
+                                const idx = (startRow + r) * 9 + (startCol + c);
+                                if (!blocks[idx]) {
+                                    canPlace = false;
+                                    break;
+                                }
+                            }
+                            if (!canPlace) break;
                         }
                     }
 
-                    // Placement of items in drop position.
-                    itemImage.x = droppedBlock.x;
-                    itemImage.y = droppedBlock.y;
-                    itemPositions[item] = { x: droppedBlock.x, y: droppedBlock.y };
+                    if (canPlace) {
+                        // 既に配置されているアイテムをboxに移動
+                        const overlappingItems = new Set<string>();
+                        for (let r = 0; r < height; r++) {
+                            for (let c = 0; c < width; c++) {
+                                const idx = (startRow + r) * 9 + (startCol + c);
+                                const existingItemKey = Object.keys(itemPositions).find(key => {
+                                    const pos = itemPositions[key];
+                                    return pos.x === blocks[idx].x && pos.y === blocks[idx].y;
+                                });
+                                if (existingItemKey) {
+                                    overlappingItems.add(existingItemKey);
+                                }
+                            }
+                        }
 
-                } else {
-                    console.log('Dropped outside any block');
-                    // return something (that has been moved) to its original position
-                    if (itemImage.x === boxImage.x && itemImage.y === boxImage.y) {
-                        // Back in the box.
+                        overlappingItems.forEach(existingItemKey => {
+                            const existingItemImage = this.children.getByName(existingItemKey) as Phaser.GameObjects.Image;
+                            if (existingItemImage) {
+                                existingItemImage.x = boxImage.x;
+                                existingItemImage.y = boxImage.y;
+                                itemPositions[existingItemKey] = { x: boxImage.x, y: boxImage.y, width: itemPositions[existingItemKey].width, height: itemPositions[existingItemKey].height };
+                            }
+                        });
+
+                        // アイテムをドロップ位置に配置
+                        itemImage.x = droppedBlock.x;
+                        itemImage.y = droppedBlock.y;
+                        itemPositions[item] = { x: droppedBlock.x, y: droppedBlock.y, width, height };
+                    } else {
                         itemImage.x = itemPositions[item].x;
                         itemImage.y = itemPositions[item].y;
-                    } else {
-                        // If dropped outside the box, return to box
-                        itemImage.x = boxImage.x;
-                        itemImage.y = boxImage.y;
-                        itemPositions[item] = { x: boxImage.x, y: boxImage.y };
                     }
-                }
-
-                // ハイライトを元に戻す
-                if (highlightedBlock) {
-                    highlightedBlock.clearTint();
-                    highlightedBlock = null;
+                } else {
+                    console.log('Dropped outside any block');
+                    itemImage.x = itemPositions[item].x;
+                    itemImage.y = itemPositions[item].y;
                 }
             });
         });
