@@ -7,15 +7,24 @@ export class MainMenu extends Phaser.Scene {
 
     preload() {
         this.load.image('topBackground', 'assets/background/top.png');
+        this.load.image('startButton', 'assets/logo.png');
     }
 
     create() {
-        const { width, height } = this.scale; // 画面の幅と高さを取得
-        this.add.image(width / 2, height / 2, 'topBackground').setOrigin(0.5, 0.5); // 画像を中央に配置
-        // ここにトップ画面のUIやボタンを追加
-        this.add.text(width / 2, height - 100, 'Start Game', { color: '#0f0' })
-            .setOrigin(0.5, 0.5) // テキストを中央に配置
-            .setInteractive()
-            .on('pointerdown', () => this.scene.start('SelectItem'));
+        const { width, height } = this.scale;
+        this.add.image(width / 2, height / 2, 'topBackground').setOrigin(0.5, 0.5);
+        
+        const startButton = this.add.image(width / 2, height / 2, 'startButton').setOrigin(0.5, 0.5);
+        startButton.setInteractive();
+        startButton.on('pointerdown', () => this.scene.start('SelectItem'));
+
+        this.tweens.add({
+            targets: startButton,
+            alpha: 0,
+            duration: 1000,
+            ease: 'Linear',
+            yoyo: true,
+            repeat: -1
+        });
     }
 }
