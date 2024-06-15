@@ -141,7 +141,20 @@ export class SelectItem extends Phaser.Scene {
 
             let highlightedBlocks: Phaser.GameObjects.Image[] = [];
 
+            itemImage.on('dragstart', () => {
+                if (itemDataEntry.cost > playerGold) {
+                    itemImage.disableInteractive();
+                    this.time.delayedCall(100, () => {
+                        itemImage.setInteractive({ draggable: true });
+                    });
+                }
+            });
+
             itemImage.on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+                if (itemDataEntry.cost > playerGold) {
+                    return;
+                }
+
                 itemImage.x = dragX;
                 itemImage.y = dragY;
 
@@ -176,6 +189,8 @@ export class SelectItem extends Phaser.Scene {
                 highlightedBlocks = [];
             
                 const droppedBlock = blocks.find(block => Phaser.Math.Distance.Between(block.x, block.y, itemImage.x, itemImage.y) < blockWidth / 2);
+                const droppedBox = Phaser.Math.Distance.Between(itemImage.x, itemImage.y, boxImage.x, boxImage.y) < boxImage.width / 2;
+
                 if (droppedBlock) {
                     console.log(`Dropped on block at: (${droppedBlock.x}, ${droppedBlock.y})`);
             
@@ -245,15 +260,19 @@ export class SelectItem extends Phaser.Scene {
                         itemImage.x = itemPositions[item].x;
                         itemImage.y = itemPositions[item].y;
                     }
-                } else {
-                    console.log('Dropped outside any block');
-                    itemImage.x = itemPositions[item].x;
-                    itemImage.y = itemPositions[item].y;
+                } else if (droppedBox) {
+                    console.log(`Dropped in box at: (${boxImage.x}, ${boxImage.y})`);
+                    itemImage.x = boxImage.x;
+                    itemImage.y = boxImage.y;
+                    itemPositions[item] = { x: boxImage.x, y: boxImage.y, width: itemPositions[item].width, height: itemPositions[item].height };
 
                     if (itemsOnBlock.has(item)) {
-                        playerGold += itemDataEntry.cost; // Re-add cost to playerGold when moved outside any block
                         itemsOnBlock.delete(item);
                     }
+                } else {
+                    console.log('Dropped outside any block or box');
+                    itemImage.x = itemPositions[item].x;
+                    itemImage.y = itemPositions[item].y;
                 }
 
                 updateStatsText(); // Update the stats text to reflect the new playerGold value
