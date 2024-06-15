@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+// TODO: 画像の各使用する枠をImportする
 
 export class SelectItem extends Phaser.Scene {
     constructor() {
@@ -35,7 +36,7 @@ export class SelectItem extends Phaser.Scene {
             this.scene.start('BattleScene');
         });
 
-        this.add.image(width / 2, height - 100, 'box').setOrigin(0.5, 0.5).setScale(2 / 3);
+        const boxImage = this.add.image(width / 2, height - 100, 'box').setOrigin(0.5, 0.5).setScale(2 / 3);
 
         this.add.image(width - 320, 400, 'shelf').setOrigin(0.5, 0.5);
 
@@ -59,14 +60,18 @@ export class SelectItem extends Phaser.Scene {
         const itemSpacingX = 200;
         const itemSpacingY = 180;
 
+        const itemPositions: { [key: string]: { x: number, y: number } } = {};
+
         selectedItems.forEach((item, index) => {
             console.log(`Displaying item: ${item}`);
             const x = itemStartX + (index % 2) * itemSpacingX;
             const y = itemStartY + Math.floor(index / 2) * itemSpacingY;
-            const itemImage = this.add.image(x, y, item).setOrigin(0.5, 0.5).setScale(0.5);
+            const itemImage = this.add.image(x, y, item).setOrigin(0.5, 0.5).setScale(0.5).setName(item);
             itemImage.setInteractive({ draggable: true });
 
             this.input.setDraggable(itemImage);
+
+            itemPositions[item] = { x, y };
 
             let highlightedBlock: Phaser.GameObjects.Image | null = null;
 
@@ -78,12 +83,12 @@ export class SelectItem extends Phaser.Scene {
                 const block = blocks.find(block => Phaser.Math.Distance.Between(block.x, block.y, dragX, dragY) < blockWidth / 2);
                 if (block) {
                     if (highlightedBlock && highlightedBlock !== block) {
-                        highlightedBlock.clearTint(); // 元に戻す
+                        highlightedBlock.clearTint();
                     }
-                    block.setTint(0x0000ff); // 青く光らせる
+                    block.setTint(0x0000ff); // Make it glow blue.
                     highlightedBlock = block;
                 } else if (highlightedBlock) {
-                    highlightedBlock.clearTint(); // 元に戻す
+                    highlightedBlock.clearTint();
                     highlightedBlock = null;
                 }
             });
@@ -95,14 +100,37 @@ export class SelectItem extends Phaser.Scene {
 
                 if (droppedBlock) {
                     console.log(`Dropped on block at: (${droppedBlock.x}, ${droppedBlock.y})`);
-                    // ドロップ位置にアイテムを配置する
+                    
+                    //  If there are already items in the block, move them to the box
+                    const existingItemKey = Object.keys(itemPositions).find(key => itemPositions[key].x === droppedBlock.x && itemPositions[key].y === droppedBlock.y);
+                    if (existingItemKey) {
+                        const existingItemImage = this.children.getByName(existingItemKey) as Phaser.GameObjects.Image;
+                        if (existingItemImage) {
+                            existingItemImage.x = boxImage.x;
+                            existingItemImage.y = boxImage.y;
+                            // Update itemPositions to record that you have moved to the box.
+                            itemPositions[existingItemKey] = { x: boxImage.x, y: boxImage.y };
+                        }
+                    }
+
+                    // Placement of items in drop position.
                     itemImage.x = droppedBlock.x;
                     itemImage.y = droppedBlock.y;
+                    itemPositions[item] = { x: droppedBlock.x, y: droppedBlock.y };
+
                 } else {
                     console.log('Dropped outside any block');
-                    // 元の位置に戻す
-                    itemImage.x = x;
-                    itemImage.y = y;
+                    // return something (that has been moved) to its original position
+                    if (itemImage.x === boxImage.x && itemImage.y === boxImage.y) {
+                        // Back in the box.
+                        itemImage.x = itemPositions[item].x;
+                        itemImage.y = itemPositions[item].y;
+                    } else {
+                        // If dropped outside the box, return to box
+                        itemImage.x = boxImage.x;
+                        itemImage.y = boxImage.y;
+                        itemPositions[item] = { x: boxImage.x, y: boxImage.y };
+                    }
                 }
 
                 // ハイライトを元に戻す
