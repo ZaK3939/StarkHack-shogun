@@ -16,7 +16,10 @@ export class MainMenu extends Phaser.Scene {
         
         const startButton = this.add.image(width / 2, height / 2, 'startButton').setOrigin(0.5, 0.5);
         startButton.setInteractive();
-        startButton.on('pointerdown', () => this.scene.start('SelectItem'));
+        startButton.on('pointerdown', () => {
+            console.log('Start Button Clicked');
+            this.scene.start('SelectItem');
+        });
 
         this.tweens.add({
             targets: startButton,
