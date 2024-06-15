@@ -15,7 +15,8 @@ export class SelectItem extends Phaser.Scene {
         this.load.image('shelf', 'assets/components/shelf.png');
         this.load.image('block', 'assets/components/block.png');
 
-        for (let i = 1; i <= 47; i++) {
+        // TODO: 画像の数に調整
+        for (let i = 1; i <= 20; i++) {
             this.load.image(`item${i}`, `assets/items/${i}.png`);
         }
     }
@@ -103,6 +104,17 @@ export class SelectItem extends Phaser.Scene {
         const itemPositions: { [key: string]: { x: number, y: number, width: number, height: number } } = {};
         const itemsOnBlock = new Set<string>();
 
+        // Hover text for item effect
+        const hoverTextStyle = {
+            fontSize: '18px',
+            color: '#000000',
+            backgroundColor: '#ffffff',
+            padding: { left: 10, right: 10, top: 5, bottom: 5 },
+            wordWrap: { width: 240 }
+        };
+
+        const hoverText = this.add.text(width / 2, height / 2, '', hoverTextStyle).setOrigin(0.5).setVisible(false);
+
         selectedItems.forEach((item, index) => {
             console.log(`Displaying item: ${item}`);
             const itemDataEntry = itemData[index + 1];
@@ -139,6 +151,14 @@ export class SelectItem extends Phaser.Scene {
             itemPositions[item] = { x, y, width: itemDataEntry.width, height: itemDataEntry.height };
 
             let highlightedBlocks: Phaser.GameObjects.Image[] = [];
+
+            itemImage.on('pointerover', () => {
+                hoverText.setText(itemDataEntry.effect).setVisible(true);
+            });
+
+            itemImage.on('pointerout', () => {
+                hoverText.setVisible(false);
+            });
 
             itemImage.on('dragstart', () => {
                 if (itemDataEntry.cost > playerGold) {
