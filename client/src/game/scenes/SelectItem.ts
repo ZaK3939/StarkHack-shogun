@@ -22,18 +22,18 @@ export class SelectItem extends Phaser.Scene {
 
         this.add.image(400, height - 100, 'charactorMain').setOrigin(0.5, 0.5);
 
-        
         const goBattleButton = this.add.image(width / 2, 200, 'goBattle').setOrigin(0.5, 0.5).setScale(2/3);
         goBattleButton.setInteractive();
-        goBattleButton.on('pointerdown', () => this.scene.start('BattleScene'));
+        goBattleButton.on('pointerdown', () => {
+            console.log('Go Battle Button Clicked');
+            this.scene.start('BattleScene');
+        });
 
-        
         this.add.image(width / 2, height - 100, 'box').setOrigin(0.5, 0.5).setScale(2/3);
 
-        
         this.add.image(width - 320, 400, 'shelf').setOrigin(0.5, 0.5);
 
-        const blockWidth = 70
+        const blockWidth = 70;
         const blockHeight = 70;
         const startX = 50;
         const startY = 50;
