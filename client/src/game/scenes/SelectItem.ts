@@ -14,7 +14,7 @@ export class SelectItem extends Phaser.Scene {
         this.load.image('shelf', 'assets/components/shelf.png');
         this.load.image('block', 'assets/components/block.png');
 
-        // itemsフォルダ内の画像をすべてロード
+        // TODO: 画像の数に調整
         for (let i = 1; i <= 20; i++) {
             this.load.image(`item${i}`, `assets/items/${i}.png`);
         }

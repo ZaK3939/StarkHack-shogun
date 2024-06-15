@@ -1,3 +1,4 @@
+// TODO: Notionを参照して変更する
 export const itemData: { [key: string]: { width: number, height: number } } = {
   item1: { width: 2, height: 2 },
   item2: { width: 1, height: 2 },
