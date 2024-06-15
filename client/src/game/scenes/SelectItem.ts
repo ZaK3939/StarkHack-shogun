@@ -9,7 +9,7 @@ export class SelectItem extends Phaser.Scene {
     preload() {
         console.log('Loading SelectItem Background');
         this.load.image('selectItemBackground', 'assets/background/select.png');
-        this.load.image('charactorMain', 'assets/charactor/main.png');
+        this.load.image('player', 'assets/charactor/main.png');
         this.load.image('goBattle', 'assets/status/goBattle.png');
         this.load.image('box', 'assets/components/box.png');
         this.load.image('shelf', 'assets/components/shelf.png');
@@ -27,10 +27,51 @@ export class SelectItem extends Phaser.Scene {
         background.setOrigin(0.5, 0.5);
         console.log('SelectItem Background Loaded');
 
-        this.add.image(400, height - 100, 'charactorMain').setOrigin(0.5, 0.5);
+        this.add.image(400, height - 100, 'player').setOrigin(0.5, 0.5);
+
+        // プレイヤーの情報
+        const playerAddress = '0x00...000';
+        let playerGold = 10;
+        const playerVitality = 10;
+        const playerStamina = 5;
+        const playerVictories = 10;
+
+        // Create the stats box next to the player image
+        const statsBoxX = 200;
+        const statsBoxY = height - 200;
+        const statsBoxWidth = 150;
+        const statsBoxHeight = 150; // Adjusted height to accommodate increased line spacing
+
+        const statsBox = this.add.graphics();
+        statsBox.fillStyle(0x000000, 0.5);
+        statsBox.fillRect(statsBoxX, statsBoxY, statsBoxWidth, statsBoxHeight);
+
+        const statsText = `Address: ${playerAddress}\nGold: ${playerGold}\nVitality: ${playerVitality}\nStamina: ${playerStamina}\nVictories: ${playerVictories}`;
+        const statsTextStyle = {
+            fontSize: '14px',
+            color: '#ffffff',
+            lineSpacing: 10
+        };
+        const statsTextObject = this.add.text(statsBoxX + 10, statsBoxY + 10, statsText, statsTextStyle);
+
+        const updateStatsText = () => {
+            statsTextObject.setText(`Address: ${playerAddress}\nGold: ${playerGold}\nVitality: ${playerVitality}\nStamina: ${playerStamina}\nVictories: ${playerVictories}`);
+        };
 
         const goBattleButton = this.add.image(width / 2, 200, 'goBattle').setOrigin(0.5, 0.5).setScale(2 / 3);
         goBattleButton.setInteractive();
+
+        // Add hover effect
+        goBattleButton.on('pointerover', () => {
+            goBattleButton.setScale(0.75); // Increase size
+            goBattleButton.setTint(0x999999); // Add a tint for blur effect
+        });
+
+        goBattleButton.on('pointerout', () => {
+            goBattleButton.setScale(2 / 3); // Reset size
+            goBattleButton.clearTint(); // Remove the tint
+        });
+
         goBattleButton.on('pointerdown', () => {
             console.log('Go Battle Button Clicked');
             this.scene.start('BattleScene');
@@ -61,6 +102,7 @@ export class SelectItem extends Phaser.Scene {
         const itemSpacingY = 180;
 
         const itemPositions: { [key: string]: { x: number, y: number, width: number, height: number } } = {};
+        const itemsOnBlock = new Set<string>();
 
         selectedItems.forEach((item, index) => {
             console.log(`Displaying item: ${item}`);
@@ -71,6 +113,29 @@ export class SelectItem extends Phaser.Scene {
             itemImage.setInteractive({ draggable: true });
 
             this.input.setDraggable(itemImage);
+
+            // Draw cost circle with gradient and border
+            const costCircle = this.add.graphics();
+            const circleX = x - 75;
+            const circleY = y;
+            const radius = 20;
+
+            // Draw the border
+            costCircle.lineStyle(2, 0x000000, 1); // Black border
+            costCircle.strokeCircle(circleX, circleY, radius);
+
+            // Draw the gradient
+            const gradient = costCircle.createGeometryMask();
+            const gradientFill = this.add.graphics();
+            gradientFill.fillGradientStyle(0xffff00, 0xffd700, 0xffa500, 0xff8c00, 1);
+            gradientFill.fillCircle(circleX, circleY, radius);
+            costCircle.setMask(gradient);
+
+            // Add cost text
+            this.add.text(circleX, circleY, `${itemDataEntry.cost}`, {
+                fontSize: '14px',
+                color: '#000000'
+            }).setOrigin(0.5);
 
             itemPositions[item] = { x, y, width: itemDataEntry.width, height: itemDataEntry.height };
 
@@ -114,7 +179,7 @@ export class SelectItem extends Phaser.Scene {
                 if (droppedBlock) {
                     console.log(`Dropped on block at: (${droppedBlock.x}, ${droppedBlock.y})`);
             
-                    const { width, height } = itemDataEntry;
+                    const { width, height, cost } = itemDataEntry;
                     const startCol = Math.floor((droppedBlock.x - startX) / blockWidth);
                     const startRow = Math.floor((droppedBlock.y - startY) / blockHeight);
             
@@ -160,13 +225,22 @@ export class SelectItem extends Phaser.Scene {
                                 existingItemImage.x = boxImage.x;
                                 existingItemImage.y = boxImage.y;
                                 itemPositions[existingItemKey] = { x: boxImage.x, y: boxImage.y, width: itemPositions[existingItemKey].width, height: itemPositions[existingItemKey].height };
+                                if (itemsOnBlock.has(existingItemKey)) {
+                                    playerGold += itemDataEntry.cost; // Re-add cost to playerGold when moving to the box
+                                    itemsOnBlock.delete(existingItemKey);
+                                }
                             }
                         });
-            
+
                         // Place the new item
                         itemImage.x = droppedBlock.x;
                         itemImage.y = droppedBlock.y;
                         itemPositions[item] = { x: droppedBlock.x, y: droppedBlock.y, width, height };
+
+                        if (!itemsOnBlock.has(item)) {
+                            playerGold -= cost; // Subtract cost from playerGold when placed on block
+                            itemsOnBlock.add(item);
+                        }
                     } else {
                         itemImage.x = itemPositions[item].x;
                         itemImage.y = itemPositions[item].y;
@@ -175,9 +249,16 @@ export class SelectItem extends Phaser.Scene {
                     console.log('Dropped outside any block');
                     itemImage.x = itemPositions[item].x;
                     itemImage.y = itemPositions[item].y;
+
+                    if (itemsOnBlock.has(item)) {
+                        playerGold += itemDataEntry.cost; // Re-add cost to playerGold when moved outside any block
+                        itemsOnBlock.delete(item);
+                    }
                 }
+
+                updateStatsText(); // Update the stats text to reflect the new playerGold value
             });
-            
+
         });
 
         console.log('SelectItem Scene Created');
