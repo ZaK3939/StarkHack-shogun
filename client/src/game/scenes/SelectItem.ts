@@ -7,7 +7,7 @@ export class SelectItem extends Phaser.Scene {
 
     preload() {
         console.log('Loading SelectItem Background');
-        this.load.image('selectItemBackground', 'assets/background/selectItem.png');
+        this.load.image('selectItemBackground', 'assets/background/select.png');
     }
 
     create() {
