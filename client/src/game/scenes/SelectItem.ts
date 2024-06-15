@@ -109,15 +109,15 @@ export class SelectItem extends Phaser.Scene {
                 console.log(`Drag ended at: (${dragX}, ${dragY})`);
                 highlightedBlocks.forEach(block => block.clearTint());
                 highlightedBlocks = [];
-
+            
                 const droppedBlock = blocks.find(block => Phaser.Math.Distance.Between(block.x, block.y, itemImage.x, itemImage.y) < blockWidth / 2);
                 if (droppedBlock) {
                     console.log(`Dropped on block at: (${droppedBlock.x}, ${droppedBlock.y})`);
-
+            
                     const { width, height } = itemDataEntry;
                     const startCol = Math.floor((droppedBlock.x - startX) / blockWidth);
                     const startRow = Math.floor((droppedBlock.y - startY) / blockHeight);
-
+            
                     let canPlace = true;
                     if (startCol + width > 9 || startRow + height > 7) {
                         canPlace = false;
@@ -135,21 +135,25 @@ export class SelectItem extends Phaser.Scene {
                     }
 
                     if (canPlace) {
-                        // 既に配置されているアイテムをboxに移動
+                        // Check for overlapping items
                         const overlappingItems = new Set<string>();
                         for (let r = 0; r < height; r++) {
                             for (let c = 0; c < width; c++) {
-                                const idx = (startRow + r) * 9 + (startCol + c);
                                 const existingItemKey = Object.keys(itemPositions).find(key => {
                                     const pos = itemPositions[key];
-                                    return pos.x === blocks[idx].x && pos.y === blocks[idx].y;
+                                    const itemStartCol = Math.floor((pos.x - startX) / blockWidth);
+                                    const itemStartRow = Math.floor((pos.y - startY) / blockHeight);
+                                    const itemEndCol = itemStartCol + pos.width - 1;
+                                    const itemEndRow = itemStartRow + pos.height - 1;
+                                    return itemStartCol <= startCol + c && startCol + c <= itemEndCol &&
+                                        itemStartRow <= startRow + r && startRow + r <= itemEndRow;
                                 });
                                 if (existingItemKey) {
                                     overlappingItems.add(existingItemKey);
                                 }
                             }
                         }
-
+            
                         overlappingItems.forEach(existingItemKey => {
                             const existingItemImage = this.children.getByName(existingItemKey) as Phaser.GameObjects.Image;
                             if (existingItemImage) {
@@ -158,8 +162,8 @@ export class SelectItem extends Phaser.Scene {
                                 itemPositions[existingItemKey] = { x: boxImage.x, y: boxImage.y, width: itemPositions[existingItemKey].width, height: itemPositions[existingItemKey].height };
                             }
                         });
-
-                        // アイテムをドロップ位置に配置
+            
+                        // Place the new item
                         itemImage.x = droppedBlock.x;
                         itemImage.y = droppedBlock.y;
                         itemPositions[item] = { x: droppedBlock.x, y: droppedBlock.y, width, height };
@@ -173,6 +177,7 @@ export class SelectItem extends Phaser.Scene {
                     itemImage.y = itemPositions[item].y;
                 }
             });
+            
         });
 
         console.log('SelectItem Scene Created');
