@@ -130,7 +130,6 @@ export class BattleScene extends Phaser.Scene {
             return;
         }
 
-        // TODO: debugUI must bec hanged
         if (Math.random() < 0.5) {
             // Decrease player's HP by 7 and animate charactorEnemy
             if (this.playerCurrentHP > 0) {
@@ -186,11 +185,20 @@ export class BattleScene extends Phaser.Scene {
         // Create the button background
         const buttonBackground = this.add.graphics();
         buttonBackground.fillStyle(0xff0000, 1); // Red color
-        buttonBackground.fillRoundedRect(width / 2 - 100, height / 2 + 242, 200, 50, 25); // Rounded rectangle
+        buttonBackground.fillRoundedRect(width / 2 - 100, height / 2 + 342, 200, 50, 5); // Rounded rectangle
 
         // Add text to the button
         const buttonText = status === 'won' ? 'Go next stage' : 'Go top';
-        const button = this.add.text(width / 2, height / 2 + 267, buttonText, { fontSize: '20px', color: '#ffffff' }).setOrigin(0.5, 0.5).setInteractive();
+        const button = this.add.text(width / 2, height / 2 + 367, buttonText, { fontSize: '20px', color: '#ffffff' }).setOrigin(0.5, 0.5).setInteractive();
+
+        // Add hover effect
+        button.on('pointerover', () => {
+            button.setStyle({ fill: '#ffcc00' }); // Change text color to yellow
+        });
+
+        button.on('pointerout', () => {
+            button.setStyle({ fill: '#ffffff' }); // Change text color back to white
+        });
 
         // Add button click event
         button.on('pointerdown', () => {
