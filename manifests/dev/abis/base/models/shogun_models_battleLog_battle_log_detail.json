@@ -319,98 +319,104 @@
   },
   {
     "type": "impl",
-    "name": "itemImpl",
-    "interface_name": "shogun::models::item::Iitem"
+    "name": "battle_log_detailImpl",
+    "interface_name": "shogun::models::battleLog::Ibattle_log_detail"
+  },
+  {
+    "type": "enum",
+    "name": "core::bool",
+    "variants": [
+      {
+        "name": "False",
+        "type": "()"
+      },
+      {
+        "name": "True",
+        "type": "()"
+      }
+    ]
   },
   {
     "type": "struct",
-    "name": "shogun::models::item::Item",
+    "name": "shogun::models::battleLog::BattleLogDetail",
     "members": [
+      {
+        "name": "player",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "battleLogId",
+        "type": "core::integer::u32"
+      },
       {
         "name": "id",
         "type": "core::integer::u32"
       },
       {
-        "name": "name",
+        "name": "whoTriggered",
         "type": "core::felt252"
       },
       {
-        "name": "itemType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "shapeType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "width",
+        "name": "whichItem",
         "type": "core::integer::u32"
       },
       {
-        "name": "height",
+        "name": "damageCaused",
         "type": "core::integer::u32"
       },
       {
-        "name": "price",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "damage",
-        "type": "core::integer::u32"
+        "name": "isDodged",
+        "type": "core::bool"
       },
       {
         "name": "cleansePoison",
         "type": "core::integer::u32"
       },
       {
-        "name": "chance",
+        "name": "buffType",
+        "type": "core::felt252"
+      },
+      {
+        "name": "regenHP",
         "type": "core::integer::u32"
       },
       {
-        "name": "cooldown",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rarity",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "armor",
+        "name": "player_armor_stacks",
         "type": "core::integer::u32"
       },
       {
-        "name": "armorActivation",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "regen",
+        "name": "player_regen_stacks",
         "type": "core::integer::u32"
       },
       {
-        "name": "regenActivation",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "reflect",
+        "name": "player_reflect_stacks",
         "type": "core::integer::u32"
       },
       {
-        "name": "reflectActivation",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "poison",
+        "name": "player_poison_stacks",
         "type": "core::integer::u32"
       },
       {
-        "name": "poisonActivation",
-        "type": "core::integer::u8"
+        "name": "dummy_armor_stacks",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "dummy_regen_stacks",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "dummy_reflect_stacks",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "dummy_poison_stacks",
+        "type": "core::integer::u32"
       }
     ]
   },
   {
     "type": "interface",
-    "name": "shogun::models::item::Iitem",
+    "name": "shogun::models::battleLog::Ibattle_log_detail",
     "items": [
       {
         "type": "function",
@@ -418,7 +424,7 @@
         "inputs": [
           {
             "name": "model",
-            "type": "shogun::models::item::Item"
+            "type": "shogun::models::battleLog::BattleLogDetail"
           }
         ],
         "outputs": [],
@@ -428,7 +434,7 @@
   },
   {
     "type": "event",
-    "name": "shogun::models::item::item::Event",
+    "name": "shogun::models::battleLog::battle_log_detail::Event",
     "kind": "enum",
     "variants": []
   }

@@ -48,13 +48,3 @@ struct BattleLogDetail {
     dummy_reflect_stacks: usize,
     dummy_poison_stacks: usize,
     }
-
-#[derive(Copy, Drop, Serde)]
-#[dojo::model]
-struct BattleLogDetailCounter {
-    #[key]
-    player: ContractAddress,
-    #[key]
-    battleLogId: usize,
-    count: usize,
-}

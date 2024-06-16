@@ -16,16 +16,11 @@ mod battle {
 
     use shogun::models::{
         character::{Character}, 
-        battleLog::{BattleLog, BattleLogCounter, BattleLogDetail, BattleLogDetailCounter},
-        characterItem::{
-            Position, CharacterItemsStorageCounter, CharacterItemStorage, CharacterItemInventory,
-            CharacterItemsInventoryCounter
-        },
-        item::{Item, ItemsCounter},
+        battleLog::{BattleLog, BattleLogCounter, BattleLogDetail},
+        characterItem::{Position, CharacterItemInventory,CharacterItemsInventoryCounter},
+        item::{Item},
         dummyCharacter::{DummyCharacter, DummyCharacterCounter},
-        dummyCharacterItem::{
-            DummyCharacterItem, DummyCharacterItemsCounter
-        }
+        dummyCharacterItem::{DummyCharacterItem, DummyCharacterItemsCounter}
     };
 
     use shogun::utils::random::{pseudo_seed, random};

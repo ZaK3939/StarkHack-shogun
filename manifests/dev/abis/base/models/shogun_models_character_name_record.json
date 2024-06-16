@@ -319,98 +319,26 @@
   },
   {
     "type": "impl",
-    "name": "itemImpl",
-    "interface_name": "shogun::models::item::Iitem"
+    "name": "name_recordImpl",
+    "interface_name": "shogun::models::character::Iname_record"
   },
   {
     "type": "struct",
-    "name": "shogun::models::item::Item",
+    "name": "shogun::models::character::NameRecord",
     "members": [
-      {
-        "name": "id",
-        "type": "core::integer::u32"
-      },
       {
         "name": "name",
         "type": "core::felt252"
       },
       {
-        "name": "itemType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "shapeType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "width",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "height",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "price",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "damage",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "cleansePoison",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "chance",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "cooldown",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rarity",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "armor",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "armorActivation",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "regen",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "regenActivation",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "reflect",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "reflectActivation",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "poison",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "poisonActivation",
-        "type": "core::integer::u8"
+        "name": "player",
+        "type": "core::starknet::contract_address::ContractAddress"
       }
     ]
   },
   {
     "type": "interface",
-    "name": "shogun::models::item::Iitem",
+    "name": "shogun::models::character::Iname_record",
     "items": [
       {
         "type": "function",
@@ -418,7 +346,7 @@
         "inputs": [
           {
             "name": "model",
-            "type": "shogun::models::item::Item"
+            "type": "shogun::models::character::NameRecord"
           }
         ],
         "outputs": [],
@@ -428,7 +356,7 @@
   },
   {
     "type": "event",
-    "name": "shogun::models::item::item::Event",
+    "name": "shogun::models::character::name_record::Event",
     "kind": "enum",
     "variants": []
   }

@@ -55,110 +55,20 @@
   },
   {
     "type": "impl",
-    "name": "AdminImpl",
-    "interface_name": "shogun::systems::admin::IAdmin"
-  },
-  {
-    "type": "enum",
-    "name": "core::bool",
-    "variants": [
-      {
-        "name": "False",
-        "type": "()"
-      },
-      {
-        "name": "True",
-        "type": "()"
-      }
-    ]
+    "name": "ActionsImpl",
+    "interface_name": "shogun::systems::actions::IActions"
   },
   {
     "type": "interface",
-    "name": "shogun::systems::admin::IAdmin",
+    "name": "shogun::systems::actions::IActions",
     "items": [
       {
         "type": "function",
-        "name": "add_item",
+        "name": "spawn",
         "inputs": [
-          {
-            "name": "id",
-            "type": "core::integer::u32"
-          },
           {
             "name": "name",
             "type": "core::felt252"
-          },
-          {
-            "name": "itemType",
-            "type": "core::integer::u8"
-          },
-          {
-            "name": "shapeType",
-            "type": "core::integer::u8"
-          },
-          {
-            "name": "width",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "height",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "price",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "damage",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "cleansePoison",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "chance",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "cooldown",
-            "type": "core::integer::u8"
-          },
-          {
-            "name": "rarity",
-            "type": "core::integer::u8"
-          },
-          {
-            "name": "armor",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "armorActivation",
-            "type": "core::integer::u8"
-          },
-          {
-            "name": "regen",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "regenActivation",
-            "type": "core::integer::u8"
-          },
-          {
-            "name": "reflect",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "reflectActivation",
-            "type": "core::integer::u8"
-          },
-          {
-            "name": "poison",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "poisonActivation",
-            "type": "core::integer::u8"
           }
         ],
         "outputs": [],
@@ -166,19 +76,23 @@
       },
       {
         "type": "function",
-        "name": "edit_item",
+        "name": "rebirth",
+        "inputs": [
+          {
+            "name": "name",
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "buy_item",
         "inputs": [
           {
             "name": "item_id",
             "type": "core::integer::u32"
-          },
-          {
-            "name": "item_key",
-            "type": "core::felt252"
-          },
-          {
-            "name": "item_value",
-            "type": "core::felt252"
           }
         ],
         "outputs": [],
@@ -186,18 +100,57 @@
       },
       {
         "type": "function",
-        "name": "is_world_owner",
+        "name": "sell_item",
         "inputs": [
           {
-            "name": "player",
-            "type": "core::starknet::contract_address::ContractAddress"
+            "name": "storage_item_id",
+            "type": "core::integer::u32"
           }
         ],
-        "outputs": [
+        "outputs": [],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "reroll_shop",
+        "inputs": [],
+        "outputs": [],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "place_item",
+        "inputs": [
           {
-            "type": "core::bool"
+            "name": "storage_item_id",
+            "type": "core::integer::u32"
+          },
+          {
+            "name": "x",
+            "type": "core::integer::u32"
+          },
+          {
+            "name": "y",
+            "type": "core::integer::u32"
+          },
+          {
+            "name": "rotation",
+            "type": "core::integer::u32"
           }
         ],
+        "outputs": [],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "undo_place_item",
+        "inputs": [
+          {
+            "name": "inventory_item_id",
+            "type": "core::integer::u32"
+          }
+        ],
+        "outputs": [],
         "state_mutability": "view"
       }
     ]
@@ -205,11 +158,11 @@
   {
     "type": "impl",
     "name": "IDojoInitImpl",
-    "interface_name": "shogun::systems::admin::admin::IDojoInit"
+    "interface_name": "shogun::systems::actions::actions::IDojoInit"
   },
   {
     "type": "interface",
-    "name": "shogun::systems::admin::admin::IDojoInit",
+    "name": "shogun::systems::actions::actions::IDojoInit",
     "items": [
       {
         "type": "function",
@@ -269,7 +222,7 @@
   },
   {
     "type": "event",
-    "name": "shogun::systems::admin::admin::Event",
+    "name": "shogun::systems::actions::actions::Event",
     "kind": "enum",
     "variants": [
       {

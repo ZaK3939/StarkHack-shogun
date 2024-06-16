@@ -41,6 +41,7 @@ mod tests {
         assert(item_three_data.id == items::Dagger::id, 'I3 id mismatch');
         assert(item_three_data.name == items::Dagger::name, 'I3 name mismatch');
         assert(item_three_data.itemType == items::Dagger::itemType, 'I3 itemType mismatch');
+        assert(item_three_data.shapeType == items::Dagger::shapeType, 'I3 shapeType mismatch');
         assert(item_three_data.width == items::Dagger::width, 'I3 width mismatch');
         assert(item_three_data.height == items::Dagger::height, 'I3 height mismatch');
         assert(item_three_data.price == items::Dagger::price, 'I3 price mismatch');
@@ -92,6 +93,7 @@ mod tests {
                 items::Backpack1::id,
                 items::Backpack1::name,
                 items::Backpack1::itemType,
+                items::Backpack1::shapeType,
                 items::Backpack1::width,
                 items::Backpack1::height,
                 items::Backpack1::price,
@@ -128,6 +130,7 @@ mod tests {
                 items::Backpack1::id,
                 items::Backpack1::name,
                 items::Backpack1::itemType,
+                items::Backpack1::shapeType,
                 10,
                 items::Backpack1::height,
                 items::Backpack1::price,
@@ -164,6 +167,7 @@ mod tests {
                 items::Backpack1::id,
                 items::Backpack1::name,
                 items::Backpack1::itemType,
+                items::Backpack1::shapeType,
                 items::Backpack1::width,
                 10,
                 items::Backpack1::price,
@@ -200,6 +204,7 @@ mod tests {
                 items::Backpack1::id,
                 items::Backpack1::name,
                 items::Backpack1::itemType,
+                items::Backpack1::shapeType,
                 items::Backpack1::width,
                 items::Backpack1::height,
                 0,
@@ -237,6 +242,7 @@ mod tests {
                 items::Backpack1::id,
                 items::Backpack1::name,
                 items::Backpack1::itemType,
+                items::Backpack1::shapeType,
                 items::Backpack1::width,
                 items::Backpack1::height,
                 items::Backpack1::price,

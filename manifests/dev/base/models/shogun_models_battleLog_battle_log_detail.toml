@@ -1,0 +1,95 @@
+kind = "DojoModel"
+class_hash = "0x28e49569ceccdfce84bafdc3309832bbb235d67b515037d4254358cf484a01d"
+original_class_hash = "0x28e49569ceccdfce84bafdc3309832bbb235d67b515037d4254358cf484a01d"
+abi = "manifests/dev/abis/base/models/shogun_models_battleLog_battle_log_detail.json"
+name = "shogun::models::battleLog::battle_log_detail"
+
+[[members]]
+name = "player"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "battleLogId"
+type = "usize"
+key = true
+
+[[members]]
+name = "id"
+type = "usize"
+key = true
+
+[[members]]
+name = "whoTriggered"
+type = "felt252"
+key = false
+
+[[members]]
+name = "whichItem"
+type = "usize"
+key = false
+
+[[members]]
+name = "damageCaused"
+type = "usize"
+key = false
+
+[[members]]
+name = "isDodged"
+type = "bool"
+key = false
+
+[[members]]
+name = "cleansePoison"
+type = "usize"
+key = false
+
+[[members]]
+name = "buffType"
+type = "felt252"
+key = false
+
+[[members]]
+name = "regenHP"
+type = "usize"
+key = false
+
+[[members]]
+name = "player_armor_stacks"
+type = "usize"
+key = false
+
+[[members]]
+name = "player_regen_stacks"
+type = "usize"
+key = false
+
+[[members]]
+name = "player_reflect_stacks"
+type = "usize"
+key = false
+
+[[members]]
+name = "player_poison_stacks"
+type = "usize"
+key = false
+
+[[members]]
+name = "dummy_armor_stacks"
+type = "usize"
+key = false
+
+[[members]]
+name = "dummy_regen_stacks"
+type = "usize"
+key = false
+
+[[members]]
+name = "dummy_reflect_stacks"
+type = "usize"
+key = false
+
+[[members]]
+name = "dummy_poison_stacks"
+type = "usize"
+key = false
