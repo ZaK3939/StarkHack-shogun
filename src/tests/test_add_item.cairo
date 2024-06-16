@@ -38,36 +38,36 @@ mod tests {
         assert(updated_counter.count == 6, 'total item count mismatch');
         
         let item_three_data = get!(world, 3, (Item));
-        assert(item_three_data.id == items::Dagger::id, 'I3 id mismatch');
-        assert(item_three_data.name == items::Dagger::name, 'I3 name mismatch');
-        assert(item_three_data.itemType == items::Dagger::itemType, 'I3 itemType mismatch');
-        assert(item_three_data.shapeType == items::Dagger::shapeType, 'I3 shapeType mismatch');
-        assert(item_three_data.width == items::Dagger::width, 'I3 width mismatch');
-        assert(item_three_data.height == items::Dagger::height, 'I3 height mismatch');
-        assert(item_three_data.price == items::Dagger::price, 'I3 price mismatch');
-        assert(item_three_data.damage == items::Dagger::damage, 'I3 damage mismatch');
-        assert(item_three_data.chance == items::Dagger::chance, 'I3 chance mismatch');
-        assert(item_three_data.cooldown == items::Dagger::cooldown, 'I3 cooldown mismatch');
-        assert(item_three_data.rarity == items::Dagger::rarity, 'I3 rarity mismatch');
-        assert(item_three_data.armor == items::Dagger::armor, 'I3 armor mismatch');
+        assert(item_three_data.id == items::Item3::id, 'I3 id mismatch');
+        assert(item_three_data.name == items::Item3::name, 'I3 name mismatch');
+        assert(item_three_data.itemType == items::Item3::itemType, 'I3 itemType mismatch');
+        assert(item_three_data.shapeType == items::Item3::shapeType, 'I3 shapeType mismatch');
+        assert(item_three_data.width == items::Item3::width, 'I3 width mismatch');
+        assert(item_three_data.height == items::Item3::height, 'I3 height mismatch');
+        assert(item_three_data.price == items::Item3::price, 'I3 price mismatch');
+        assert(item_three_data.damage == items::Item3::damage, 'I3 damage mismatch');
+        assert(item_three_data.chance == items::Item3::chance, 'I3 chance mismatch');
+        assert(item_three_data.coolTime == items::Item3::coolTime, 'I3 coolTime mismatch');
+        assert(item_three_data.rarity == items::Item3::rarity, 'I3 rarity mismatch');
+        assert(item_three_data.armor == items::Item3::armor, 'I3 armor mismatch');
         assert(
-            item_three_data.armorActivation == items::Dagger::armorActivation,
-            'I3 armorActivation mismatch'
+            item_three_data.armorType == items::Item3::armorType,
+            'I3 armorType mismatch'
         );
-        assert(item_three_data.regen == items::Dagger::regen, 'I3 regen mismatch');
+        assert(item_three_data.regen == items::Item3::regen, 'I3 regen mismatch');
         assert(
-            item_three_data.regenActivation == items::Dagger::regenActivation,
-            'I3 regenActivation mismatch'
+            item_three_data.regenType == items::Item3::regenType,
+            'I3 regenType mismatch'
         );
-        assert(item_three_data.reflect == items::Dagger::reflect, 'I3 reflect mismatch');
+        assert(item_three_data.reflect == items::Item3::reflect, 'I3 reflect mismatch');
         assert(
-            item_three_data.reflectActivation == items::Dagger::reflectActivation,
-            'I3 reflectActivation mismatch'
+            item_three_data.reflectType == items::Item3::reflectType,
+            'I3 reflectType mismatch'
         );
-        assert(item_three_data.poison == items::Dagger::poison, 'I3 poison mismatch');
+        assert(item_three_data.spike == items::Item3::spike, 'I3 spike mismatch');
         assert(
-            item_three_data.poisonActivation == items::Dagger::poisonActivation,
-            'I3 poisonActivation mismatch'
+            item_three_data.spikeType == items::Item3::spikeType,
+            'I3 spikeType mismatch'
         );
 
     }
@@ -90,26 +90,26 @@ mod tests {
 
         admin_system
             .add_item(
-                items::Backpack1::id,
-                items::Backpack1::name,
-                items::Backpack1::itemType,
-                items::Backpack1::shapeType,
-                items::Backpack1::width,
-                items::Backpack1::height,
-                items::Backpack1::price,
-                items::Backpack1::damage,
-                items::Backpack1::cleansePoison,
-                items::Backpack1::chance,
-                items::Backpack1::cooldown,
-                items::Backpack1::rarity,
-                items::Backpack1::armor,
-                items::Backpack1::armorActivation,
-                items::Backpack1::regen,
-                items::Backpack1::regenActivation,
-                items::Backpack1::reflect,
-                items::Backpack1::reflectActivation,
-                items::Backpack1::poison,
-                items::Backpack1::poisonActivation,
+                items::Item1::id,
+                items::Item1::name,
+                items::Item1::itemType,
+                items::Item1::shapeType,
+                items::Item1::width,
+                items::Item1::height,
+                items::Item1::price,
+                items::Item1::damage,
+                items::Item1::consumeStamina,
+                items::Item1::chance,
+                items::Item1::coolTime,
+                items::Item1::rarity,
+                items::Item1::armor,
+                items::Item1::armorType,
+                items::Item1::regen,
+                items::Item1::regenType,
+                items::Item1::reflect,
+                items::Item1::reflectType,
+                items::Item1::spike,
+                items::Item1::spikeType,
             );
     }
 
@@ -127,26 +127,26 @@ mod tests {
 
         admin_system
             .add_item(
-                items::Backpack1::id,
-                items::Backpack1::name,
-                items::Backpack1::itemType,
-                items::Backpack1::shapeType,
+                items::Item1::id,
+                items::Item1::name,
+                items::Item1::itemType,
+                items::Item1::shapeType,
                 10,
-                items::Backpack1::height,
-                items::Backpack1::price,
-                items::Backpack1::damage,
-                items::Backpack1::cleansePoison,
-                items::Backpack1::chance,
-                items::Backpack1::cooldown,
-                items::Backpack1::rarity,
-                items::Backpack1::armor,
-                items::Backpack1::armorActivation,
-                items::Backpack1::regen,
-                items::Backpack1::regenActivation,
-                items::Backpack1::reflect,
-                items::Backpack1::reflectActivation,
-                items::Backpack1::poison,
-                items::Backpack1::poisonActivation,
+                items::Item1::height,
+                items::Item1::price,
+                items::Item1::damage,
+                items::Item1::consumeStamina,
+                items::Item1::chance,
+                items::Item1::coolTime,
+                items::Item1::rarity,
+                items::Item1::armor,
+                items::Item1::armorType,
+                items::Item1::regen,
+                items::Item1::regenType,
+                items::Item1::reflect,
+                items::Item1::reflectType,
+                items::Item1::spike,
+                items::Item1::spikeType,
             );
     }
 
@@ -164,26 +164,26 @@ mod tests {
 
         admin_system
             .add_item(
-                items::Backpack1::id,
-                items::Backpack1::name,
-                items::Backpack1::itemType,
-                items::Backpack1::shapeType,
-                items::Backpack1::width,
+                items::Item1::id,
+                items::Item1::name,
+                items::Item1::itemType,
+                items::Item1::shapeType,
+                items::Item1::width,
                 10,
-                items::Backpack1::price,
-                items::Backpack1::damage,
-                items::Backpack1::cleansePoison,
-                items::Backpack1::chance,
-                items::Backpack1::cooldown,
-                items::Backpack1::rarity,
-                items::Backpack1::armor,
-                items::Backpack1::armorActivation,
-                items::Backpack1::regen,
-                items::Backpack1::regenActivation,
-                items::Backpack1::reflect,
-                items::Backpack1::reflectActivation,
-                items::Backpack1::poison,
-                items::Backpack1::poisonActivation,
+                items::Item1::price,
+                items::Item1::damage,
+                items::Item1::consumeStamina,
+                items::Item1::chance,
+                items::Item1::coolTime,
+                items::Item1::rarity,
+                items::Item1::armor,
+                items::Item1::armorType,
+                items::Item1::regen,
+                items::Item1::regenType,
+                items::Item1::reflect,
+                items::Item1::reflectType,
+                items::Item1::spike,
+                items::Item1::spikeType,
             );
     }
 
@@ -201,26 +201,26 @@ mod tests {
 
         admin_system
             .add_item(
-                items::Backpack1::id,
-                items::Backpack1::name,
-                items::Backpack1::itemType,
-                items::Backpack1::shapeType,
-                items::Backpack1::width,
-                items::Backpack1::height,
+                items::Item1::id,
+                items::Item1::name,
+                items::Item1::itemType,
+                items::Item1::shapeType,
+                items::Item1::width,
+                items::Item1::height,
                 0,
-                items::Backpack1::damage,
-                items::Backpack1::cleansePoison,
-                items::Backpack1::chance,
-                items::Backpack1::cooldown,
-                items::Backpack1::rarity,
-                items::Backpack1::armor,
-                items::Backpack1::armorActivation,
-                items::Backpack1::regen,
-                items::Backpack1::regenActivation,
-                items::Backpack1::reflect,
-                items::Backpack1::reflectActivation,
-                items::Backpack1::poison,
-                items::Backpack1::poisonActivation,
+                items::Item1::damage,
+                items::Item1::consumeStamina,
+                items::Item1::chance,
+                items::Item1::coolTime,
+                items::Item1::rarity,
+                items::Item1::armor,
+                items::Item1::armorType,
+                items::Item1::regen,
+                items::Item1::regenType,
+                items::Item1::reflect,
+                items::Item1::reflectType,
+                items::Item1::spike,
+                items::Item1::spikeType,
             );
     }
 
@@ -239,26 +239,26 @@ mod tests {
 
         admin_system
             .add_item(
-                items::Backpack1::id,
-                items::Backpack1::name,
-                items::Backpack1::itemType,
-                items::Backpack1::shapeType,
-                items::Backpack1::width,
-                items::Backpack1::height,
-                items::Backpack1::price,
-                items::Backpack1::damage,
-                items::Backpack1::cleansePoison,
-                items::Backpack1::chance,
-                items::Backpack1::cooldown,
+                items::Item1::id,
+                items::Item1::name,
+                items::Item1::itemType,
+                items::Item1::shapeType,
+                items::Item1::width,
+                items::Item1::height,
+                items::Item1::price,
+                items::Item1::damage,
+                items::Item1::consumeStamina,
+                items::Item1::chance,
+                items::Item1::coolTime,
                 7,
-                items::Backpack1::armor,
-                items::Backpack1::armorActivation,
-                items::Backpack1::regen,
-                items::Backpack1::regenActivation,
-                items::Backpack1::reflect,
-                items::Backpack1::reflectActivation,
-                items::Backpack1::poison,
-                items::Backpack1::poisonActivation,
+                items::Item1::armor,
+                items::Item1::armorType,
+                items::Item1::regen,
+                items::Item1::regenType,
+                items::Item1::reflect,
+                items::Item1::reflectType,
+                items::Item1::spike,
+                items::Item1::spikeType,
             );
     }
 }

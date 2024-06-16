@@ -55,7 +55,7 @@ mod tests {
         actions_system.buy_item(5);
 
         let char_data = get!(world, alice, (Character));
-        assert(char_data.gold == INIT_GOLD - items::Spike::price, 'gold value mismatch');
+        assert(char_data.gold == INIT_GOLD - items::Item5::price, 'gold value mismatch');
 
         let storageItemCount = get!(world, alice, (CharacterItemsStorageCounter));
         assert(storageItemCount.count == 2, 'total item count mismatch');

@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x28e49569ceccdfce84bafdc3309832bbb235d67b515037d4254358cf484a01d"
-original_class_hash = "0x28e49569ceccdfce84bafdc3309832bbb235d67b515037d4254358cf484a01d"
+class_hash = "0x43724e132374756a45596836ab3ecd52a57f292d2098dc8bfcf791fb2aefc4b"
+original_class_hash = "0x43724e132374756a45596836ab3ecd52a57f292d2098dc8bfcf791fb2aefc4b"
 abi = "manifests/dev/abis/base/models/shogun_models_battleLog_battle_log_detail.json"
 name = "shogun::models::battleLog::battle_log_detail"
 
@@ -40,11 +40,6 @@ type = "bool"
 key = false
 
 [[members]]
-name = "cleansePoison"
-type = "usize"
-key = false
-
-[[members]]
 name = "buffType"
 type = "felt252"
 key = false
@@ -70,7 +65,7 @@ type = "usize"
 key = false
 
 [[members]]
-name = "player_poison_stacks"
+name = "player_spike_stacks"
 type = "usize"
 key = false
 
@@ -90,6 +85,6 @@ type = "usize"
 key = false
 
 [[members]]
-name = "dummy_poison_stacks"
+name = "dummy_spike_stacks"
 type = "usize"
 key = false

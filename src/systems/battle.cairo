@@ -28,8 +28,8 @@ mod battle {
     const EFFECT_ARMOR: felt252 = 'armor';
     const EFFECT_REGEN: felt252 = 'regen';
     const EFFECT_REFLECT: felt252 = 'reflect';
-    const EFFECT_POISON: felt252 = 'poison';
-    const EFFECT_CLEANSE_POISON: felt252 = 'cleanse_poison';
+    const EFFECT_spike: felt252 = 'spike';
+    const EFFECT_CLEANSE_spike: felt252 = 'cleanse_spike';
 
     #[abi(embed_v0)]
     impl BattleImpl of IBattle<ContractState> {
@@ -67,8 +67,8 @@ mod battle {
             let mut char_reflect: usize = 0;
             let mut dummy_reflect: usize = 0;
 
-            let mut char_poison: usize = 0;
-            let mut dummy_poison: usize = 0;
+            let mut char_spike: usize = 0;
+            let mut dummy_spike: usize = 0;
 
             let mut char_on_hit_items: Array<(felt252, usize, usize)> = ArrayTrait::new();
             let mut dummy_on_hit_items: Array<(felt252, usize, usize)> = ArrayTrait::new();
@@ -92,44 +92,44 @@ mod battle {
                     inventoryItemCount -= 1;
                     continue;
                 }
-                let cooldown = item.cooldown;
-                if cooldown > 0 {
+                let coolTime = item.coolTime;
+                if coolTime > 0 {
                     items.insert(items_length.into(), charItem.itemId);
                     item_belongs.insert(items_length.into(), 'player');
 
                     items_length += 1;
                     // char_items_len += 1;
-                } else if cooldown == 0 {
+                } else if coolTime == 0 {
                     // ====== on start to plus stacks, 100% chance ======
                     // buff
-                    if item.armorActivation == 1 {
+                    if item.armorType == 1 {
                         char_armor += item.armor;
                     }
-                    if item.regenActivation == 1 {
+                    if item.regenType == 1 {
                         char_regen += item.regen;
                     }
-                    if item.reflectActivation == 1 {
+                    if item.reflectType == 1 {
                         char_reflect += item.reflect;
                     }
                     // debuff
-                    if item.poisonActivation == 1 {
-                        dummy_poison += item.poison;
+                    if item.spikeType == 1 {
+                        dummy_spike += item.spike;
                     }
                 // ====== end ======
                 }
 
                 // ====== on hit to plus stacks ======
-                if item.armorActivation == 2 {
+                if item.armorType == 2 {
                     char_on_hit_items.append((EFFECT_ARMOR, item.chance, item.armor));
                 }
-                if item.regenActivation == 2 {
+                if item.regenType == 2 {
                     char_on_hit_items.append((EFFECT_REGEN, item.chance, item.regen));
                 }
-                if item.reflectActivation == 2 {
+                if item.reflectType == 2 {
                     char_on_hit_items.append((EFFECT_REFLECT, item.chance, item.reflect));
                 }
-                if item.poisonActivation == 2 {
-                    char_on_hit_items.append((EFFECT_POISON, item.chance, item.poison));
+                if item.spikeType == 2 {
+                    char_on_hit_items.append((EFFECT_spike, item.chance, item.spike));
                 }
                 // ====== end ======
 
@@ -154,43 +154,43 @@ mod battle {
                     dummy_item_count -= 1;
                     continue;
                 }
-                if item.cooldown > 0 {
+                if item.coolTime > 0 {
                     items.insert(items_length.into(), dummy_item.itemId);
                     item_belongs.insert(items_length.into(), 'dummy');
 
                     items_length += 1;
                     dummy_items_len += 1;
-                } else if item.cooldown == 0 {
+                } else if item.coolTime == 0 {
                     // ====== on start to plus stacks, 100% chance ======
                     // buff
-                    if item.armorActivation == 1 {
+                    if item.armorType == 1 {
                         dummy_armor += item.armor;
                     }
-                    if item.regenActivation == 1 {
+                    if item.regenType == 1 {
                         dummy_regen += item.regen;
                     }
-                    if item.reflectActivation == 1 {
+                    if item.reflectType == 1 {
                         dummy_reflect += item.reflect;
                     }
                     // debuff
-                    if item.poisonActivation == 1 {
-                        char_poison += item.poison;
+                    if item.spikeType == 1 {
+                        char_spike += item.spike;
                     }
                 // ====== end ======
                 }
 
                 // ====== on hit to plus stacks ======
-                if item.armorActivation == 2 {
+                if item.armorType == 2 {
                     dummy_on_hit_items.append((EFFECT_ARMOR, item.chance, item.armor));
                 }
-                if item.regenActivation == 2 {
+                if item.regenType == 2 {
                     dummy_on_hit_items.append((EFFECT_REGEN, item.chance, item.regen));
                 }
-                if item.reflectActivation == 2 {
+                if item.reflectType == 2 {
                     dummy_on_hit_items.append((EFFECT_REFLECT, item.chance, item.reflect));
                 }
-                if item.poisonActivation == 2 {
-                    dummy_on_hit_items.append((EFFECT_POISON, item.chance, item.poison));
+                if item.spikeType == 2 {
+                    dummy_on_hit_items.append((EFFECT_spike, item.chance, item.spike));
                 }
                 // ====== end ======
 
@@ -198,7 +198,7 @@ mod battle {
             };
             let dummy_on_hit_items_span = dummy_on_hit_items.span();
 
-            // sorting items based on cooldown in ascending order
+            // sorting items based on coolTime in ascending order
             let mut i: usize = 0;
             let mut j: usize = 0;
             loop {
@@ -220,7 +220,7 @@ mod battle {
                     let item_data_at_j = get!(world, items_at_j, Item);
                     let item_data_at_j_plus_one = get!(world, items_at_j_plus_one, Item);
 
-                    if item_data_at_j.cooldown > item_data_at_j_plus_one.cooldown {
+                    if item_data_at_j.coolTime > item_data_at_j_plus_one.coolTime {
                         items.insert(j.into(), items_at_j_plus_one);
                         item_belongs.insert(j.into(), items_at_j_plus_one_belongs);
                         items.insert((j + 1).into(), items_at_j);
@@ -269,28 +269,28 @@ mod battle {
 
                     let curr_item_data = get!(world, curr_item_index, (Item));
                     let damage = curr_item_data.damage;
-                    let cleansePoison = curr_item_data.cleansePoison;
+                    let consumeStamina = curr_item_data.consumeStamina;
                     let chance = curr_item_data.chance;
-                    let cooldown = curr_item_data.cooldown;
+                    let coolTime = curr_item_data.coolTime;
 
-                    // each second is treated as 1 unit of cooldown 
-                    if seconds % cooldown == 0 {
+                    // each second is treated as 1 unit of coolTime 
+                    if seconds % coolTime == 0 {
                         v += seconds.into() + 17;
                         rand = random(seed2 + v, 100);
                         if rand < chance {
                             if curr_item_belongs == 'player' {
-                                // ====== on cooldown to plus stacks, all use the same randomness ======
-                                if curr_item_data.armorActivation == 3 {
+                                // ====== on coolTime to plus stacks, all use the same randomness ======
+                                if curr_item_data.armorType == 3 {
                                     char_armor += curr_item_data.armor;
                                 }
-                                if curr_item_data.regenActivation == 3 {
+                                if curr_item_data.regenType == 3 {
                                     char_regen += curr_item_data.regen;
                                 }
-                                if curr_item_data.reflectActivation == 3 {
+                                if curr_item_data.reflectType == 3 {
                                     char_reflect += curr_item_data.reflect;
                                 }
-                                if curr_item_data.poisonActivation == 3 {
-                                    dummy_poison += curr_item_data.poison;
+                                if curr_item_data.spikeType == 3 {
+                                    dummy_spike += curr_item_data.spike;
                                 }
                                 // ====== end ======
 
@@ -315,8 +315,8 @@ mod battle {
                                                 dummy_regen += on_hit_item_stack;
                                             } else if on_hit_item_type == EFFECT_REFLECT {
                                                 dummy_reflect += on_hit_item_stack;
-                                            } else if on_hit_item_type == EFFECT_POISON {
-                                                char_poison += on_hit_item_stack;
+                                            } else if on_hit_item_type == EFFECT_spike {
+                                                char_spike += on_hit_item_stack;
                                             }
                                         }
 
@@ -345,17 +345,16 @@ mod battle {
                                             whichItem: curr_item_index,
                                             damageCaused: damageCaused,
                                             isDodged: false,
-                                            cleansePoison: 0,
                                             buffType: EFFECT_ARMOR,
                                             regenHP: 0,
                                             player_armor_stacks: char_armor,
                                             player_regen_stacks: char_regen,
                                             player_reflect_stacks: char_reflect,
-                                            player_poison_stacks: char_poison,
+                                            player_spike_stacks: char_spike,
                                             dummy_armor_stacks: dummy_armor,
                                             dummy_regen_stacks: dummy_regen,
                                             dummy_reflect_stacks: dummy_reflect,
-                                            dummy_poison_stacks: dummy_poison,
+                                            dummy_spike_stacks: dummy_spike,
                                         })
                                     );
 
@@ -393,17 +392,16 @@ mod battle {
                                                 whichItem: 0,
                                                 damageCaused: damageCaused,
                                                 isDodged: false,
-                                                cleansePoison: 0,
                                                 buffType: EFFECT_REFLECT,
                                                 regenHP: 0,
                                                 player_armor_stacks: char_armor,
                                                 player_regen_stacks: char_regen,
                                                 player_reflect_stacks: char_reflect,
-                                                player_poison_stacks: char_poison,
+                                                player_spike_stacks: char_spike,
                                                 dummy_armor_stacks: dummy_armor,
                                                 dummy_regen_stacks: dummy_regen,
                                                 dummy_reflect_stacks: dummy_reflect,
-                                                dummy_poison_stacks: dummy_poison,
+                                                dummy_spike_stacks: dummy_spike,
                                             })
                                         );
 
@@ -414,52 +412,20 @@ mod battle {
                                         char_health -= damageCaused;
                                     }
                                 // ====== end ======
-                                } else {
-                                    if cleansePoison > 0 {
-                                        if char_poison > cleansePoison {
-                                            char_poison -= cleansePoison;
-                                        } else {
-                                            char_poison = 0;
-                                        }
-                                        battleLogsCount += 1;
-                                        emit!(
-                                            world,
-                                            (BattleLogDetail {
-                                                player,
-                                                battleLogId: battleLogCounterCount,
-                                                id: battleLogsCount,
-                                                whoTriggered: curr_item_belongs,
-                                                whichItem: curr_item_index,
-                                                damageCaused: 0,
-                                                cleansePoison: cleansePoison,
-                                                isDodged: false,
-                                                buffType: EFFECT_CLEANSE_POISON,
-                                                regenHP: 0,
-                                                player_armor_stacks: char_armor,
-                                                player_regen_stacks: char_regen,
-                                                player_reflect_stacks: char_reflect,
-                                                player_poison_stacks: char_poison,
-                                                dummy_armor_stacks: dummy_armor,
-                                                dummy_regen_stacks: dummy_regen,
-                                                dummy_reflect_stacks: dummy_reflect,
-                                                dummy_poison_stacks: dummy_poison,
-                                            })
-                                        );
-                                    }
                                 }
                             } else {
-                                // ====== on cooldown to plus stacks, all use the same randomness ======
-                                if curr_item_data.armorActivation == 3 {
+                                // ====== on coolTime to plus stacks, all use the same randomness ======
+                                if curr_item_data.armorType == 3 {
                                     dummy_armor += curr_item_data.armor;
                                 }
-                                if curr_item_data.regenActivation == 3 {
+                                if curr_item_data.regenType == 3 {
                                     dummy_regen += curr_item_data.regen;
                                 }
-                                if curr_item_data.reflectActivation == 3 {
+                                if curr_item_data.reflectType == 3 {
                                     dummy_reflect += curr_item_data.reflect;
                                 }
-                                if curr_item_data.poisonActivation == 3 {
-                                    char_poison += curr_item_data.poison;
+                                if curr_item_data.spikeType == 3 {
+                                    char_spike += curr_item_data.spike;
                                 }
                                 // ====== end ======
 
@@ -484,8 +450,8 @@ mod battle {
                                                 char_regen += on_hit_item_stack;
                                             } else if on_hit_item_type == EFFECT_REFLECT {
                                                 char_reflect += on_hit_item_stack;
-                                            } else if on_hit_item_type == EFFECT_POISON {
-                                                dummy_poison += on_hit_item_stack;
+                                            } else if on_hit_item_type == EFFECT_spike {
+                                                dummy_spike += on_hit_item_stack;
                                             }
                                         }
 
@@ -514,17 +480,16 @@ mod battle {
                                             whichItem: curr_item_index,
                                             damageCaused: damageCaused,
                                             isDodged: false,
-                                            cleansePoison: 0,
                                             buffType: EFFECT_ARMOR,
                                             regenHP: 0,
                                             player_armor_stacks: char_armor,
                                             player_regen_stacks: char_regen,
                                             player_reflect_stacks: char_reflect,
-                                            player_poison_stacks: char_poison,
+                                            player_spike_stacks: char_spike,
                                             dummy_armor_stacks: dummy_armor,
                                             dummy_regen_stacks: dummy_regen,
                                             dummy_reflect_stacks: dummy_reflect,
-                                            dummy_poison_stacks: dummy_poison,
+                                            dummy_spike_stacks: dummy_spike,
                                         })
                                     );
 
@@ -562,17 +527,16 @@ mod battle {
                                                 whichItem: 0,
                                                 damageCaused: damageCaused,
                                                 isDodged: false,
-                                                cleansePoison: 0,
                                                 buffType: EFFECT_REFLECT,
                                                 regenHP: 0,
                                                 player_armor_stacks: char_armor,
                                                 player_regen_stacks: char_regen,
                                                 player_reflect_stacks: char_reflect,
-                                                player_poison_stacks: char_poison,
+                                                player_spike_stacks: char_spike,
                                                 dummy_armor_stacks: dummy_armor,
                                                 dummy_regen_stacks: dummy_regen,
                                                 dummy_reflect_stacks: dummy_reflect,
-                                                dummy_poison_stacks: dummy_poison,
+                                                dummy_spike_stacks: dummy_spike,
                                             })
                                         );
 
@@ -583,38 +547,6 @@ mod battle {
                                         dummy_health -= damageCaused;
                                     }
                                 // ====== end ======
-                                } else {
-                                    if cleansePoison > 0 {
-                                        if dummy_poison > cleansePoison {
-                                            dummy_poison -= cleansePoison;
-                                        } else {
-                                            dummy_poison = 0;
-                                        }
-                                        battleLogsCount += 1;
-                                        emit!(
-                                            world,
-                                            (BattleLogDetail {
-                                                player,
-                                                battleLogId: battleLogCounterCount,
-                                                id: battleLogsCount,
-                                                whoTriggered: curr_item_belongs,
-                                                whichItem: curr_item_index,
-                                                damageCaused: 0,
-                                                isDodged: false,
-                                                cleansePoison: cleansePoison,
-                                                buffType: EFFECT_CLEANSE_POISON,
-                                                regenHP: 0,
-                                                player_armor_stacks: char_armor,
-                                                player_regen_stacks: char_regen,
-                                                player_reflect_stacks: char_reflect,
-                                                player_poison_stacks: char_poison,
-                                                dummy_armor_stacks: dummy_armor,
-                                                dummy_regen_stacks: dummy_regen,
-                                                dummy_reflect_stacks: dummy_reflect,
-                                                dummy_poison_stacks: dummy_poison,
-                                            })
-                                        );
-                                    }
                                 }
                             }
                         } else if rand >= chance && damage > 0 {
@@ -629,17 +561,16 @@ mod battle {
                                     whichItem: curr_item_index,
                                     damageCaused: 0,
                                     isDodged: true,
-                                    cleansePoison: 0,
                                     buffType: 0,
                                     regenHP: 0,
                                     player_armor_stacks: char_armor,
                                     player_regen_stacks: char_regen,
                                     player_reflect_stacks: char_reflect,
-                                    player_poison_stacks: char_poison,
+                                    player_spike_stacks: char_spike,
                                     dummy_armor_stacks: dummy_armor,
                                     dummy_regen_stacks: dummy_regen,
                                     dummy_reflect_stacks: dummy_reflect,
-                                    dummy_poison_stacks: dummy_poison,
+                                    dummy_spike_stacks: dummy_spike,
                                 })
                             );
                         }
@@ -648,10 +579,10 @@ mod battle {
                     i += 1;
                 };
 
-                // ====== Poison effect: Deals 1 damage per stack every 2 seconds. ======
+                // ====== spike effect: Deals 1 damage per stack every 2 seconds. ======
                 // ====== Heal effect: Regenerate 1 health per stack every 2 seconds. ======
                 if seconds % 2 == 0 {
-                    if char_poison > 0 {
+                    if char_spike > 0 {
                         battleLogsCount += 1;
                         emit!(
                             world,
@@ -661,29 +592,28 @@ mod battle {
                                 id: battleLogsCount,
                                 whoTriggered: 'dummy',
                                 whichItem: 0,
-                                damageCaused: char_poison,
+                                damageCaused: char_spike,
                                 isDodged: false,
-                                cleansePoison: 0,
-                                buffType: EFFECT_POISON,
+                                buffType: EFFECT_spike,
                                 regenHP: 0,
                                 player_armor_stacks: char_armor,
                                 player_regen_stacks: char_regen,
                                 player_reflect_stacks: char_reflect,
-                                player_poison_stacks: char_poison,
+                                player_spike_stacks: char_spike,
                                 dummy_armor_stacks: dummy_armor,
                                 dummy_regen_stacks: dummy_regen,
                                 dummy_reflect_stacks: dummy_reflect,
-                                dummy_poison_stacks: dummy_poison,
+                                dummy_spike_stacks: dummy_spike,
                             })
                         );
 
-                        if char_health <= char_poison {
+                        if char_health <= char_spike {
                             winner = 'dummy';
                             break;
                         }
-                        char_health -= char_poison;
+                        char_health -= char_spike;
                     }
-                    if dummy_poison > 0 {
+                    if dummy_spike > 0 {
                         battleLogsCount += 1;
                         emit!(
                             world,
@@ -693,27 +623,26 @@ mod battle {
                                 id: battleLogsCount,
                                 whoTriggered: 'player',
                                 whichItem: 0,
-                                damageCaused: dummy_poison,
+                                damageCaused: dummy_spike,
                                 isDodged: false,
-                                cleansePoison: 0,
-                                buffType: EFFECT_POISON,
+                                buffType: EFFECT_spike,
                                 regenHP: 0,
                                 player_armor_stacks: char_armor,
                                 player_regen_stacks: char_regen,
                                 player_reflect_stacks: char_reflect,
-                                player_poison_stacks: char_poison,
+                                player_spike_stacks: char_spike,
                                 dummy_armor_stacks: dummy_armor,
                                 dummy_regen_stacks: dummy_regen,
                                 dummy_reflect_stacks: dummy_reflect,
-                                dummy_poison_stacks: dummy_poison,
+                                dummy_spike_stacks: dummy_spike,
                             })
                         );
 
-                        if dummy_health <= dummy_poison {
+                        if dummy_health <= dummy_spike {
                             winner = 'player';
                             break;
                         }
-                        dummy_health -= dummy_poison;
+                        dummy_health -= dummy_spike;
                     }
                     if char_regen > 0 {
                         battleLogsCount += 1;
@@ -727,17 +656,16 @@ mod battle {
                                 whichItem: 0,
                                 damageCaused: 0,
                                 isDodged: false,
-                                cleansePoison: 0,
                                 buffType: EFFECT_REGEN,
                                 regenHP: char_regen,
                                 player_armor_stacks: char_armor,
                                 player_regen_stacks: char_regen,
                                 player_reflect_stacks: char_reflect,
-                                player_poison_stacks: char_poison,
+                                player_spike_stacks: char_spike,
                                 dummy_armor_stacks: dummy_armor,
                                 dummy_regen_stacks: dummy_regen,
                                 dummy_reflect_stacks: dummy_reflect,
-                                dummy_poison_stacks: dummy_poison,
+                                dummy_spike_stacks: dummy_spike,
                             })
                         );
 
@@ -758,17 +686,16 @@ mod battle {
                                 whichItem: 0,
                                 damageCaused: 0,
                                 isDodged: false,
-                                cleansePoison: 0,
                                 buffType: EFFECT_REGEN,
                                 regenHP: dummy_regen,
                                 player_armor_stacks: char_armor,
                                 player_regen_stacks: char_regen,
                                 player_reflect_stacks: char_reflect,
-                                player_poison_stacks: char_poison,
+                                player_spike_stacks: char_spike,
                                 dummy_armor_stacks: dummy_armor,
                                 dummy_regen_stacks: dummy_regen,
                                 dummy_reflect_stacks: dummy_reflect,
-                                dummy_poison_stacks: dummy_poison,
+                                dummy_spike_stacks: dummy_spike,
                             })
                         );
 

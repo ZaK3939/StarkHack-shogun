@@ -30,9 +30,11 @@ mod actions {
     };
 
     use shogun::utils::random::{pseudo_seed, random};
-    use shogun::items::{Backpack1, Backpack2};
 
-    const GRID_X: usize = 9;
+    // for start item
+    // use shogun::items::{Backpack1, Backpack2};
+
+    const GRID_X: usize = 7;
     const GRID_Y: usize = 7;
     const INIT_GOLD: usize = 8;
     const INIT_HEALTH: usize = 25;
@@ -60,23 +62,46 @@ mod actions {
 
             // Default the player has 2 Backpacks
             // Must add two backpack items when setup the game
-            let item = get!(world, Backpack1::id, (Item));
-            assert(item.itemType == 4, 'Invalid item type');
-            let item = get!(world, Backpack2::id, (Item));
-            assert(item.itemType == 4, 'Invalid item type');
+            // let item = get!(world, Backpack1::id, (Item));
+            // assert(item.itemType == 4, 'Invalid item type');
+            // let item = get!(world, Backpack2::id, (Item));
+            // assert(item.itemType == 4, 'Invalid item type');
 
-            set!(
-                world,
-                (
-                    CharacterItemStorage { player, id: 1, itemId: Backpack1::id },
-                    CharacterItemStorage { player, id: 2, itemId: Backpack2::id },
-                    CharacterItemsStorageCounter { player, count: 2 },
-                )
-            );
+            // set!(
+            //     world,
+            //     (
+            //         CharacterItemStorage { player, id: 1, itemId: Backpack1::id },
+            //         CharacterItemStorage { player, id: 2, itemId: Backpack2::id },
+            //         CharacterItemsStorageCounter { player, count: 2 },
+            //     )
+            // );
 
-            self.place_item(1, 4, 2, 0);
-            self.place_item(2, 2, 2, 0);
+            // self.place_item(1, 4, 2, 0);
+            // self.place_item(2, 2, 2, 0);
+            let mut i: usize = 1;
 
+            loop {
+                if i > GRID_X {
+                    break;
+                }
+                let mut j = 1;
+                loop {
+                    if j > GRID_Y {
+                        break;
+                    }
+                    let playerBackpackGrids = get!(world, (player, i, j), (BackpackGrids));
+                    set!(
+                        world,
+                        (BackpackGrids {
+                            player: player, x: i, y: j, enabled: true, occupied: false
+                        })
+                    );
+
+                    j += 1;
+                };
+                i += 1;
+            };
+            
             // keep the previous rating, totalWins and totalLoss during rebirth
             let prev_rating = player_exists.rating;
             let prev_total_wins = player_exists.totalWins;
