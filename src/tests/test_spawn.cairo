@@ -67,32 +67,31 @@ mod tests {
         assert(char.updatedAt == timestamp, 'updatedAt mismatch');
 
         let storageItemsCounter = get!(world, (alice), CharacterItemsStorageCounter);
-        assert(storageItemsCounter.count == 2, 'Storage item count should be 2');
+        assert(storageItemsCounter.count == 1, 'Storage item count should be 1');
 
         let storageItem = get!(world, (alice, 1), CharacterItemStorage);
-        assert(storageItem.itemId == 0, 'item 1 should be 0');
-
-        let storageItem = get!(world, (alice, 2), CharacterItemStorage);
-        assert(storageItem.itemId == 0, 'item 2 should be 0');
+        assert(storageItem.itemId == 40, 'item 1 should be 40');
 
         let inventoryItemsCounter = get!(world, (alice), CharacterItemsInventoryCounter);
-        assert(inventoryItemsCounter.count == 2, 'item count should be 2');
+        assert(inventoryItemsCounter.count == 0, 'item count should be 0');
 
-        let inventoryItem = get!(world, (alice, 1), CharacterItemInventory);
-        assert(inventoryItem.itemId == 1, 'item 1 should be 1');
-        assert(inventoryItem.position.x == 4, 'item 1 x should be 4');
-        assert(inventoryItem.position.y == 2, 'item 1 y should be 2');
+        // let inventoryItem = get!(world, (alice, 1), CharacterItemInventory);
+        // assert(inventoryItem.itemId == 1, 'item 1 should be 1');
+        // assert(inventoryItem.position.x == 4, 'item 1 x should be 4');
+        // assert(inventoryItem.position.y == 2, 'item 1 y should be 2');
 
-        let inventoryItem = get!(world, (alice, 2), CharacterItemInventory);
-        assert(inventoryItem.itemId == 2, 'item 2 should be 2');
-        assert(inventoryItem.position.x == 2, 'item 2 x should be 4');
-        assert(inventoryItem.position.y == 2, 'item 2 y should be 3');
+        // let inventoryItem = get!(world, (alice, 2), CharacterItemInventory);
+        // assert(inventoryItem.itemId == 2, 'item 2 should be 2');
+        // assert(inventoryItem.position.x == 2, 'item 2 x should be 4');
+        // assert(inventoryItem.position.y == 2, 'item 2 y should be 3');
 
         let playerShopData = get!(world, (alice), Shop);
         assert(playerShopData.item1 == 0, 'item 1 should be 0');
         assert(playerShopData.item2 == 0, 'item 2 should be 0');
         assert(playerShopData.item3 == 0, 'item 3 should be 0');
         assert(playerShopData.item4 == 0, 'item 4 should be 0');
+        assert(playerShopData.item5 == 0, 'item 5 should be 0');
+        assert(playerShopData.item6 == 0, 'item 6 should be 0');
 
         // During spawn backpacks are added at (4,2) and (2,2) with h and w of 
         // 2 and 3 & 2 and 2 respectively

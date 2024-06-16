@@ -59,17 +59,17 @@ mod tests {
 
         actions_system.buy_item(4);
         let storageItemCount = get!(world, (alice), (CharacterItemsStorageCounter));
-        assert(storageItemCount.count == 2, 'storage count mismatch');
+        assert(storageItemCount.count == 2, 'storage count mismatch 2');
 
         let prev_char_data = get!(world, alice, (Character));
 
         actions_system.sell_item(2);
         let storageItemCount = get!(world, (alice), (CharacterItemsStorageCounter));
-        assert(storageItemCount.count == 2, 'storage count mismatch');
+        assert(storageItemCount.count == 2, 'storage count mismatch 2');
 
         let char_data = get!(world, alice, (Character));
         assert(
-            char_data.gold == prev_char_data.gold + (items::Item6::price / 2),
+            char_data.gold == prev_char_data.gold + (items::Item4::price / 2),
             'sell one: gold value mismatch'
         );
 
@@ -78,13 +78,13 @@ mod tests {
 
         actions_system.buy_item(6);
         let storageItemCount = get!(world, (alice), (CharacterItemsStorageCounter));
-        assert(storageItemCount.count == 2, 'storage count mismatch');
+        assert(storageItemCount.count == 2, 'storage count mismatch 2');
 
         let prev_char_data = get!(world, alice, (Character));
 
         actions_system.sell_item(2);
         let storageItemCount = get!(world, (alice), (CharacterItemsStorageCounter));
-        assert(storageItemCount.count == 2, 'storage count mismatch');
+        assert(storageItemCount.count == 2, 'storage count mismatch 2');
 
         let char_data = get!(world, alice, (Character));
         assert(
@@ -93,10 +93,8 @@ mod tests {
         );
 
         let storageItem = get!(world, (alice, 1), (CharacterItemStorage));
-        assert(storageItem.itemId == 0, 'item id mismatch');
+        assert(storageItem.itemId == 40, 'item1 id mismatch');
 
-        let storageItem = get!(world, (alice, 2), (CharacterItemStorage));
-        assert(storageItem.itemId == 0, 'item id mismatch');
 
         actions_system.buy_item(8);
         actions_system.buy_item(9);
@@ -116,29 +114,31 @@ mod tests {
         actions_system.buy_item(3);
 
         let storageItemCount = get!(world, (alice), (CharacterItemsStorageCounter));
-        assert(storageItemCount.count == 3, 'storage count mismatch');
+        assert(storageItemCount.count == 4, 'storage count mismatch 4');
 
         actions_system.sell_item(2);
         let storageItemCount = get!(world, (alice), (CharacterItemsStorageCounter));
-        assert(storageItemCount.count == 3, 'storage count mismatch');
+        assert(storageItemCount.count == 4, 'storage count mismatch 4');
 
         let storageItem = get!(world, (alice, 1), (CharacterItemStorage));
-        assert(storageItem.itemId == 9, 'item id mismatch');
+        assert(storageItem.itemId == 40, 'item40 id mismatch');
+        
         let storageItem = get!(world, (alice, 2), (CharacterItemStorage));
-        assert(storageItem.itemId == 0, 'item id mismatch');
+        
+        assert(storageItem.itemId == 0, 'item2 id mismatch');
         let storageItem = get!(world, (alice, 3), (CharacterItemStorage));
-        assert(storageItem.itemId == 3, 'item id mismatch');
+        assert(storageItem.itemId == 9, 'item3 id mismatch');
 
         actions_system.buy_item(5);
         let storageItemCount = get!(world, (alice), (CharacterItemsStorageCounter));
-        assert(storageItemCount.count == 3, 'storage count mismatch');
+        assert(storageItemCount.count == 4, 'storage count mismatch 4');
 
         let storageItem = get!(world, (alice, 1), (CharacterItemStorage));
-        assert(storageItem.itemId == 9, 'item id mismatch');
+        assert(storageItem.itemId == 40, 'item40 id mismatch');
         let storageItem = get!(world, (alice, 2), (CharacterItemStorage));
-        assert(storageItem.itemId == 5, 'item id mismatch');
+        assert(storageItem.itemId == 5, 'item2 id mismatch');
         let storageItem = get!(world, (alice, 3), (CharacterItemStorage));
-        assert(storageItem.itemId == 3, 'item id mismatch');
+        assert(storageItem.itemId == 9, 'item3 id mismatch');
     }
 
     #[test]
