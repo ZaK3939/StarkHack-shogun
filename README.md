@@ -10,7 +10,7 @@ sozo clean or (rm -rf manifests)
 
 sozo build
 
-katana --disable-fee --allowed-origins "\*" or( RUST_BACKTRACE=1 katana --disable-fee --allowed-origins "*")
+katana --disable-fee --allowed-origins "*" or( RUST_BACKTRACE=1 katana --disable-fee --allowed-origins "*")
 
 Change world_address into Scarb.toml
 
