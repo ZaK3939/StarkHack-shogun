@@ -310,10 +310,27 @@ export class SelectItem extends Phaser.Scene {
         const resetButton = this.add.image(width - 50, height - 50, 'reset').setOrigin(0.5, 0.5).setScale(0.5);
         resetButton.setInteractive();
 
+        const updateResetButtonState = () => {
+            if (playerGold > 0) {
+                resetButton.setInteractive();
+                resetButton.clearTint();
+            } else {
+                resetButton.disableInteractive();
+                resetButton.setTint(0x999999);
+            }
+        };
+
         resetButton.on('pointerdown', () => {
             console.log('Reset Button Clicked');
-            displayItems();
+            if (playerGold > 0) {
+                playerGold -= 1;
+                displayItems();
+                updateStatsText();
+                updateResetButtonState();
+            }
         });
+
+        updateResetButtonState();
 
         console.log('SelectItem Scene Created');
     }
