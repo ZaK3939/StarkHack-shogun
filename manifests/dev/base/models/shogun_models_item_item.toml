@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x16263b8bd95226f03ae4c6e56706b11437448d33dea3450eb160fb8f4fe5dc9"
-original_class_hash = "0x16263b8bd95226f03ae4c6e56706b11437448d33dea3450eb160fb8f4fe5dc9"
+class_hash = "0x145f784a3245506f9345ad3354c7d4e02764c5df2a740457aa4c1324d3956ed"
+original_class_hash = "0x145f784a3245506f9345ad3354c7d4e02764c5df2a740457aa4c1324d3956ed"
 abi = "manifests/dev/abis/base/models/shogun_models_item_item.json"
 name = "shogun::models::item::item"
 
@@ -16,6 +16,11 @@ key = false
 
 [[members]]
 name = "itemType"
+type = "u8"
+key = false
+
+[[members]]
+name = "shapeType"
 type = "u8"
 key = false
 

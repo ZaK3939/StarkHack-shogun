@@ -319,98 +319,26 @@
   },
   {
     "type": "impl",
-    "name": "itemImpl",
-    "interface_name": "shogun::models::item::Iitem"
+    "name": "character_items_storage_counterImpl",
+    "interface_name": "shogun::models::characterItem::Icharacter_items_storage_counter"
   },
   {
     "type": "struct",
-    "name": "shogun::models::item::Item",
+    "name": "shogun::models::characterItem::CharacterItemsStorageCounter",
     "members": [
       {
-        "name": "id",
+        "name": "player",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "count",
         "type": "core::integer::u32"
-      },
-      {
-        "name": "name",
-        "type": "core::felt252"
-      },
-      {
-        "name": "itemType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "shapeType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "width",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "height",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "price",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "damage",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "cleansePoison",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "chance",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "cooldown",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rarity",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "armor",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "armorActivation",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "regen",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "regenActivation",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "reflect",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "reflectActivation",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "poison",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "poisonActivation",
-        "type": "core::integer::u8"
       }
     ]
   },
   {
     "type": "interface",
-    "name": "shogun::models::item::Iitem",
+    "name": "shogun::models::characterItem::Icharacter_items_storage_counter",
     "items": [
       {
         "type": "function",
@@ -418,7 +346,7 @@
         "inputs": [
           {
             "name": "model",
-            "type": "shogun::models::item::Item"
+            "type": "shogun::models::characterItem::CharacterItemsStorageCounter"
           }
         ],
         "outputs": [],
@@ -428,7 +356,7 @@
   },
   {
     "type": "event",
-    "name": "shogun::models::item::item::Event",
+    "name": "shogun::models::characterItem::character_items_storage_counter::Event",
     "kind": "enum",
     "variants": []
   }

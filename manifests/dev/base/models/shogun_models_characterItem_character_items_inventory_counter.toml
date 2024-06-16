@@ -1,0 +1,15 @@
+kind = "DojoModel"
+class_hash = "0x7827dac1ab6a0662d79e0a80dedf9e1e957853cf838d2295e5341e7477515db"
+original_class_hash = "0x7827dac1ab6a0662d79e0a80dedf9e1e957853cf838d2295e5341e7477515db"
+abi = "manifests/dev/abis/base/models/shogun_models_characterItem_character_items_inventory_counter.json"
+name = "shogun::models::characterItem::character_items_inventory_counter"
+
+[[members]]
+name = "player"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "count"
+type = "usize"
+key = false
