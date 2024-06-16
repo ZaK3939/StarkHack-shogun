@@ -9,6 +9,8 @@ struct Item {
     name: felt252,
     // 1 - Weapon, 2 - Start Gear (Buff/Debuff initial Battle), 3 - Gear, 4 - Backpack 5 - Consumable
     itemType: u8,
+    // 1 - Square, 2 - T, 3 - Axe, 4 - Banana, 5 - Pan
+    shape: u8,
     width: usize,
     height: usize,
     price: usize,

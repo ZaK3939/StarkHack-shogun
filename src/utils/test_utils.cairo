@@ -71,8 +71,7 @@ fn add_items(ref admins_system: IAdminDispatcher) {
             items::Dagger::poison,
             items::Dagger::poisonActivation,
         );
-
-    admins_system
+        admins_system
         .add_item(
             items::Sword::id,
             items::Sword::name,
@@ -117,7 +116,7 @@ fn add_items(ref admins_system: IAdminDispatcher) {
             items::Spike::poison,
             items::Spike::poisonActivation,
         );
-
+    
     admins_system
         .add_item(
             items::Shield::id,
@@ -139,166 +138,5 @@ fn add_items(ref admins_system: IAdminDispatcher) {
             items::Shield::reflectActivation,
             items::Shield::poison,
             items::Shield::poisonActivation,
-        );
-
-    admins_system
-        .add_item(
-            items::Helmet::id,
-            items::Helmet::name,
-            items::Helmet::itemType,
-            items::Helmet::width,
-            items::Helmet::height,
-            items::Helmet::price,
-            items::Helmet::damage,
-            items::Helmet::cleansePoison,
-            items::Helmet::chance,
-            items::Helmet::cooldown,
-            items::Helmet::rarity,
-            items::Helmet::armor,
-            items::Helmet::armorActivation,
-            items::Helmet::regen,
-            items::Helmet::regenActivation,
-            items::Helmet::reflect,
-            items::Helmet::reflectActivation,
-            items::Helmet::poison,
-            items::Helmet::poisonActivation,
-        );
-
-    admins_system
-        .add_item(
-            items::HealingPotion::id,
-            items::HealingPotion::name,
-            items::HealingPotion::itemType,
-            items::HealingPotion::width,
-            items::HealingPotion::height,
-            items::HealingPotion::price,
-            items::HealingPotion::damage,
-            items::HealingPotion::cleansePoison,
-            items::HealingPotion::chance,
-            items::HealingPotion::cooldown,
-            items::HealingPotion::rarity,
-            items::HealingPotion::armor,
-            items::HealingPotion::armorActivation,
-            items::HealingPotion::regen,
-            items::HealingPotion::regenActivation,
-            items::HealingPotion::reflect,
-            items::HealingPotion::reflectActivation,
-            items::HealingPotion::poison,
-            items::HealingPotion::poisonActivation,
-        );
-
-    admins_system
-        .add_item(
-            items::LeatherArmor::id,
-            items::LeatherArmor::name,
-            items::LeatherArmor::itemType,
-            items::LeatherArmor::width,
-            items::LeatherArmor::height,
-            items::LeatherArmor::price,
-            items::LeatherArmor::damage,
-            items::LeatherArmor::cleansePoison,
-            items::LeatherArmor::chance,
-            items::LeatherArmor::cooldown,
-            items::LeatherArmor::rarity,
-            items::LeatherArmor::armor,
-            items::LeatherArmor::armorActivation,
-            items::LeatherArmor::regen,
-            items::LeatherArmor::regenActivation,
-            items::LeatherArmor::reflect,
-            items::LeatherArmor::reflectActivation,
-            items::LeatherArmor::poison,
-            items::LeatherArmor::poisonActivation,
-        );
-
-    admins_system
-        .add_item(
-            items::PoisonPotion::id,
-            items::PoisonPotion::name,
-            items::PoisonPotion::itemType,
-            items::PoisonPotion::width,
-            items::PoisonPotion::height,
-            items::PoisonPotion::price,
-            items::PoisonPotion::damage,
-            items::PoisonPotion::cleansePoison,
-            items::PoisonPotion::chance,
-            items::PoisonPotion::cooldown,
-            items::PoisonPotion::rarity,
-            items::PoisonPotion::armor,
-            items::PoisonPotion::armorActivation,
-            items::PoisonPotion::regen,
-            items::PoisonPotion::regenActivation,
-            items::PoisonPotion::reflect,
-            items::PoisonPotion::reflectActivation,
-            items::PoisonPotion::poison,
-            items::PoisonPotion::poisonActivation,
-        );
-
-    admins_system
-        .add_item(
-            items::AugmentedSword::id,
-            items::AugmentedSword::name,
-            items::AugmentedSword::itemType,
-            items::AugmentedSword::width,
-            items::AugmentedSword::height,
-            items::AugmentedSword::price,
-            items::AugmentedSword::damage,
-            items::AugmentedSword::cleansePoison,
-            items::AugmentedSword::chance,
-            items::AugmentedSword::cooldown,
-            items::AugmentedSword::rarity,
-            items::AugmentedSword::armor,
-            items::AugmentedSword::armorActivation,
-            items::AugmentedSword::regen,
-            items::AugmentedSword::regenActivation,
-            items::AugmentedSword::reflect,
-            items::AugmentedSword::reflectActivation,
-            items::AugmentedSword::poison,
-            items::AugmentedSword::poisonActivation,
-        );
-
-    admins_system
-        .add_item(
-            items::AugmentedDagger::id,
-            items::AugmentedDagger::name,
-            items::AugmentedDagger::itemType,
-            items::AugmentedDagger::width,
-            items::AugmentedDagger::height,
-            items::AugmentedDagger::price,
-            items::AugmentedDagger::damage,
-            items::AugmentedDagger::cleansePoison,
-            items::AugmentedDagger::chance,
-            items::AugmentedDagger::cooldown,
-            items::AugmentedDagger::rarity,
-            items::AugmentedDagger::armor,
-            items::AugmentedDagger::armorActivation,
-            items::AugmentedDagger::regen,
-            items::AugmentedDagger::regenActivation,
-            items::AugmentedDagger::reflect,
-            items::AugmentedDagger::reflectActivation,
-            items::AugmentedDagger::poison,
-            items::AugmentedDagger::poisonActivation,
-        );
-
-    admins_system
-        .add_item(
-            items::SpikeShield::id,
-            items::SpikeShield::name,
-            items::SpikeShield::itemType,
-            items::SpikeShield::width,
-            items::SpikeShield::height,
-            items::SpikeShield::price,
-            items::SpikeShield::damage,
-            items::SpikeShield::cleansePoison,
-            items::SpikeShield::chance,
-            items::SpikeShield::cooldown,
-            items::SpikeShield::rarity,
-            items::SpikeShield::armor,
-            items::SpikeShield::armorActivation,
-            items::SpikeShield::regen,
-            items::SpikeShield::regenActivation,
-            items::SpikeShield::reflect,
-            items::SpikeShield::reflectActivation,
-            items::SpikeShield::poison,
-            items::SpikeShield::poisonActivation,
         );
 }
