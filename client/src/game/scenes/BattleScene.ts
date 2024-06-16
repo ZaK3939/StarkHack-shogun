@@ -46,12 +46,41 @@ export class BattleScene extends Phaser.Scene {
             }
         }
 
-        // Your status
-        this.add.image(width / 2 - 200, height - 150, 'battleStatus').setOrigin(0.5, 0.5).setScale(0.8);
+        // Player's status
+        const playerCurrentHP = 35;
+        const playerMaxHP = 35;
+        const playerCurrentStamina = 5;
+        const playerMaxStamina = 5;
+        this.add.image(width / 2 - 200, height - 140, 'battleStatus').setOrigin(0.5, 0.5).setScale(0.8);
+        this.createStatusBars(width / 2 - 200, height - 200, playerCurrentHP, playerMaxHP, playerCurrentStamina, playerMaxStamina);
 
         // Enemy's status
-        this.add.image(width / 2 + 200, height - 150, 'battleStatus').setOrigin(0.5, 0.5).setScale(0.8);
+        const enemyCurrentHP = 30;
+        const enemyMaxHP = 30;
+        const enemyCurrentStamina = 4;
+        const enemyMaxStamina = 4;
+        this.add.image(width / 2 + 200, height - 140, 'battleStatus').setOrigin(0.5, 0.5).setScale(0.8);
+        this.createStatusBars(width / 2 + 200, height - 200, enemyCurrentHP, enemyMaxHP, enemyCurrentStamina, enemyMaxStamina);
 
         console.log('BattleScene Created');
+    }
+
+    createStatusBars(x: number, y: number, currentHP: number, maxHP: number, currentStamina: number, maxStamina: number) {
+        const barWidth = 160;
+        const barHeight = 20;
+        const offsetY = 20;
+        const textX = x - 130;  // Text alignment x coordinate
+
+        // HP Bar
+        this.add.rectangle(x - 50, y - offsetY, barWidth, barHeight, 0x000000).setOrigin(0, 0.5);
+        this.add.rectangle(x - 50, y - offsetY, barWidth * (currentHP / maxHP), barHeight, 0xff0000).setOrigin(0, 0.5);
+        this.add.text(textX, y - offsetY, 'HP', { fontSize: '16px', color: '#ffffff' }).setOrigin(0, 0.5);
+        this.add.text(x - 50 + barWidth, y - offsetY, `${currentHP}/${maxHP}`, { fontSize: '16px', color: '#ffffff' }).setOrigin(1, 0.5);
+
+        // Stamina Bar
+        this.add.rectangle(x - 50, y + offsetY, barWidth, barHeight, 0x000000).setOrigin(0, 0.5);
+        this.add.rectangle(x - 50, y + offsetY, barWidth * (currentStamina / maxStamina), barHeight, 0x00B75F).setOrigin(0, 0.5);
+        this.add.text(textX, y + offsetY, 'Stamina', { fontSize: '16px', color: '#ffffff' }).setOrigin(0, 0.5);
+        this.add.text(x - 50 + barWidth, y + offsetY, `${currentStamina}/${maxStamina}`, { fontSize: '16px', color: '#ffffff' }).setOrigin(1, 0.5);
     }
 }
