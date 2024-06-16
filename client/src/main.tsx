@@ -19,31 +19,26 @@ async function init() {
     const rootElement = document.getElementById("root");
     if (!rootElement) throw new Error("React root not found");
     const root = ReactDOM.createRoot(rootElement as HTMLElement);
-    root.render(
-        <React.StrictMode>
-            <App />
-        </React.StrictMode>
-    );
 
-    // try {
-    //     const setupResult = await setup(dojoConfig);
+    try {
+        const setupResult = await setup(dojoConfig);
 
-    //     if (!setupResult) {
-    //         root.render(<div>Loading...</div>);
-    //         return;
-    //     }
+        if (!setupResult) {
+            root.render(<div>Loading...</div>);
+            return;
+        }
 
-    //     root.render(
-    //         <React.StrictMode>
-    //             <DojoProvider value={setupResult}>
-    //                 <App />
-    //             </DojoProvider>
-    //         </React.StrictMode>
-    //     );
-    // } catch (error) {
-    //     console.error("Error during setup:", error);
-    //     root.render(<div>Error</div>);
-    // }
+        root.render(
+            <React.StrictMode>
+                <DojoProvider value={setupResult}>
+                    <App />
+                </DojoProvider>
+            </React.StrictMode>
+        );
+    } catch (error) {
+        console.error("Error during setup:", error);
+        root.render(<div>Error</div>);
+    }
 }
 
 init();
