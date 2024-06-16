@@ -14,6 +14,8 @@ export class BattleScene extends Phaser.Scene {
     private enemyHPText: Phaser.GameObjects.Text;
     private playerHPBar: Phaser.GameObjects.Rectangle;
     private enemyHPBar: Phaser.GameObjects.Rectangle;
+    private charactorMain: Phaser.GameObjects.Image;
+    private charactorEnemy: Phaser.GameObjects.Image;
 
     constructor() {
         super({ key: 'BattleScene' });
@@ -40,10 +42,10 @@ export class BattleScene extends Phaser.Scene {
         console.log('BattleScene Loaded');
 
         // charactorMain
-        this.add.image(150, height - 150, 'charactorMain').setOrigin(0.5, 0.5);
+        this.charactorMain = this.add.image(150, height - 150, 'charactorMain').setOrigin(0.5, 0.5);
 
         // charactorEnemy
-        this.add.image(width - 150, height - 150, 'charactorEnemy').setOrigin(0.5, 0.5);
+        this.charactorEnemy = this.add.image(width - 150, height - 150, 'charactorEnemy').setOrigin(0.5, 0.5);
 
         // Your items
         const blockWidth = 70;
@@ -80,7 +82,7 @@ export class BattleScene extends Phaser.Scene {
 
         // Set up a timer to decrease HP randomly
         this.time.addEvent({
-            delay: 1000, // 1 second
+            delay: 300, // 0.3 second
             callback: this.decreaseHP,
             callbackScope: this,
             loop: true
@@ -130,20 +132,38 @@ export class BattleScene extends Phaser.Scene {
 
         // TODO: debugUI must bec hanged
         if (Math.random() < 0.5) {
-            // Decrease player's HP by 7
+            // Decrease player's HP by 7 and animate charactorEnemy
             if (this.playerCurrentHP > 0) {
                 this.playerCurrentHP -= 7;
                 if (this.playerCurrentHP < 0) this.playerCurrentHP = 0;
                 this.playerHPBar.width = 160 * (this.playerCurrentHP / this.playerMaxHP);
                 this.playerHPText.setText(`${this.playerCurrentHP}/${this.playerMaxHP}`);
+                this.tweens.add({
+                    targets: this.charactorEnemy,
+                    angle: -30,
+                    duration: 100,
+                    yoyo: true,
+                    onComplete: () => {
+                        this.charactorEnemy.setAngle(0); // Reset angle to 0
+                    }
+                });
             }
         } else {
-            // Decrease enemy's HP by 7
+            // Decrease enemy's HP by 7 and animate charactorMain
             if (this.enemyCurrentHP > 0) {
                 this.enemyCurrentHP -= 7;
                 if (this.enemyCurrentHP < 0) this.enemyCurrentHP = 0;
                 this.enemyHPBar.width = 160 * (this.enemyCurrentHP / this.enemyMaxHP);
                 this.enemyHPText.setText(`${this.enemyCurrentHP}/${this.enemyMaxHP}`);
+                this.tweens.add({
+                    targets: this.charactorMain,
+                    angle: 30,
+                    duration: 100,
+                    yoyo: true,
+                    onComplete: () => {
+                        this.charactorMain.setAngle(0); // Reset angle to 0
+                    }
+                });
             }
         }
 
@@ -166,7 +186,7 @@ export class BattleScene extends Phaser.Scene {
         // Create the button background
         const buttonBackground = this.add.graphics();
         buttonBackground.fillStyle(0xff0000, 1); // Red color
-        buttonBackground.fillRoundedRect(width / 2 - 100, height / 2 + 242, 200, 50, 25);
+        buttonBackground.fillRoundedRect(width / 2 - 100, height / 2 + 242, 200, 50, 25); // Rounded rectangle
 
         // Add text to the button
         const buttonText = status === 'won' ? 'Go next stage' : 'Go top';
