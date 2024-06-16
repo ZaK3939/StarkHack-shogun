@@ -14,6 +14,7 @@ export class SelectItem extends Phaser.Scene {
         this.load.image('box', 'assets/components/box.png');
         this.load.image('shelf', 'assets/components/shelf.png');
         this.load.image('block', 'assets/components/block.png');
+        this.load.image('reset', 'assets/components/reset.png');
 
         // Load item images based on their ids
         Object.keys(itemData).forEach(id => {
@@ -29,7 +30,7 @@ export class SelectItem extends Phaser.Scene {
 
         this.add.image(400, height - 100, 'player').setOrigin(0.5, 0.5);
 
-        // プレイヤーの情報
+        // PlayerInfo
         const playerAddress = '0x00...000';
         let playerGold = 10;
         const playerVitality = 10;
@@ -40,7 +41,7 @@ export class SelectItem extends Phaser.Scene {
         const statsBoxX = 200;
         const statsBoxY = height - 200;
         const statsBoxWidth = 150;
-        const statsBoxHeight = 150; // Adjusted height to accommodate increased line spacing
+        const statsBoxHeight = 150;
 
         const statsBox = this.add.graphics();
         statsBox.fillStyle(0x000000, 0.5);
@@ -85,17 +86,16 @@ export class SelectItem extends Phaser.Scene {
         const blockHeight = 70;
         const startX = 50;
         const startY = 50;
+        const rows = 7;
+        const cols = 7;
 
         const blocks: Phaser.GameObjects.Image[] = [];
-        for (let row = 0; row < 7; row++) {
-            for (let col = 0; col < 9; col++) {
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
                 const block = this.add.image(startX + col * blockWidth, startY + row * blockHeight, 'block').setOrigin(0.5, 0.5);
                 blocks.push(block);
             }
         }
-
-        // Randomly select 6 items from itemData
-        const selectedItems = Phaser.Utils.Array.Shuffle(Object.keys(itemData)).slice(0, 6);
 
         const itemStartX = width - 300 - 150;
         const itemStartY = 320 - 150;
@@ -105,7 +105,6 @@ export class SelectItem extends Phaser.Scene {
         const itemPositions: { [key: string]: { x: number, y: number, width: number, height: number } } = {};
         const itemsOnBlock = new Set<string>();
 
-        // Hover text for item effect and name
         const hoverTextStyle = {
             fontSize: '18px',
             color: '#000000',
@@ -113,194 +112,245 @@ export class SelectItem extends Phaser.Scene {
             padding: { left: 10, right: 10, top: 5, bottom: 5 },
             wordWrap: { width: 240 }
         };
-
         const hoverText = this.add.text(width / 2, height / 2, '', hoverTextStyle).setOrigin(0.5).setVisible(false);
 
-        selectedItems.forEach((id, index) => {
-            const item = itemData[id];
-            console.log(`Displaying item: ${item.name}`);
-            const x = itemStartX + (index % 2) * itemSpacingX;
-            const y = itemStartY + Math.floor(index / 2) * itemSpacingY;
-            const itemImage = this.add.image(x, y, `item${id}`).setOrigin(0.5, 0.5).setScale(0.5).setName(`item${id}`);
-            itemImage.setInteractive({ draggable: true });
+        let selectedItems: string[] = [];
 
-            this.input.setDraggable(itemImage);
-
-            // Draw cost circle with gradient and border
-            const costCircle = this.add.graphics();
-            const circleX = x - 75;
-            const circleY = y;
-            const radius = 20;
-
-            // Draw the border
-            costCircle.lineStyle(2, 0x000000, 1); // Black border
-            costCircle.strokeCircle(circleX, circleY, radius);
-
-            // Draw the gradient
-            const gradient = costCircle.createGeometryMask();
-            const gradientFill = this.add.graphics();
-            gradientFill.fillGradientStyle(0xffff00, 0xffd700, 0xffa500, 0xff8c00, 1);
-            gradientFill.fillCircle(circleX, circleY, radius);
-            costCircle.setMask(gradient);
-
-            // Add cost text
-            this.add.text(circleX, circleY, `${item.cost}`, {
-                fontSize: '14px',
-                color: '#000000'
-            }).setOrigin(0.5);
-
-            itemPositions[`item${id}`] = { x, y, width: item.width, height: item.height };
-
-            let highlightedBlocks: Phaser.GameObjects.Image[] = [];
-
-            itemImage.on('pointerover', () => {
-                hoverText.setText(`${item.name}\n${item.effect}`).setVisible(true);
-            });
-
-            itemImage.on('pointerout', () => {
-                hoverText.setVisible(false);
-            });
-
-            itemImage.on('dragstart', () => {
-                if (item.cost > playerGold) {
-                    itemImage.disableInteractive();
-                    this.time.delayedCall(100, () => {
-                        itemImage.setInteractive({ draggable: true });
-                    });
+        const displayItems = () => {
+            // Clear previous items
+            this.children.each(child => {
+                if (child.name && child.name.startsWith('item')) {
+                    child.destroy();
                 }
             });
+            selectedItems = Phaser.Utils.Array.Shuffle(Object.keys(itemData)).slice(0, 6);
 
-            itemImage.on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
-                if (item.cost > playerGold) {
-                    return;
-                }
+            selectedItems.forEach((id, index) => {
+                const item = itemData[id];
+                console.log(`Displaying item: ${item.name}`);
+                const x = itemStartX + (index % 2) * itemSpacingX;
+                const y = itemStartY + Math.floor(index / 2) * itemSpacingY;
+                const itemImage = this.add.image(x, y, `item${id}`).setOrigin(0.5, 0.5).setScale(0.5).setName(`item${id}`);
+                itemImage.setInteractive({ draggable: true });
 
-                itemImage.x = dragX;
-                itemImage.y = dragY;
+                this.input.setDraggable(itemImage);
 
-                // ハイライトを更新
-                highlightedBlocks.forEach(block => block.clearTint());
-                highlightedBlocks = [];
+                // Draw cost circle with gradient and border
+                const costCircle = this.add.graphics();
+                const circleX = x - 75;
+                const circleY = y;
+                const radius = 20;
 
-                const block = blocks.find(block => Phaser.Math.Distance.Between(block.x, block.y, dragX, dragY) < blockWidth / 2);
-                if (block) {
-                    const { width, height } = item;
-                    const startCol = Math.floor((block.x - startX) / blockWidth);
-                    const startRow = Math.floor((block.y - startY) / blockHeight);
+                costCircle.lineStyle(2, 0x000000, 1);
+                costCircle.strokeCircle(circleX, circleY, radius);
 
-                    // ブロックが幅を超える場合はハイライトしない
-                    if (startCol + width <= 9 && startRow + height <= 7) {
-                        for (let r = 0; r < height; r++) {
-                            for (let c = 0; c < width; c++) {
-                                const idx = (startRow + r) * 9 + (startCol + c);
-                                if (blocks[idx]) {
-                                    blocks[idx].setTint(0x0000ff); // 青でハイライト
-                                    highlightedBlocks.push(blocks[idx]);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
+                const gradient = costCircle.createGeometryMask();
+                const gradientFill = this.add.graphics();
+                gradientFill.fillGradientStyle(0xffff00, 0xffd700, 0xffa500, 0xff8c00, 1);
+                gradientFill.fillCircle(circleX, circleY, radius);
+                costCircle.setMask(gradient);
 
-            itemImage.on('dragend', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
-                console.log(`Drag ended at: (${dragX}, ${dragY})`);
-                highlightedBlocks.forEach(block => block.clearTint());
-                highlightedBlocks = [];
-            
-                const droppedBlock = blocks.find(block => Phaser.Math.Distance.Between(block.x, block.y, itemImage.x, itemImage.y) < blockWidth / 2);
-                const droppedBox = Phaser.Math.Distance.Between(itemImage.x, itemImage.y, boxImage.x, boxImage.y) < boxImage.width / 2;
+                this.add.text(circleX, circleY, `${item.cost}`, {
+                    fontSize: '14px',
+                    color: '#000000'
+                }).setOrigin(0.5);
 
-                if (droppedBlock) {
-                    console.log(`Dropped on block at: (${droppedBlock.x}, ${droppedBlock.y})`);
-            
-                    const { width, height, cost } = item;
-                    const startCol = Math.floor((droppedBlock.x - startX) / blockWidth);
-                    const startRow = Math.floor((droppedBlock.y - startY) / blockHeight);
-            
-                    let canPlace = true;
-                    if (startCol + width > 9 || startRow + height > 7) {
-                        canPlace = false;
-                    } else {
-                        for (let r = 0; r < height; r++) {
-                            for (let c = 0; c < width; c++) {
-                                const idx = (startRow + r) * 9 + (startCol + c);
-                                if (!blocks[idx]) {
-                                    canPlace = false;
-                                    break;
-                                }
-                            }
-                            if (!canPlace) break;
-                        }
-                    }
+                itemPositions[`item${id}`] = { x, y, width: item.width, height: item.height };
 
-                    if (canPlace) {
-                        // Check for overlapping items
-                        const overlappingItems = new Set<string>();
-                        for (let r = 0; r < height; r++) {
-                            for (let c = 0; c < width; c++) {
-                                const existingItemKey = Object.keys(itemPositions).find(key => {
-                                    const pos = itemPositions[key];
-                                    const itemStartCol = Math.floor((pos.x - startX) / blockWidth);
-                                    const itemStartRow = Math.floor((pos.y - startY) / blockHeight);
-                                    const itemEndCol = itemStartCol + pos.width - 1;
-                                    const itemEndRow = itemStartRow + pos.height - 1;
-                                    return itemStartCol <= startCol + c && startCol + c <= itemEndCol &&
-                                        itemStartRow <= startRow + r && startRow + r <= itemEndRow;
-                                });
-                                if (existingItemKey) {
-                                    overlappingItems.add(existingItemKey);
-                                }
-                            }
-                        }
-            
-                        overlappingItems.forEach(existingItemKey => {
-                            const existingItemImage = this.children.getByName(existingItemKey) as Phaser.GameObjects.Image;
-                            if (existingItemImage) {
-                                existingItemImage.x = boxImage.x;
-                                existingItemImage.y = boxImage.y;
-                                itemPositions[existingItemKey] = { x: boxImage.x, y: boxImage.y, width: itemPositions[existingItemKey].width, height: itemPositions[existingItemKey].height };
-                                if (itemsOnBlock.has(existingItemKey)) {
-                                    playerGold += item.cost; // Re-add cost to playerGold when moving to the box
-                                    itemsOnBlock.delete(existingItemKey);
-                                }
-                            }
+                let highlightedBlocks: Phaser.GameObjects.Image[] = [];
+
+                itemImage.on('pointerover', () => {
+                    hoverText.setText(`${item.name}\n${item.effect}`).setVisible(true);
+                });
+
+                itemImage.on('pointerout', () => {
+                    hoverText.setVisible(false);
+                });
+
+                itemImage.on('dragstart', () => {
+                    if (item.cost > playerGold) {
+                        itemImage.disableInteractive();
+                        this.time.delayedCall(100, () => {
+                            itemImage.setInteractive({ draggable: true });
                         });
+                    }
+                });
 
-                        // Place the new item in the center of the blocks it covers
-                        const centerX = startX + (startCol + (width / 2)) * blockWidth - (blockWidth / 2);
-                        const centerY = startY + (startRow + (height / 2)) * blockHeight - (blockHeight / 2);
-                        itemImage.x = centerX;
-                        itemImage.y = centerY;
-                        itemPositions[`item${id}`] = { x: centerX, y: centerY, width, height };
+                itemImage.on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+                    if (item.cost > playerGold) {
+                        return;
+                    }
 
-                        if (!itemsOnBlock.has(`item${id}`)) {
-                            playerGold -= cost; // Subtract cost from playerGold when placed on block
-                            itemsOnBlock.add(`item${id}`);
+                    itemImage.x = dragX;
+                    itemImage.y = dragY;
+
+                    highlightedBlocks.forEach(block => block.clearTint());
+                    highlightedBlocks = [];
+
+                    const block = blocks.find(block => Phaser.Math.Distance.Between(block.x, block.y, dragX, dragY) < blockWidth / 2);
+                    if (block) {
+                        const { width, height } = item;
+                        const startCol = Math.floor((block.x - startX) / blockWidth);
+                        const startRow = Math.floor((block.y - startY) / blockHeight);
+
+                        if (startCol + width <= cols && startRow + height <= rows) {
+                            for (let r = 0; r < height; r++) {
+                                for (let c = 0; c < width; c++) {
+                                    const idx = (startRow + r) * cols + (startCol + c);
+                                    if (blocks[idx]) {
+                                        blocks[idx].setTint(0x0000ff);
+                                        highlightedBlocks.push(blocks[idx]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                itemImage.on('dragend', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+                    console.log(`Drag ended at: (${dragX}, ${dragY})`);
+                    highlightedBlocks.forEach(block => block.clearTint());
+                    highlightedBlocks = [];
+
+                    const droppedBlock = blocks.find(block => Phaser.Math.Distance.Between(block.x, block.y, itemImage.x, itemImage.y) < blockWidth / 2);
+                    const droppedBox = Phaser.Math.Distance.Between(itemImage.x, itemImage.y, boxImage.x, boxImage.y) < boxImage.width / 2;
+
+                    if (droppedBlock) {
+                        console.log(`Dropped on block at: (${droppedBlock.x}, ${droppedBlock.y})`);
+
+                        const { width, height, cost } = item;
+                        const startCol = Math.floor((droppedBlock.x - startX) / blockWidth);
+                        const startRow = Math.floor((droppedBlock.y - startY) / blockHeight);
+
+                        let canPlace = true;
+                        if (startCol + width > cols || startRow + height > rows) {
+                            canPlace = false;
+                        } else {
+                            for (let r = 0; r < height; r++) {
+                                for (let c = 0; c < width; c++) {
+                                    const idx = (startRow + r) * cols + (startCol + c);
+                                    if (!blocks[idx]) {
+                                        canPlace = false;
+                                        break;
+                                    }
+                                }
+                                if (!canPlace) break;
+                            }
+                        }
+
+                        if (canPlace) {
+                            const overlappingItems = new Set<string>();
+                            for (let r = 0; r < height; r++) {
+                                for (let c = 0; c < width; c++) {
+                                    const existingItemKey = Object.keys(itemPositions).find(key => {
+                                        const pos = itemPositions[key];
+                                        const itemStartCol = Math.floor((pos.x - startX) / blockWidth);
+                                        const itemStartRow = Math.floor((pos.y - startY) / blockHeight);
+                                        const itemEndCol = itemStartCol + pos.width - 1;
+                                        const itemEndRow = itemStartRow + pos.height - 1;
+                                        return itemStartCol <= startCol + c && startCol + c <= itemEndCol &&
+                                            itemStartRow <= startRow + r && startRow + r <= itemEndRow;
+                                    });
+                                    if (existingItemKey) {
+                                        overlappingItems.add(existingItemKey);
+                                    }
+                                }
+                            }
+
+                            overlappingItems.forEach(existingItemKey => {
+                                const existingItemImage = this.children.getByName(existingItemKey) as Phaser.GameObjects.Image;
+                                if (existingItemImage) {
+                                    existingItemImage.x = boxImage.x;
+                                    existingItemImage.y = boxImage.y;
+                                    itemPositions[existingItemKey] = { x: boxImage.x, y: boxImage.y, width: itemPositions[existingItemKey].width, height: itemPositions[existingItemKey].height };
+                                    if (itemsOnBlock.has(existingItemKey)) {
+                                        playerGold += item.cost;
+                                        itemsOnBlock.delete(existingItemKey);
+                                    }
+                                }
+                            });
+
+                            const centerX = startX + (startCol + (width / 2)) * blockWidth - (blockWidth / 2);
+                            const centerY = startY + (startRow + (height / 2)) * blockHeight - (blockHeight / 2);
+                            itemImage.x = centerX;
+                            itemImage.y = centerY;
+                            itemPositions[`item${id}`] = { x: centerX, y: centerY, width, height };
+
+                            if (!itemsOnBlock.has(`item${id}`)) {
+                                playerGold -= cost;
+                                itemsOnBlock.add(`item${id}`);
+                            }
+                        } else {
+                            itemImage.x = itemPositions[`item${id}`].x;
+                            itemImage.y = itemPositions[`item${id}`].y;
+                        }
+                    } else if (droppedBox) {
+                        console.log(`Dropped in box at: (${boxImage.x}, ${boxImage.y})`);
+                        itemImage.x = boxImage.x;
+                        itemImage.y = boxImage.y;
+                        itemPositions[`item${id}`] = { x: boxImage.x, y: boxImage.y, width: itemPositions[`item${id}`].width, height: itemPositions[`item${id}`].height };
+
+                        if (itemsOnBlock.has(`item${id}`)) {
+                            itemsOnBlock.delete(`item${id}`);
                         }
                     } else {
+                        console.log('Dropped outside any block or box');
                         itemImage.x = itemPositions[`item${id}`].x;
                         itemImage.y = itemPositions[`item${id}`].y;
                     }
-                } else if (droppedBox) {
-                    console.log(`Dropped in box at: (${boxImage.x}, ${boxImage.y})`);
-                    itemImage.x = boxImage.x;
-                    itemImage.y = boxImage.y;
-                    itemPositions[`item${id}`] = { x: boxImage.x, y: boxImage.y, width: itemPositions[`item${id}`].width, height: itemPositions[`item${id}`].height };
 
-                    if (itemsOnBlock.has(`item${id}`)) {
-                        itemsOnBlock.delete(`item${id}`);
-                    }
-                } else {
-                    console.log('Dropped outside any block or box');
-                    itemImage.x = itemPositions[`item${id}`].x;
-                    itemImage.y = itemPositions[`item${id}`].y;
-                }
-
-                updateStatsText(); // Update the stats text to reflect the new playerGold value
+                    updateStatsText();
+                });
             });
+        };
 
+        displayItems();
+
+        // Add Reset button
+        const resetButton = this.add.image(width - 50, height - 50, 'reset').setOrigin(0.5, 0.5).setScale(0.5);
+        resetButton.setInteractive();
+
+        // Add cost circle for reset button
+        const resetCostCircle = this.add.graphics();
+        const circleX = width - 200; // Positioning the circle left of the reset button
+        const circleY = height - 50;
+        const radius = 20;
+
+        resetCostCircle.lineStyle(2, 0x000000, 1);
+        resetCostCircle.strokeCircle(circleX, circleY, radius);
+
+        const gradient = resetCostCircle.createGeometryMask();
+        const gradientFill = this.add.graphics();
+        gradientFill.fillGradientStyle(0xffff00, 0xffd700, 0xffa500, 0xff8c00, 1);
+        gradientFill.fillCircle(circleX, circleY, radius);
+        resetCostCircle.setMask(gradient);
+
+        this.add.text(circleX, circleY, '1', {
+            fontSize: '14px',
+            color: '#000000'
+        }).setOrigin(0.5);
+
+        const updateResetButtonState = () => {
+            if (playerGold > 0) {
+                resetButton.setInteractive();
+                resetButton.clearTint();
+            } else {
+                resetButton.disableInteractive();
+                resetButton.setTint(0x999999);
+            }
+        };
+
+        resetButton.on('pointerdown', () => {
+            console.log('Reset Button Clicked');
+            if (playerGold > 0) {
+                playerGold -= 1;
+                displayItems();
+                updateStatsText();
+                updateResetButtonState();
+            }
         });
+
+        updateResetButtonState();
 
         console.log('SelectItem Scene Created');
     }
