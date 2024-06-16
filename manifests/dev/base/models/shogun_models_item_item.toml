@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x145f784a3245506f9345ad3354c7d4e02764c5df2a740457aa4c1324d3956ed"
-original_class_hash = "0x145f784a3245506f9345ad3354c7d4e02764c5df2a740457aa4c1324d3956ed"
+class_hash = "0x21c58e427f9c6c21782ad99451bbcea4f9ca5a10d2bb301e391cc97ff086aa2"
+original_class_hash = "0x21c58e427f9c6c21782ad99451bbcea4f9ca5a10d2bb301e391cc97ff086aa2"
 abi = "manifests/dev/abis/base/models/shogun_models_item_item.json"
 name = "shogun::models::item::item"
 
@@ -45,7 +45,7 @@ type = "usize"
 key = false
 
 [[members]]
-name = "cleansePoison"
+name = "consumeStamina"
 type = "usize"
 key = false
 
@@ -55,7 +55,7 @@ type = "usize"
 key = false
 
 [[members]]
-name = "cooldown"
+name = "coolTime"
 type = "u8"
 key = false
 
@@ -70,7 +70,7 @@ type = "usize"
 key = false
 
 [[members]]
-name = "armorActivation"
+name = "armorType"
 type = "u8"
 key = false
 
@@ -80,7 +80,7 @@ type = "usize"
 key = false
 
 [[members]]
-name = "regenActivation"
+name = "regenType"
 type = "u8"
 key = false
 
@@ -90,16 +90,16 @@ type = "usize"
 key = false
 
 [[members]]
-name = "reflectActivation"
+name = "reflectType"
 type = "u8"
 key = false
 
 [[members]]
-name = "poison"
+name = "spike"
 type = "usize"
 key = false
 
 [[members]]
-name = "poisonActivation"
+name = "spikeType"
 type = "u8"
 key = false

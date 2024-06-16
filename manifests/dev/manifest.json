@@ -1134,7 +1134,7 @@
                   "type": "core::integer::u32"
                 },
                 {
-                  "name": "cleansePoison",
+                  "name": "cleansespike",
                   "type": "core::integer::u32"
                 },
                 {
@@ -1142,7 +1142,7 @@
                   "type": "core::integer::u32"
                 },
                 {
-                  "name": "cooldown",
+                  "name": "coolTime",
                   "type": "core::integer::u8"
                 },
                 {
@@ -1154,7 +1154,7 @@
                   "type": "core::integer::u32"
                 },
                 {
-                  "name": "armorActivation",
+                  "name": "armorType",
                   "type": "core::integer::u8"
                 },
                 {
@@ -1162,7 +1162,7 @@
                   "type": "core::integer::u32"
                 },
                 {
-                  "name": "regenActivation",
+                  "name": "regenType",
                   "type": "core::integer::u8"
                 },
                 {
@@ -1170,15 +1170,15 @@
                   "type": "core::integer::u32"
                 },
                 {
-                  "name": "reflectActivation",
+                  "name": "reflectType",
                   "type": "core::integer::u8"
                 },
                 {
-                  "name": "poison",
+                  "name": "spike",
                   "type": "core::integer::u32"
                 },
                 {
-                  "name": "poisonActivation",
+                  "name": "spikeType",
                   "type": "core::integer::u8"
                 }
               ],
@@ -1348,7 +1348,7 @@
           "key": false
         },
         {
-          "name": "cleansePoison",
+          "name": "cleansespike",
           "type": "usize",
           "key": false
         },
@@ -1358,7 +1358,7 @@
           "key": false
         },
         {
-          "name": "cooldown",
+          "name": "coolTime",
           "type": "u8",
           "key": false
         },
@@ -1373,7 +1373,7 @@
           "key": false
         },
         {
-          "name": "armorActivation",
+          "name": "armorType",
           "type": "u8",
           "key": false
         },
@@ -1383,7 +1383,7 @@
           "key": false
         },
         {
-          "name": "regenActivation",
+          "name": "regenType",
           "type": "u8",
           "key": false
         },
@@ -1393,17 +1393,17 @@
           "key": false
         },
         {
-          "name": "reflectActivation",
+          "name": "reflectType",
           "type": "u8",
           "key": false
         },
         {
-          "name": "poison",
+          "name": "spike",
           "type": "usize",
           "key": false
         },
         {
-          "name": "poisonActivation",
+          "name": "spikeType",
           "type": "u8",
           "key": false
         }
@@ -1767,7 +1767,7 @@
               "type": "core::integer::u32"
             },
             {
-              "name": "cleansePoison",
+              "name": "cleansespike",
               "type": "core::integer::u32"
             },
             {
@@ -1775,7 +1775,7 @@
               "type": "core::integer::u32"
             },
             {
-              "name": "cooldown",
+              "name": "coolTime",
               "type": "core::integer::u8"
             },
             {
@@ -1787,7 +1787,7 @@
               "type": "core::integer::u32"
             },
             {
-              "name": "armorActivation",
+              "name": "armorType",
               "type": "core::integer::u8"
             },
             {
@@ -1795,7 +1795,7 @@
               "type": "core::integer::u32"
             },
             {
-              "name": "regenActivation",
+              "name": "regenType",
               "type": "core::integer::u8"
             },
             {
@@ -1803,15 +1803,15 @@
               "type": "core::integer::u32"
             },
             {
-              "name": "reflectActivation",
+              "name": "reflectType",
               "type": "core::integer::u8"
             },
             {
-              "name": "poison",
+              "name": "spike",
               "type": "core::integer::u32"
             },
             {
-              "name": "poisonActivation",
+              "name": "spikeType",
               "type": "core::integer::u8"
             }
           ]

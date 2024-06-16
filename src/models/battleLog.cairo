@@ -41,9 +41,9 @@ struct BattleLogDetail {
     player_armor_stacks: usize,
     player_regen_stacks: usize,
     player_reflect_stacks: usize,
-    player_poison_stacks: usize,
+    player_spike_stacks: usize,
     dummy_armor_stacks: usize,
     dummy_regen_stacks: usize,
     dummy_reflect_stacks: usize,
-    dummy_poison_stacks: usize,
+    dummy_spike_stacks: usize,
     }

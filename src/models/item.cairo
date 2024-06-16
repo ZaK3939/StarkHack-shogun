@@ -7,7 +7,7 @@ struct Item {
     #[key]
     id: usize,
     name: felt252,
-    // 1 - Weapon, 2 - Gear
+    // 1 - Weapon, 2 - Gear, 3 - Consumable, 4 - Backpacks
     itemType: u8,
     // 1 - Square, 2 - T, 3 - Axe, 4 - Banana, 5 - Pan
     shapeType: u8,
@@ -20,18 +20,19 @@ struct Item {
     // Accuracy to trigger
     chance: usize,
     // item reuse time
-    cooldown: u8,
+    coolTime: u8,
+    // 1 - Common, 2 - UnCommon, 3 - Rare, 4 - Epic, 5 - Legendary
     rarity: u8,
     // Effects
-    // activation 0 - passive, 1 - on start, 2 - on hit, 3 - on cooldown 4 - on almost dead
+    // activation 0 - passive, 1 - on start, 2 - on hit, 3 - on coolTime 4 - on almost dead
     armor: usize,
-    armorActivation: u8,
+    armorType: u8,
     regen: usize,
-    regenActivation: u8,
+    regenType: u8,
     reflect: usize,
-    reflectActivation: u8,
-    poison: usize,
-    poisonActivation: u8,
+    reflectType: u8,
+    spike: usize,
+    spikeType: u8,
 }
 
 #[derive(Model, Drop, Serde)]

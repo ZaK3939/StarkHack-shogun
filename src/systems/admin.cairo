@@ -13,16 +13,16 @@ trait IAdmin {
         damage: usize,
         consumeStamina: usize,
         chance: usize,
-        cooldown: u8,
+        coolTime: u8,
         rarity: u8,
         armor: u32,
-        armorActivation: u8,
+        armorType: u8,
         regen: u32,
-        regenActivation: u8,
+        regenType: u8,
         reflect: u32,
-        reflectActivation: u8,
-        poison: u32,
-        poisonActivation: u8,
+        reflectType: u8,
+        spike: u32,
+        spikeType: u8,
     );
     fn edit_item(item_id: u32, item_key: felt252, item_value: felt252);
     fn is_world_owner(player: ContractAddress) -> bool;
@@ -60,16 +60,16 @@ mod admin {
             damage: usize,
             consumeStamina: usize,
             chance: usize,
-            cooldown: u8,
+            coolTime: u8,
             rarity: u8,
             armor: u32,
-            armorActivation: u8,
+            armorType: u8,
             regen: u32,
-            regenActivation: u8,
+            regenType: u8,
             reflect: u32,
-            reflectActivation: u8,
-            poison: u32,
-            poisonActivation: u8,
+            reflectType: u8,
+            spike: u32,
+            spikeType: u8,
         ) {
             let player = get_caller_address();
 
@@ -101,16 +101,16 @@ mod admin {
                 damage,
                 consumeStamina,
                 chance,
-                cooldown,
+                coolTime,
                 rarity,
                 armor,
-                armorActivation,
+                armorType,
                 regen,
-                regenActivation,
+                regenType,
                 reflect,
-                reflectActivation,
-                poison,
-                poisonActivation,
+                reflectType,
+                spike,
+                spikeType,
             };
 
             set!(world, (item));
@@ -190,11 +190,11 @@ mod admin {
                     item_data.chance = new_chance;
                     set!(world, (item_data,));
                 },
-                // cooldown
+                // coolTime
                 9 => {
-                    let new_cooldown: u8 = item_value.try_into().unwrap();
+                    let new_coolTime: u8 = item_value.try_into().unwrap();
 
-                    item_data.cooldown = new_cooldown;
+                    item_data.coolTime = new_coolTime;
                     set!(world, (item_data,));
                 },
                 // rarity
@@ -215,11 +215,11 @@ mod admin {
                     item_data.armor = new_armor;
                     set!(world, (item_data,));
                 },
-                // armorActivation
+                // armorType
                 12 => {
-                    let new_armorActivation: u8 = item_value.try_into().unwrap();
+                    let new_armorType: u8 = item_value.try_into().unwrap();
 
-                    item_data.armorActivation = new_armorActivation;
+                    item_data.armorType = new_armorType;
                     set!(world, (item_data,));
                 },
                 // regen
@@ -229,11 +229,11 @@ mod admin {
                     item_data.regen = new_regen;
                     set!(world, (item_data,));
                 },
-                // regenActivation
+                // regenType
                 14 => {
-                    let new_regenActivation: u8 = item_value.try_into().unwrap();
+                    let new_regenType: u8 = item_value.try_into().unwrap();
 
-                    item_data.regenActivation = new_regenActivation;
+                    item_data.regenType = new_regenType;
                     set!(world, (item_data,));
                 },
                 // reflect
@@ -243,25 +243,25 @@ mod admin {
                     item_data.reflect = new_reflect;
                     set!(world, (item_data,));
                 },
-                // reflectActivation
+                // reflectType
                 16 => {
-                    let new_reflectActivation: u8 = item_value.try_into().unwrap();
+                    let new_reflectType: u8 = item_value.try_into().unwrap();
 
-                    item_data.reflectActivation = new_reflectActivation;
+                    item_data.reflectType = new_reflectType;
                     set!(world, (item_data,));
                 },
-                // poison
+                // spike
                 17 => {
-                    let new_poison: usize = item_value.try_into().unwrap();
+                    let new_spike: usize = item_value.try_into().unwrap();
 
-                    item_data.poison = new_poison;
+                    item_data.spike = new_spike;
                     set!(world, (item_data,));
                 },
-                // poisonActivation
+                // spikeType
                 18 => {
-                    let new_poisonActivation: u8 = item_value.try_into().unwrap();
+                    let new_spikeType: u8 = item_value.try_into().unwrap();
 
-                    item_data.poisonActivation = new_poisonActivation;
+                    item_data.spikeType = new_spikeType;
                     set!(world, (item_data,));
                 },
                 _ => { panic!("Invalid item_key: {}", item_key); }

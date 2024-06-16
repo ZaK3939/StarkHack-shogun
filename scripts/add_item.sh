@@ -37,7 +37,7 @@ echo "--------------------------------------------------------------------------
 # Helmet 			79600448005492,3,1,1,3,0,0,50,0,1,3,2,0,0,0,0,0,0
 # Healing Potion 	1468365686984687211050012787699566,3,1,1,4,0,0,100,0,2,0,0,3,1,0,0,0,0
 # Leather Armor 	6052716152600831465235768242034,3,2,3,5,0,0,100,0,2,35,1,0,0,0,0,0,0
-# Poison Potion 	6372733319570045399349322149742,3,1,1,5,0,0,100,0,2,0,0,0,0,0,0,2,1
+# spike Potion 	6372733319570045399349322149742,3,1,1,5,0,0,100,0,2,0,0,0,0,0,0,2,1
 # Atlas Band 		309101453348888473857636,3,2,1,5,0,0,100,0,2,25,1,0,0,0,0,0,0
 # Augmented Sword 	339880532085619196269974512114561636,1,1,3,6,10,0,80,4,2,0,0,0,0,0,0,0,0
 # Augmented Dagger 	87009416213918514245113458514029143410,1,1,2,6,6,0,90,3,2,0,0,0,0,0,0,0,0
@@ -53,8 +53,8 @@ echo "--------------------------------------------------------------------------
 
 
 
-# name, itemType, width, height, price, damage, cleansePoison, chance, cooldown, rarity, 
-# armor, armorActivation, regen, regenActivation, reflect, reflectActivation, poison, poisonActivation: u8,
+# name, itemType, width, height, price, damage, cleansespike, chance, coolTime, rarity, 
+# armor, armorType, regen, regenType, reflect, reflectType, spike, spikeType: u8,
 
 sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 1,4783213592342258539,4,2,3,10,0,0,0,0,0,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
 sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 2,1348559723,4,2,2,4,0,0,0,0,2,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL

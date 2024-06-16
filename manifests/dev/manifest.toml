@@ -75,7 +75,7 @@ type = "usize"
 key = false
 
 [[models.members]]
-name = "cleansePoison"
+name = "cleansespike"
 type = "usize"
 key = false
 
@@ -85,7 +85,7 @@ type = "usize"
 key = false
 
 [[models.members]]
-name = "cooldown"
+name = "coolTime"
 type = "u8"
 key = false
 
@@ -100,7 +100,7 @@ type = "usize"
 key = false
 
 [[models.members]]
-name = "armorActivation"
+name = "armorType"
 type = "u8"
 key = false
 
@@ -110,7 +110,7 @@ type = "usize"
 key = false
 
 [[models.members]]
-name = "regenActivation"
+name = "regenType"
 type = "u8"
 key = false
 
@@ -120,17 +120,17 @@ type = "usize"
 key = false
 
 [[models.members]]
-name = "reflectActivation"
+name = "reflectType"
 type = "u8"
 key = false
 
 [[models.members]]
-name = "poison"
+name = "spike"
 type = "usize"
 key = false
 
 [[models.members]]
-name = "poisonActivation"
+name = "spikeType"
 type = "u8"
 key = false
 

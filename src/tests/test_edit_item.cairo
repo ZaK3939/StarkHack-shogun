@@ -41,16 +41,16 @@ mod tests {
         let item_one_new_damage: felt252 = 2;
         let item_one_new_consumeStamina: felt252 = 2;
         let item_one_new_chance: felt252 = 100;
-        let item_one_new_cooldown: felt252 = 5;
+        let item_one_new_coolTime: felt252 = 5;
         let item_one_new_rarity: felt252 = 2;
         let item_one_new_armor: felt252 = 1;
-        let item_one_new_armorActivation: felt252 = 1;
+        let item_one_new_armorType: felt252 = 1;
         let item_one_new_regen: felt252 = 1;
-        let item_one_new_regenActivation: felt252 = 1;
+        let item_one_new_regenType: felt252 = 1;
         let item_one_new_reflect: felt252 = 2;
-        let item_one_new_reflectActivation: felt252 = 2;
-        let item_one_new_poison: felt252 = 3;
-        let item_one_new_poisonActivation: felt252 = 3;
+        let item_one_new_reflectType: felt252 = 2;
+        let item_one_new_spike: felt252 = 3;
+        let item_one_new_spikeType: felt252 = 3;
 
         admins_system.edit_item(1, 0, item_one_new_name);
         admins_system.edit_item(1, 1, item_one_new_itemType);
@@ -61,16 +61,16 @@ mod tests {
         admins_system.edit_item(1, 6, item_one_new_damage);
         admins_system.edit_item(1, 7, item_one_new_consumeStamina);
         admins_system.edit_item(1, 8, item_one_new_chance);
-        admins_system.edit_item(1, 9, item_one_new_cooldown);
+        admins_system.edit_item(1, 9, item_one_new_coolTime);
         admins_system.edit_item(1, 10, item_one_new_rarity);
         admins_system.edit_item(1, 11, item_one_new_armor);
-        admins_system.edit_item(1, 12, item_one_new_armorActivation);
+        admins_system.edit_item(1, 12, item_one_new_armorType);
         admins_system.edit_item(1, 13, item_one_new_regen);
-        admins_system.edit_item(1, 14, item_one_new_regenActivation);
+        admins_system.edit_item(1, 14, item_one_new_regenType);
         admins_system.edit_item(1, 15, item_one_new_reflect);
-        admins_system.edit_item(1, 16, item_one_new_reflectActivation);
-        admins_system.edit_item(1, 17, item_one_new_poison);
-        admins_system.edit_item(1, 18, item_one_new_poisonActivation);
+        admins_system.edit_item(1, 16, item_one_new_reflectType);
+        admins_system.edit_item(1, 17, item_one_new_spike);
+        admins_system.edit_item(1, 18, item_one_new_spikeType);
 
         let item_one_data = get!(world, 1, (Item));
         assert(item_one_data.name == item_one_new_name, 'I1 name mismatch');
@@ -85,27 +85,27 @@ mod tests {
             'I1 consumeStamina mismatch'
         );
         assert(item_one_data.chance.into() == item_one_new_chance, 'I1 chance mismatch');
-        assert(item_one_data.cooldown.into() == item_one_new_cooldown, 'I1 cooldown mismatch');
+        assert(item_one_data.coolTime.into() == item_one_new_coolTime, 'I1 coolTime mismatch');
         assert(item_one_data.rarity.into() == item_one_new_rarity, 'I1 rarity mismatch');
         assert(item_one_data.armor.into() == item_one_new_armor, 'I1 armor mismatch');
         assert(
-            item_one_data.armorActivation.into() == item_one_new_armorActivation,
-            'I1 armorActivation mismatch'
+            item_one_data.armorType.into() == item_one_new_armorType,
+            'I1 armorType mismatch'
         );
         assert(item_one_data.regen.into() == item_one_new_regen, 'I1 regen mismatch');
         assert(
-            item_one_data.regenActivation.into() == item_one_new_regenActivation,
-            'I1 regenActivation mismatch'
+            item_one_data.regenType.into() == item_one_new_regenType,
+            'I1 regenType mismatch'
         );
         assert(item_one_data.reflect.into() == item_one_new_reflect, 'I1 reflect mismatch');
         assert(
-            item_one_data.reflectActivation.into() == item_one_new_reflectActivation,
-            'I1 reflectActivation mismatch'
+            item_one_data.reflectType.into() == item_one_new_reflectType,
+            'I1 reflectType mismatch'
         );
-        assert(item_one_data.poison.into() == item_one_new_poison, 'I1 poison mismatch');
+        assert(item_one_data.spike.into() == item_one_new_spike, 'I1 spike mismatch');
         assert(
-            item_one_data.poisonActivation.into() == item_one_new_poisonActivation,
-            'I1 poisonActivation mismatch'
+            item_one_data.spikeType.into() == item_one_new_spikeType,
+            'I1 spikeType mismatch'
         );
     }
 
