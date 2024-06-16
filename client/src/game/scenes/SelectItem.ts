@@ -267,10 +267,12 @@ export class SelectItem extends Phaser.Scene {
                             }
                         });
 
-                        // Place the new item
-                        itemImage.x = droppedBlock.x;
-                        itemImage.y = droppedBlock.y;
-                        itemPositions[`item${id}`] = { x: droppedBlock.x, y: droppedBlock.y, width, height };
+                        // Place the new item in the center of the blocks it covers
+                        const centerX = startX + (startCol + (width / 2)) * blockWidth - (blockWidth / 2);
+                        const centerY = startY + (startRow + (height / 2)) * blockHeight - (blockHeight / 2);
+                        itemImage.x = centerX;
+                        itemImage.y = centerY;
+                        itemPositions[`item${id}`] = { x: centerX, y: centerY, width, height };
 
                         if (!itemsOnBlock.has(`item${id}`)) {
                             playerGold -= cost; // Subtract cost from playerGold when placed on block
