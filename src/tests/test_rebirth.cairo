@@ -58,10 +58,10 @@ mod tests {
         set!(world, (shop_data));
 
         actions_system.buy_item(4);
-        actions_system.buy_item(6);
-        actions_system.buy_item(8);
+        actions_system.buy_item(3);
+        actions_system.buy_item(1);
 
-        actions_system.place_item(2, 4, 2, 0);
+        actions_system.place_item(2, 4, 4, 0);
         actions_system.place_item(1, 2, 2, 0);
         actions_system.place_item(3, 5, 2, 0);
 
@@ -95,30 +95,34 @@ mod tests {
         assert(char.winStreak == 0, 'win streak should be 0');
         assert(char.birthCount == 2, 'birth count should be 2');
         assert(char.updatedAt == timestamp, 'updatedAt mismatch');
+        
 
-        assert(inventoryItemsCounter.count == 2, 'item count should be 0');
-        assert(storageItemsCounter.count == 2, 'item count should be 0');
+        assert(inventoryItemsCounter.count == 0, 'inventory item should be 0');
+        assert(storageItemsCounter.count == 1, 'storage item should be 1');
 
         assert(playerShopData.item1 == 0, 'item 1 should be 0');
         assert(playerShopData.item2 == 0, 'item 2 should be 0');
         assert(playerShopData.item3 == 0, 'item 3 should be 0');
         assert(playerShopData.item4 == 0, 'item 4 should be 0');
+        assert(playerShopData.item5 == 0, 'item 5 should be 0');
+        assert(playerShopData.item6 == 0, 'item 6 should be 0');
+
 
         let storageItem = get!(world, (alice, 1), CharacterItemStorage);
-        assert(storageItem.itemId == 0, 'item 1 should be 0');
+        assert(storageItem.itemId == 40, 'item 1 should be 40');
 
-        let storageItem = get!(world, (alice, 2), CharacterItemStorage);
-        assert(storageItem.itemId == 0, 'item 2 should be 0');
+        // let storageItem = get!(world, (alice, 2), CharacterItemStorage);
+        // assert(storageItem.itemId == 0, 'item 2 should be 0');
 
-        let inventoryItem = get!(world, (alice, 1), CharacterItemInventory);
-        assert(inventoryItem.itemId == 1, 'item 1 should be 1');
-        assert(inventoryItem.position.x == 4, 'item 1 x should be 4');
-        assert(inventoryItem.position.y == 2, 'item 1 y should be 2');
+        // let inventoryItem = get!(world, (alice, 1), CharacterItemInventory);
+        // assert(inventoryItem.itemId == 1, 'item 1 should be 1');
+        // assert(inventoryItem.position.x == 4, 'item 1 x should be 4');
+        // assert(inventoryItem.position.y == 2, 'item 1 y should be 2');
 
-        let inventoryItem = get!(world, (alice, 2), CharacterItemInventory);
-        assert(inventoryItem.itemId == 2, 'item 2 should be 2');
-        assert(inventoryItem.position.x == 2, 'item 2 x should be 4');
-        assert(inventoryItem.position.y == 2, 'item 2 y should be 3');
+        // let inventoryItem = get!(world, (alice, 2), CharacterItemInventory);
+        // assert(inventoryItem.itemId == 2, 'item 2 should be 2');
+        // assert(inventoryItem.position.x == 2, 'item 2 x should be 4');
+        // assert(inventoryItem.position.y == 2, 'item 2 y should be 3');
 
         let playerGridData = get!(world, (alice, 4, 2), BackpackGrids);
         assert(playerGridData.enabled == true, '(4,2) should be enabled');

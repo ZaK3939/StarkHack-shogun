@@ -59,23 +59,27 @@ mod tests {
         shop_data.item3 = 8;
         shop_data.item4 = 1;
         set!(world, (shop_data));
-
+        
         actions_system.buy_item(4);
+
         // place a sword on (4,2)
         actions_system.place_item(2, 4, 2, 0);
-
-        actions_system.undo_place_item(3);
-
+        
+        actions_system.undo_place_item(1);
+        
         let storageItemCounter = get!(world, alice, CharacterItemsStorageCounter);
-        assert(storageItemCounter.count == 2, 'storage item count mismatch');
-
+        
+        assert(storageItemCounter.count == 2, 'storage item count mismatch 2');
+        
         let storageItem = get!(world, (alice, 2), CharacterItemStorage);
         assert(storageItem.itemId == 4, 'item id should equal 2');
-
+        
         let inventoryItemCounter = get!(world, alice, CharacterItemsInventoryCounter);
-        assert(inventoryItemCounter.count == 3, 'inventory item count mismatch');
-
+        
+        assert(inventoryItemCounter.count == 1, 'inventory item count mismatch');
+        
         let invetoryItem = get!(world, (alice, 3), CharacterItemInventory);
+        
         assert(invetoryItem.itemId == 0, 'item id should equal 0');
         assert(invetoryItem.position.x == 0, 'x position mismatch');
         assert(invetoryItem.position.y == 0, 'y position mismatch');
@@ -96,21 +100,22 @@ mod tests {
         actions_system.buy_item(6);
         // place a shield on (2,2)
         actions_system.place_item(1, 2, 2, 0);
-
-        actions_system.undo_place_item(3);
+        
+        actions_system.undo_place_item(1);
 
         let storageItemCounter = get!(world, alice, CharacterItemsStorageCounter);
-        assert(storageItemCounter.count == 2, 'storage item count mismatch');
+        
+        assert(storageItemCounter.count == 3, 'storage item count 3 mismatch');
 
         let storageItem = get!(world, (alice, 2), CharacterItemStorage);
         assert(storageItem.itemId == 4, 'item id should equal 4');
         let storageItem = get!(world, (alice, 1), CharacterItemStorage);
-        assert(storageItem.itemId == 6, 'item id should equal 6');
+        assert(storageItem.itemId == 40, 'item id should equal 6');
 
         let inventoryItemCounter = get!(world, alice, CharacterItemsInventoryCounter);
-        assert(inventoryItemCounter.count == 3, 'inventory item count mismatch');
+        assert(inventoryItemCounter.count == 1, 'inventory item 1 count mismatch');
 
-        let invetoryItem = get!(world, (alice, 3), CharacterItemInventory);
+        let invetoryItem = get!(world, (alice, 1), CharacterItemInventory);
         assert(invetoryItem.itemId == 0, 'item id should equal 0');
         assert(invetoryItem.position.x == 0, 'x position mismatch');
         assert(invetoryItem.position.y == 0, 'y position mismatch');
@@ -136,19 +141,19 @@ mod tests {
         // place a potion on (5,2)
         actions_system.place_item(3, 5, 2, 0);
 
-        actions_system.undo_place_item(3);
+        actions_system.undo_place_item(1);
 
         let storageItemCounter = get!(world, alice, CharacterItemsStorageCounter);
-        assert(storageItemCounter.count == 3, 'storage item count mismatch');
+        assert(storageItemCounter.count == 4, 'storage item 4 count mismatch');
 
         let storageItem = get!(world, (alice, 3), CharacterItemStorage);
-        assert(storageItem.itemId == 8, 'item id should equal 2');
+        assert(storageItem.itemId == 6, 'item id should equal 6');
         let storageItem = get!(world, (alice, 2), CharacterItemStorage);
         assert(storageItem.itemId == 4, 'item id should equal 4');
         let storageItem = get!(world, (alice, 1), CharacterItemStorage);
-        assert(storageItem.itemId == 6, 'item id should equal 6');
+        assert(storageItem.itemId == 40, 'item id should equal 40');
         let inventoryItemCounter = get!(world, alice, CharacterItemsInventoryCounter);
-        assert(inventoryItemCounter.count == 3, 'inventory item count mismatch');
+        assert(inventoryItemCounter.count == 1, 'inventory item count mismatch');
 
         let invetoryItem = get!(world, (alice, 3), CharacterItemInventory);
         assert(invetoryItem.itemId == 0, 'item id should equal 0');
@@ -160,29 +165,30 @@ mod tests {
         assert(backpack_grid_data.occupied == false, '(5,2) should not be occupied');
         assert(backpack_grid_data.enabled == true, '(5,2) should be enabled');
 
+        
         actions_system.place_item(2, 4, 2, 0);
-        actions_system.place_item(1, 2, 2, 0);
-        actions_system.place_item(3, 5, 2, 0);
-
-        actions_system.undo_place_item(4);
+        actions_system.place_item(1, 0, 0, 0);
+        actions_system.place_item(3, 6, 2, 0);
+        actions_system.undo_place_item(3);
 
         let storageItemCounter = get!(world, alice, CharacterItemsStorageCounter);
-        assert(storageItemCounter.count == 3, 'storage item count mismatch');
+        assert(storageItemCounter.count == 4, 'storage item count mismatch');
 
         let storageItem = get!(world, (alice, 1), CharacterItemStorage);
-        assert(storageItem.itemId == 0, 'item id should equal 0');
+        assert(storageItem.itemId == 0, 'item id1 should equal 0');
         let storageItem = get!(world, (alice, 2), CharacterItemStorage);
-        assert(storageItem.itemId == 0, 'item id should equal 0');
+        assert(storageItem.itemId == 0, 'item id2 should equal 0');
         let storageItem = get!(world, (alice, 3), CharacterItemStorage);
-        assert(storageItem.itemId == 6, 'item id should equal 6');
+        assert(storageItem.itemId == 6, 'item id40 should equal 6');
 
         let inventoryItemCounter = get!(world, alice, CharacterItemsInventoryCounter);
-        assert(inventoryItemCounter.count == 5, 'inventory item count mismatch');
+        assert(inventoryItemCounter.count == 3, 'inventory item 5 count mismatch');
 
         let invetoryItem = get!(world, (alice, 3), CharacterItemInventory);
-        assert(invetoryItem.itemId == 4, 'item id should equal 2');
-        assert(invetoryItem.position.x == 4, 'x position mismatch');
-        assert(invetoryItem.position.y == 2, 'y position mismatch');
+        
+        assert(invetoryItem.itemId == 0, 'item id should equal 4');
+        assert(invetoryItem.position.x == 0, 'x position mismatch');
+        assert(invetoryItem.position.y == 0, 'y position mismatch');
         assert(invetoryItem.rotation == 0, 'rotation mismatch');
         let invetoryItem = get!(world, (alice, 4), CharacterItemInventory);
         assert(invetoryItem.itemId == 0, 'item id should equal 0');
@@ -190,9 +196,9 @@ mod tests {
         assert(invetoryItem.position.y == 0, 'y position mismatch');
         assert(invetoryItem.rotation == 0, 'rotation mismatch');
         let invetoryItem = get!(world, (alice, 5), CharacterItemInventory);
-        assert(invetoryItem.itemId == 8, 'item id should equal 6');
-        assert(invetoryItem.position.x == 5, 'x position mismatch');
-        assert(invetoryItem.position.y == 2, 'y position mismatch');
+        assert(invetoryItem.itemId == 0, 'item id should equal 0');
+        assert(invetoryItem.position.x == 0, 'x position mismatch');
+        assert(invetoryItem.position.y == 0, 'y position mismatch');
         assert(invetoryItem.rotation == 0, 'rotation mismatch');
     }
 
@@ -220,6 +226,6 @@ mod tests {
         set_contract_address(alice);
         actions_system.spawn('Alice');
 
-        actions_system.undo_place_item(3);
+        actions_system.undo_place_item(5);
     }
 }

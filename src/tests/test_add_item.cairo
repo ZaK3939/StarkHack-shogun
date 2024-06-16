@@ -35,7 +35,7 @@ mod tests {
 
         let ITEMS_COUNTER_ID: felt252 = 'ITEMS_COUNTER_ID';
         let updated_counter = get!(world, ITEMS_COUNTER_ID, (ItemsCounter));
-        assert(updated_counter.count == 6, 'total item count mismatch');
+        assert(updated_counter.count == 47, 'total item count mismatch');
         
         let item_three_data = get!(world, 3, (Item));
         assert(item_three_data.id == items::Item3::id, 'I3 id mismatch');

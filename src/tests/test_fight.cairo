@@ -68,7 +68,7 @@ mod tests {
         assert(dummyChar.id == dummyCharCounter.count, '');
         assert(dummyChar.name == 'alice', 'name should be alice');
         assert(dummyChar.health == char.health, 'health should be equal');
-        assert(dummyCharItemsCounter.count == 2, 'Should be 2');
+        assert(dummyCharItemsCounter.count == 0, 'Should be 0');
     }
 
     #[test]
@@ -108,9 +108,9 @@ mod tests {
         actions_system.buy_item(4);
         actions_system.place_item(2, 4, 2, 0);
         actions_system.buy_item(6);
-        actions_system.place_item(2, 2, 2, 0);
+        actions_system.place_item(2, 0, 2, 0);
         actions_system.buy_item(8);
-        actions_system.place_item(2, 5, 2, 0);
+        actions_system.place_item(2, 6, 2, 0);
         // actions_system.
         battle_system.create_dummy();
         battle_system.fight();

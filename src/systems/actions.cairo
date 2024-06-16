@@ -32,11 +32,11 @@ mod actions {
     use shogun::utils::random::{pseudo_seed, random};
 
     // for start item
-    // use shogun::items::{Backpack1, Backpack2};
+    use shogun::items::{Item40};
 
     const GRID_X: usize = 7;
     const GRID_Y: usize = 7;
-    const INIT_GOLD: usize = 8;
+    const INIT_GOLD: usize = 10;
     const INIT_HEALTH: usize = 25;
 
     const ITEMS_COUNTER_ID: felt252 = 'ITEMS_COUNTER_ID';
@@ -66,25 +66,25 @@ mod actions {
             // assert(item.itemType == 4, 'Invalid item type');
             // let item = get!(world, Backpack2::id, (Item));
             // assert(item.itemType == 4, 'Invalid item type');
-
-            // set!(
-            //     world,
-            //     (
-            //         CharacterItemStorage { player, id: 1, itemId: Backpack1::id },
-            //         CharacterItemStorage { player, id: 2, itemId: Backpack2::id },
-            //         CharacterItemsStorageCounter { player, count: 2 },
-            //     )
-            // );
+            
+            let item = get!(world, Item40::id, (Item));
+            set!(
+                world,
+                (
+                    CharacterItemStorage { player, id: 1, itemId: Item40::id },
+                    CharacterItemsStorageCounter { player, count: 1 },
+                )
+            );
 
             // self.place_item(1, 4, 2, 0);
             // self.place_item(2, 2, 2, 0);
-            let mut i: usize = 1;
+            let mut i: usize = 0;
 
             loop {
                 if i > GRID_X {
                     break;
                 }
-                let mut j = 1;
+                let mut j = 0;
                 loop {
                     if j > GRID_Y {
                         break;
@@ -549,7 +549,7 @@ mod actions {
                     xMax = x + itemHeight - 1;
                     yMax = y + itemWidth - 1;
                 }
-
+               
                 assert(xMax < GRID_X, 'item out of bound for x');
                 assert(yMax < GRID_Y, 'item out of bound for y');
 
@@ -640,6 +640,7 @@ mod actions {
                 world, (player, inventory_item_id), (CharacterItemInventory)
             );
             let itemId = inventoryItem.itemId;
+           
             assert(itemId != 0, 'invalid inventory item id');
             let item = get!(world, itemId, (Item));
 
