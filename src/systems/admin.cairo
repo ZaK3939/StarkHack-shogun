@@ -11,7 +11,7 @@ trait IAdmin {
         height: usize,
         price: usize,
         damage: usize,
-        cleansePoison: usize,
+        consumeStamina: usize,
         chance: usize,
         cooldown: u8,
         rarity: u8,
@@ -58,7 +58,7 @@ mod admin {
             height: usize,
             price: usize,
             damage: usize,
-            cleansePoison: usize,
+            consumeStamina: usize,
             chance: usize,
             cooldown: u8,
             rarity: u8,
@@ -99,7 +99,7 @@ mod admin {
                 height,
                 price,
                 damage,
-                cleansePoison,
+                consumeStamina,
                 chance,
                 cooldown,
                 rarity,
@@ -176,11 +176,11 @@ mod admin {
                     item_data.damage = new_damage;
                     set!(world, (item_data,));
                 },
-                // cleansePoison
+                // consumeStamina
                 7 => {
-                    let new_cleansePoison: usize = item_value.try_into().unwrap();
+                    let new_consumeStamina: usize = item_value.try_into().unwrap();
 
-                    item_data.cleansePoison = new_cleansePoison;
+                    item_data.consumeStamina = new_consumeStamina;
                     set!(world, (item_data,));
                 },
                 // chance

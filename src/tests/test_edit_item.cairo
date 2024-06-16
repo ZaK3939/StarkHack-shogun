@@ -39,7 +39,7 @@ mod tests {
         let item_one_new_height: felt252 = 1;
         let item_one_new_price: felt252 = 4;
         let item_one_new_damage: felt252 = 2;
-        let item_one_new_cleansePoison: felt252 = 2;
+        let item_one_new_consumeStamina: felt252 = 2;
         let item_one_new_chance: felt252 = 100;
         let item_one_new_cooldown: felt252 = 5;
         let item_one_new_rarity: felt252 = 2;
@@ -59,7 +59,7 @@ mod tests {
         admins_system.edit_item(1, 4, item_one_new_height);
         admins_system.edit_item(1, 5, item_one_new_price);
         admins_system.edit_item(1, 6, item_one_new_damage);
-        admins_system.edit_item(1, 7, item_one_new_cleansePoison);
+        admins_system.edit_item(1, 7, item_one_new_consumeStamina);
         admins_system.edit_item(1, 8, item_one_new_chance);
         admins_system.edit_item(1, 9, item_one_new_cooldown);
         admins_system.edit_item(1, 10, item_one_new_rarity);
@@ -81,8 +81,8 @@ mod tests {
         assert(item_one_data.price.into() == item_one_new_price, 'I1 price mismatch');
         assert(item_one_data.damage.into() == item_one_new_damage, 'I1 damage mismatch');
         assert(
-            item_one_data.cleansePoison.into() == item_one_new_cleansePoison,
-            'I1 cleansePoison mismatch'
+            item_one_data.consumeStamina.into() == item_one_new_consumeStamina,
+            'I1 consumeStamina mismatch'
         );
         assert(item_one_data.chance.into() == item_one_new_chance, 'I1 chance mismatch');
         assert(item_one_data.cooldown.into() == item_one_new_cooldown, 'I1 cooldown mismatch');

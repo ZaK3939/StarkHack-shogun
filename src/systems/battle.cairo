@@ -269,7 +269,7 @@ mod battle {
 
                     let curr_item_data = get!(world, curr_item_index, (Item));
                     let damage = curr_item_data.damage;
-                    let cleansePoison = curr_item_data.cleansePoison;
+                    let consumeStamina = curr_item_data.consumeStamina;
                     let chance = curr_item_data.chance;
                     let cooldown = curr_item_data.cooldown;
 
@@ -345,7 +345,6 @@ mod battle {
                                             whichItem: curr_item_index,
                                             damageCaused: damageCaused,
                                             isDodged: false,
-                                            cleansePoison: 0,
                                             buffType: EFFECT_ARMOR,
                                             regenHP: 0,
                                             player_armor_stacks: char_armor,
@@ -393,7 +392,6 @@ mod battle {
                                                 whichItem: 0,
                                                 damageCaused: damageCaused,
                                                 isDodged: false,
-                                                cleansePoison: 0,
                                                 buffType: EFFECT_REFLECT,
                                                 regenHP: 0,
                                                 player_armor_stacks: char_armor,
@@ -414,38 +412,6 @@ mod battle {
                                         char_health -= damageCaused;
                                     }
                                 // ====== end ======
-                                } else {
-                                    if cleansePoison > 0 {
-                                        if char_poison > cleansePoison {
-                                            char_poison -= cleansePoison;
-                                        } else {
-                                            char_poison = 0;
-                                        }
-                                        battleLogsCount += 1;
-                                        emit!(
-                                            world,
-                                            (BattleLogDetail {
-                                                player,
-                                                battleLogId: battleLogCounterCount,
-                                                id: battleLogsCount,
-                                                whoTriggered: curr_item_belongs,
-                                                whichItem: curr_item_index,
-                                                damageCaused: 0,
-                                                cleansePoison: cleansePoison,
-                                                isDodged: false,
-                                                buffType: EFFECT_CLEANSE_POISON,
-                                                regenHP: 0,
-                                                player_armor_stacks: char_armor,
-                                                player_regen_stacks: char_regen,
-                                                player_reflect_stacks: char_reflect,
-                                                player_poison_stacks: char_poison,
-                                                dummy_armor_stacks: dummy_armor,
-                                                dummy_regen_stacks: dummy_regen,
-                                                dummy_reflect_stacks: dummy_reflect,
-                                                dummy_poison_stacks: dummy_poison,
-                                            })
-                                        );
-                                    }
                                 }
                             } else {
                                 // ====== on cooldown to plus stacks, all use the same randomness ======
@@ -514,7 +480,6 @@ mod battle {
                                             whichItem: curr_item_index,
                                             damageCaused: damageCaused,
                                             isDodged: false,
-                                            cleansePoison: 0,
                                             buffType: EFFECT_ARMOR,
                                             regenHP: 0,
                                             player_armor_stacks: char_armor,
@@ -562,7 +527,6 @@ mod battle {
                                                 whichItem: 0,
                                                 damageCaused: damageCaused,
                                                 isDodged: false,
-                                                cleansePoison: 0,
                                                 buffType: EFFECT_REFLECT,
                                                 regenHP: 0,
                                                 player_armor_stacks: char_armor,
@@ -583,38 +547,6 @@ mod battle {
                                         dummy_health -= damageCaused;
                                     }
                                 // ====== end ======
-                                } else {
-                                    if cleansePoison > 0 {
-                                        if dummy_poison > cleansePoison {
-                                            dummy_poison -= cleansePoison;
-                                        } else {
-                                            dummy_poison = 0;
-                                        }
-                                        battleLogsCount += 1;
-                                        emit!(
-                                            world,
-                                            (BattleLogDetail {
-                                                player,
-                                                battleLogId: battleLogCounterCount,
-                                                id: battleLogsCount,
-                                                whoTriggered: curr_item_belongs,
-                                                whichItem: curr_item_index,
-                                                damageCaused: 0,
-                                                isDodged: false,
-                                                cleansePoison: cleansePoison,
-                                                buffType: EFFECT_CLEANSE_POISON,
-                                                regenHP: 0,
-                                                player_armor_stacks: char_armor,
-                                                player_regen_stacks: char_regen,
-                                                player_reflect_stacks: char_reflect,
-                                                player_poison_stacks: char_poison,
-                                                dummy_armor_stacks: dummy_armor,
-                                                dummy_regen_stacks: dummy_regen,
-                                                dummy_reflect_stacks: dummy_reflect,
-                                                dummy_poison_stacks: dummy_poison,
-                                            })
-                                        );
-                                    }
                                 }
                             }
                         } else if rand >= chance && damage > 0 {
@@ -629,7 +561,6 @@ mod battle {
                                     whichItem: curr_item_index,
                                     damageCaused: 0,
                                     isDodged: true,
-                                    cleansePoison: 0,
                                     buffType: 0,
                                     regenHP: 0,
                                     player_armor_stacks: char_armor,
@@ -663,7 +594,6 @@ mod battle {
                                 whichItem: 0,
                                 damageCaused: char_poison,
                                 isDodged: false,
-                                cleansePoison: 0,
                                 buffType: EFFECT_POISON,
                                 regenHP: 0,
                                 player_armor_stacks: char_armor,
@@ -695,7 +625,6 @@ mod battle {
                                 whichItem: 0,
                                 damageCaused: dummy_poison,
                                 isDodged: false,
-                                cleansePoison: 0,
                                 buffType: EFFECT_POISON,
                                 regenHP: 0,
                                 player_armor_stacks: char_armor,
@@ -727,7 +656,6 @@ mod battle {
                                 whichItem: 0,
                                 damageCaused: 0,
                                 isDodged: false,
-                                cleansePoison: 0,
                                 buffType: EFFECT_REGEN,
                                 regenHP: char_regen,
                                 player_armor_stacks: char_armor,
@@ -758,7 +686,6 @@ mod battle {
                                 whichItem: 0,
                                 damageCaused: 0,
                                 isDodged: false,
-                                cleansePoison: 0,
                                 buffType: EFFECT_REGEN,
                                 regenHP: dummy_regen,
                                 player_armor_stacks: char_armor,

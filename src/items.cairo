@@ -7,7 +7,7 @@ mod Backpack1 {
     const height: usize = 3;
     const price: usize = 5;
     const damage: usize = 0;
-    const cleansePoison: usize = 0;
+    const consumeStamina: usize = 0;
     const chance: usize = 0;
     const cooldown: u8 = 0;
     const rarity: u8 = 0;
@@ -30,7 +30,7 @@ mod Backpack2 {
     const height: usize = 2;
     const price: usize = 4;
     const damage: usize = 0;
-    const cleansePoison: usize = 0;
+    const consumeStamina: usize = 0;
     const chance: usize = 0;
     const cooldown: u8 = 0;
     const rarity: u8 = 3;
@@ -53,7 +53,7 @@ mod Dagger {
     const height: usize = 2;
     const price: usize = 2;
     const damage: usize = 3;
-    const cleansePoison: usize = 0;
+    const consumeStamina: usize = 0;
     const chance: usize = 90;
     const cooldown: u8 = 4;
     const rarity: u8 = 1;
@@ -76,7 +76,7 @@ mod Sword {
     const height: usize = 3;
     const price: usize = 2;
     const damage: usize = 5;
-    const cleansePoison: usize = 0;
+    const consumeStamina: usize = 0;
     const chance: usize = 80;
     const cooldown: u8 = 5;
     const rarity: u8 = 1;
@@ -99,7 +99,7 @@ mod Spike {
     const height: usize = 1;
     const price: usize = 2;
     const damage: usize = 0;
-    const cleansePoison: usize = 0;
+    const consumeStamina: usize = 0;
     const chance: usize = 100;
     const cooldown: u8 = 0;
     const rarity: u8 = 1;
@@ -122,7 +122,7 @@ mod Shield {
     const height: usize = 2;
     const price: usize = 3;
     const damage: usize = 0;
-    const cleansePoison: usize = 0;
+    const consumeStamina: usize = 0;
     const chance: usize = 100;
     const cooldown: u8 = 0;
     const rarity: u8 = 1;
