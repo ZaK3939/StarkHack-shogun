@@ -34,6 +34,7 @@ mod tests {
 
         let item_one_new_name: felt252 = 'New Dagger';
         let item_one_new_itemType: felt252 = 2;
+        let item_one_new_shapeType: felt252 = 2;
         let item_one_new_width: felt252 = 2;
         let item_one_new_height: felt252 = 1;
         let item_one_new_price: felt252 = 4;
@@ -53,26 +54,28 @@ mod tests {
 
         admins_system.edit_item(1, 0, item_one_new_name);
         admins_system.edit_item(1, 1, item_one_new_itemType);
-        admins_system.edit_item(1, 2, item_one_new_width);
-        admins_system.edit_item(1, 3, item_one_new_height);
-        admins_system.edit_item(1, 4, item_one_new_price);
-        admins_system.edit_item(1, 5, item_one_new_damage);
-        admins_system.edit_item(1, 6, item_one_new_cleansePoison);
-        admins_system.edit_item(1, 7, item_one_new_chance);
-        admins_system.edit_item(1, 8, item_one_new_cooldown);
-        admins_system.edit_item(1, 9, item_one_new_rarity);
-        admins_system.edit_item(1, 10, item_one_new_armor);
-        admins_system.edit_item(1, 11, item_one_new_armorActivation);
-        admins_system.edit_item(1, 12, item_one_new_regen);
-        admins_system.edit_item(1, 13, item_one_new_regenActivation);
-        admins_system.edit_item(1, 14, item_one_new_reflect);
-        admins_system.edit_item(1, 15, item_one_new_reflectActivation);
-        admins_system.edit_item(1, 16, item_one_new_poison);
-        admins_system.edit_item(1, 17, item_one_new_poisonActivation);
+        admins_system.edit_item(1, 2, item_one_new_shapeType);
+        admins_system.edit_item(1, 3, item_one_new_width);
+        admins_system.edit_item(1, 4, item_one_new_height);
+        admins_system.edit_item(1, 5, item_one_new_price);
+        admins_system.edit_item(1, 6, item_one_new_damage);
+        admins_system.edit_item(1, 7, item_one_new_cleansePoison);
+        admins_system.edit_item(1, 8, item_one_new_chance);
+        admins_system.edit_item(1, 9, item_one_new_cooldown);
+        admins_system.edit_item(1, 10, item_one_new_rarity);
+        admins_system.edit_item(1, 11, item_one_new_armor);
+        admins_system.edit_item(1, 12, item_one_new_armorActivation);
+        admins_system.edit_item(1, 13, item_one_new_regen);
+        admins_system.edit_item(1, 14, item_one_new_regenActivation);
+        admins_system.edit_item(1, 15, item_one_new_reflect);
+        admins_system.edit_item(1, 16, item_one_new_reflectActivation);
+        admins_system.edit_item(1, 17, item_one_new_poison);
+        admins_system.edit_item(1, 18, item_one_new_poisonActivation);
 
         let item_one_data = get!(world, 1, (Item));
         assert(item_one_data.name == item_one_new_name, 'I1 name mismatch');
         assert(item_one_data.itemType.into() == item_one_new_itemType, 'I1 itemType mismatch');
+        assert(item_one_data.shapeType.into() == item_one_new_shapeType, 'I1 shapeType mismatch');
         assert(item_one_data.width.into() == item_one_new_width, 'I1 width mismatch');
         assert(item_one_data.height.into() == item_one_new_height, 'I1 height mismatch');
         assert(item_one_data.price.into() == item_one_new_price, 'I1 price mismatch');
@@ -141,7 +144,7 @@ mod tests {
 
         add_items(ref admins_system);
 
-        admins_system.edit_item(1, 2, 10);
+        admins_system.edit_item(1, 3, 10);
     }
 
     #[test]
@@ -158,7 +161,7 @@ mod tests {
 
         add_items(ref admins_system);
 
-        admins_system.edit_item(1, 3, 10);
+        admins_system.edit_item(1, 4, 10);
     }
 
     #[test]
@@ -175,7 +178,7 @@ mod tests {
 
         add_items(ref admins_system);
 
-        admins_system.edit_item(1, 4, 0);
+        admins_system.edit_item(1, 5, 0);
     }
 
 
@@ -193,6 +196,6 @@ mod tests {
 
         add_items(ref admins_system);
 
-        admins_system.edit_item(1, 9, 9);
+        admins_system.edit_item(1, 10, 9);
     }
 }

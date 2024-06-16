@@ -7,7 +7,7 @@ struct Item {
     #[key]
     id: usize,
     name: felt252,
-    // 1 - Weapon, 2 - Start Gear (Buff/Debuff initial Battle), 3 - Gear, 4 - Backpack 5 - Consumable
+    // 1 - Weapon, 2 - Gear
     itemType: u8,
     // 1 - Square, 2 - T, 3 - Axe, 4 - Banana, 5 - Pan
     shapeType: u8,
@@ -16,14 +16,14 @@ struct Item {
     price: usize,
     // Base damage
     damage: usize,
-    cleansePoison: usize,
+    consumeStamina: usize,
     // Accuracy to trigger
     chance: usize,
     // item reuse time
     cooldown: u8,
     rarity: u8,
     // Effects
-    // activation 0 - passive, 1 - on start, 2 - on hit, 3 - on cooldown
+    // activation 0 - passive, 1 - on start, 2 - on hit, 3 - on cooldown 4 - on almost dead
     armor: usize,
     armorActivation: u8,
     regen: usize,
