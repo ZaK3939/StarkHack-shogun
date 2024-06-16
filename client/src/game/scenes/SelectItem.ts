@@ -15,10 +15,10 @@ export class SelectItem extends Phaser.Scene {
         this.load.image('shelf', 'assets/components/shelf.png');
         this.load.image('block', 'assets/components/block.png');
 
-        // TODO: 画像の数に調整
-        for (let i = 1; i <= 20; i++) {
-            this.load.image(`item${i}`, `assets/items/${i}.png`);
-        }
+        // Load item images based on their ids
+        Object.keys(itemData).forEach(id => {
+            this.load.image(`item${id}`, `assets/items/${id}.png`);
+        });
     }
 
     create() {
@@ -94,7 +94,8 @@ export class SelectItem extends Phaser.Scene {
             }
         }
 
-        const selectedItems = Phaser.Utils.Array.Shuffle(Array.from({ length: 20 }, (_, i) => `item${i + 1}`)).slice(0, 6);
+        // Randomly select 6 items from itemData
+        const selectedItems = Phaser.Utils.Array.Shuffle(Object.keys(itemData)).slice(0, 6);
 
         const itemStartX = width - 300 - 150;
         const itemStartY = 320 - 150;
@@ -104,7 +105,7 @@ export class SelectItem extends Phaser.Scene {
         const itemPositions: { [key: string]: { x: number, y: number, width: number, height: number } } = {};
         const itemsOnBlock = new Set<string>();
 
-        // Hover text for item effect
+        // Hover text for item effect and name
         const hoverTextStyle = {
             fontSize: '18px',
             color: '#000000',
@@ -115,12 +116,12 @@ export class SelectItem extends Phaser.Scene {
 
         const hoverText = this.add.text(width / 2, height / 2, '', hoverTextStyle).setOrigin(0.5).setVisible(false);
 
-        selectedItems.forEach((item, index) => {
-            console.log(`Displaying item: ${item}`);
-            const itemDataEntry = itemData[index + 1];
+        selectedItems.forEach((id, index) => {
+            const item = itemData[id];
+            console.log(`Displaying item: ${item.name}`);
             const x = itemStartX + (index % 2) * itemSpacingX;
             const y = itemStartY + Math.floor(index / 2) * itemSpacingY;
-            const itemImage = this.add.image(x, y, item).setOrigin(0.5, 0.5).setScale(0.5).setName(item);
+            const itemImage = this.add.image(x, y, `item${id}`).setOrigin(0.5, 0.5).setScale(0.5).setName(`item${id}`);
             itemImage.setInteractive({ draggable: true });
 
             this.input.setDraggable(itemImage);
@@ -143,17 +144,17 @@ export class SelectItem extends Phaser.Scene {
             costCircle.setMask(gradient);
 
             // Add cost text
-            this.add.text(circleX, circleY, `${itemDataEntry.cost}`, {
+            this.add.text(circleX, circleY, `${item.cost}`, {
                 fontSize: '14px',
                 color: '#000000'
             }).setOrigin(0.5);
 
-            itemPositions[item] = { x, y, width: itemDataEntry.width, height: itemDataEntry.height };
+            itemPositions[`item${id}`] = { x, y, width: item.width, height: item.height };
 
             let highlightedBlocks: Phaser.GameObjects.Image[] = [];
 
             itemImage.on('pointerover', () => {
-                hoverText.setText(itemDataEntry.effect).setVisible(true);
+                hoverText.setText(`${item.name}\n${item.effect}`).setVisible(true);
             });
 
             itemImage.on('pointerout', () => {
@@ -161,7 +162,7 @@ export class SelectItem extends Phaser.Scene {
             });
 
             itemImage.on('dragstart', () => {
-                if (itemDataEntry.cost > playerGold) {
+                if (item.cost > playerGold) {
                     itemImage.disableInteractive();
                     this.time.delayedCall(100, () => {
                         itemImage.setInteractive({ draggable: true });
@@ -170,7 +171,7 @@ export class SelectItem extends Phaser.Scene {
             });
 
             itemImage.on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
-                if (itemDataEntry.cost > playerGold) {
+                if (item.cost > playerGold) {
                     return;
                 }
 
@@ -183,7 +184,7 @@ export class SelectItem extends Phaser.Scene {
 
                 const block = blocks.find(block => Phaser.Math.Distance.Between(block.x, block.y, dragX, dragY) < blockWidth / 2);
                 if (block) {
-                    const { width, height } = itemDataEntry;
+                    const { width, height } = item;
                     const startCol = Math.floor((block.x - startX) / blockWidth);
                     const startRow = Math.floor((block.y - startY) / blockHeight);
 
@@ -213,7 +214,7 @@ export class SelectItem extends Phaser.Scene {
                 if (droppedBlock) {
                     console.log(`Dropped on block at: (${droppedBlock.x}, ${droppedBlock.y})`);
             
-                    const { width, height, cost } = itemDataEntry;
+                    const { width, height, cost } = item;
                     const startCol = Math.floor((droppedBlock.x - startX) / blockWidth);
                     const startRow = Math.floor((droppedBlock.y - startY) / blockHeight);
             
@@ -260,7 +261,7 @@ export class SelectItem extends Phaser.Scene {
                                 existingItemImage.y = boxImage.y;
                                 itemPositions[existingItemKey] = { x: boxImage.x, y: boxImage.y, width: itemPositions[existingItemKey].width, height: itemPositions[existingItemKey].height };
                                 if (itemsOnBlock.has(existingItemKey)) {
-                                    playerGold += itemDataEntry.cost; // Re-add cost to playerGold when moving to the box
+                                    playerGold += item.cost; // Re-add cost to playerGold when moving to the box
                                     itemsOnBlock.delete(existingItemKey);
                                 }
                             }
@@ -269,29 +270,29 @@ export class SelectItem extends Phaser.Scene {
                         // Place the new item
                         itemImage.x = droppedBlock.x;
                         itemImage.y = droppedBlock.y;
-                        itemPositions[item] = { x: droppedBlock.x, y: droppedBlock.y, width, height };
+                        itemPositions[`item${id}`] = { x: droppedBlock.x, y: droppedBlock.y, width, height };
 
-                        if (!itemsOnBlock.has(item)) {
+                        if (!itemsOnBlock.has(`item${id}`)) {
                             playerGold -= cost; // Subtract cost from playerGold when placed on block
-                            itemsOnBlock.add(item);
+                            itemsOnBlock.add(`item${id}`);
                         }
                     } else {
-                        itemImage.x = itemPositions[item].x;
-                        itemImage.y = itemPositions[item].y;
+                        itemImage.x = itemPositions[`item${id}`].x;
+                        itemImage.y = itemPositions[`item${id}`].y;
                     }
                 } else if (droppedBox) {
                     console.log(`Dropped in box at: (${boxImage.x}, ${boxImage.y})`);
                     itemImage.x = boxImage.x;
                     itemImage.y = boxImage.y;
-                    itemPositions[item] = { x: boxImage.x, y: boxImage.y, width: itemPositions[item].width, height: itemPositions[item].height };
+                    itemPositions[`item${id}`] = { x: boxImage.x, y: boxImage.y, width: itemPositions[`item${id}`].width, height: itemPositions[`item${id}`].height };
 
-                    if (itemsOnBlock.has(item)) {
-                        itemsOnBlock.delete(item);
+                    if (itemsOnBlock.has(`item${id}`)) {
+                        itemsOnBlock.delete(`item${id}`);
                     }
                 } else {
                     console.log('Dropped outside any block or box');
-                    itemImage.x = itemPositions[item].x;
-                    itemImage.y = itemPositions[item].y;
+                    itemImage.x = itemPositions[`item${id}`].x;
+                    itemImage.y = itemPositions[`item${id}`].y;
                 }
 
                 updateStatsText(); // Update the stats text to reflect the new playerGold value
