@@ -310,6 +310,26 @@ export class SelectItem extends Phaser.Scene {
         const resetButton = this.add.image(width - 50, height - 50, 'reset').setOrigin(0.5, 0.5).setScale(0.5);
         resetButton.setInteractive();
 
+        // Add cost circle for reset button
+        const resetCostCircle = this.add.graphics();
+        const circleX = width - 200; // Positioning the circle left of the reset button
+        const circleY = height - 50;
+        const radius = 20;
+
+        resetCostCircle.lineStyle(2, 0x000000, 1);
+        resetCostCircle.strokeCircle(circleX, circleY, radius);
+
+        const gradient = resetCostCircle.createGeometryMask();
+        const gradientFill = this.add.graphics();
+        gradientFill.fillGradientStyle(0xffff00, 0xffd700, 0xffa500, 0xff8c00, 1);
+        gradientFill.fillCircle(circleX, circleY, radius);
+        resetCostCircle.setMask(gradient);
+
+        this.add.text(circleX, circleY, '1', {
+            fontSize: '14px',
+            color: '#000000'
+        }).setOrigin(0.5);
+
         const updateResetButtonState = () => {
             if (playerGold > 0) {
                 resetButton.setInteractive();
