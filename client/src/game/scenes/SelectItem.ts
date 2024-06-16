@@ -85,10 +85,12 @@ export class SelectItem extends Phaser.Scene {
         const blockHeight = 70;
         const startX = 50;
         const startY = 50;
+        const rows = 7;
+        const cols = 7;
 
         const blocks: Phaser.GameObjects.Image[] = [];
-        for (let row = 0; row < 7; row++) {
-            for (let col = 0; col < 9; col++) {
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
                 const block = this.add.image(startX + col * blockWidth, startY + row * blockHeight, 'block').setOrigin(0.5, 0.5);
                 blocks.push(block);
             }
@@ -189,10 +191,10 @@ export class SelectItem extends Phaser.Scene {
                     const startRow = Math.floor((block.y - startY) / blockHeight);
 
                     // ブロックが幅を超える場合はハイライトしない
-                    if (startCol + width <= 9 && startRow + height <= 7) {
+                    if (startCol + width <= cols && startRow + height <= rows) {
                         for (let r = 0; r < height; r++) {
                             for (let c = 0; c < width; c++) {
-                                const idx = (startRow + r) * 9 + (startCol + c);
+                                const idx = (startRow + r) * cols + (startCol + c);
                                 if (blocks[idx]) {
                                     blocks[idx].setTint(0x0000ff); // 青でハイライト
                                     highlightedBlocks.push(blocks[idx]);
@@ -219,12 +221,12 @@ export class SelectItem extends Phaser.Scene {
                     const startRow = Math.floor((droppedBlock.y - startY) / blockHeight);
             
                     let canPlace = true;
-                    if (startCol + width > 9 || startRow + height > 7) {
+                    if (startCol + width > cols || startRow + height > rows) {
                         canPlace = false;
                     } else {
                         for (let r = 0; r < height; r++) {
                             for (let c = 0; c < width; c++) {
-                                const idx = (startRow + r) * 9 + (startCol + c);
+                                const idx = (startRow + r) * cols + (startCol + c);
                                 if (!blocks[idx]) {
                                     canPlace = false;
                                     break;

@@ -53,17 +53,20 @@ export class BattleScene extends Phaser.Scene {
         const startXLeft = 50;
         const startYLeft = 50;
 
-        for (let row = 0; row < 7; row++) {
-            for (let col = 0; col < 9; col++) {
+        const rows = 7;
+        const cols = 7;
+
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
                 this.add.image(startXLeft + col * blockWidth, startYLeft + row * blockHeight, 'block').setOrigin(0.5, 0.5);
             }
         }
 
         // Enemy's items
-        const startXRight = width - (blockWidth * 9 + 50) + 50;
+        const startXRight = width - (blockWidth * 9 + 50) + 200;
 
-        for (let row = 0; row < 7; row++) {
-            for (let col = 0; col < 9; col++) {
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
                 this.add.image(startXRight + col * blockWidth, startYLeft + row * blockHeight, 'block').setOrigin(0.5, 0.5);
             }
         }
