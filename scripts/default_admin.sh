@@ -56,5 +56,5 @@ echo "Admin authorizations have been successfully set."
 
 # add items
 echo "Adding items..."
-./scripts/add_item.sh
+./scripts/add_item.sh $PROFILE
 echo "Items added successfully."

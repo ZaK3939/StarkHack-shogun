@@ -21,7 +21,7 @@ struct Item {
     chance: usize,
     // item reuse time
     coolTime: u8,
-    // 1 - Common, 2 - UnCommon, 3 - Rare, 4 - Epic, 5 - Legendary
+    // 1 - Common, 2 - Rare
     rarity: u8,
     // Effects
     // activation 0 - passive, 1 - on start, 2 - on hit, 3 - on coolTime 4 - on almost dead

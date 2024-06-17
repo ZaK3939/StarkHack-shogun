@@ -48,7 +48,7 @@ SHOP_DATA=$(sozo model get Shop ${ACCOUNT_ADDRESS})
 
 # buy_item
 echo "Buying item..."
-sozo execute --world $WORLD_ADDRESS $ACTIONS_ADDRESS buy_item -c 4 --wait --rpc-url $RPC_URL \
+sozo execute --world $WORLD_ADDRESS $ACTIONS_ADDRESS buy_item -c 40 --wait --rpc-url $RPC_URL \
 	--account-address $ACCOUNT_ADDRESS \
 	--private-key $PRIVATE_KEY
 

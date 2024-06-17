@@ -9,6 +9,7 @@ trait IActions {
     fn reroll_shop();
     fn place_item(storage_item_id: u32, x: usize, y: usize, rotation: usize);
     fn undo_place_item(inventory_item_id: u32);
+    fn select_item(seed: u128, commonSize: usize, rareSize: usize, common: Array<usize>, rare: Array<usize>) -> u32;
 }
 
 #[dojo::contract]
@@ -31,6 +32,7 @@ mod actions {
 
     use shogun::utils::random::{pseudo_seed, random};
 
+   
     // for start item
     use shogun::items::{Item40};
 
@@ -45,6 +47,8 @@ mod actions {
 
     #[abi(embed_v0)]
     impl ActionsImpl of IActions<ContractState> {
+        
+        
         fn spawn(world: IWorldDispatcher, name: felt252) {
             let player = get_caller_address();
 
@@ -333,8 +337,6 @@ mod actions {
             // TODO: Will move these arrays after Dojo supports storing array
             let mut common: Array<usize> = ArrayTrait::new();
             let mut commonSize: usize = 0;
-            let mut uncommon: Array<usize> = ArrayTrait::new();
-            let mut uncommonSize: usize = 0;
             let mut rare: Array<usize> = ArrayTrait::new();
             let mut rareSize: usize = 0;
 
@@ -348,12 +350,7 @@ mod actions {
 
                 let item = get!(world, count, (Item));
 
-                // if item.id == 14 || item.id == 18 || item.id == 19 {
-                //     count -= 1;
-                //     continue;
-                // }
-
-                let rarity: felt252 = item.rarity.into();
+                let rarity: u8 = item.rarity.into();
                 match rarity {
                     0 => {},
                     1 => {
@@ -361,10 +358,6 @@ mod actions {
                         commonSize += 1;
                     },
                     2 => {
-                        uncommon.append(count);
-                        uncommonSize += 1;
-                    },
-                    3 => {
                         rare.append(count);
                         rareSize += 1;
                     },
@@ -373,116 +366,16 @@ mod actions {
 
                 count -= 1;
             };
-
-            assert(commonSize > 0, 'No common items found');
-    
-            let (seed1, seed2, seed3, seed4, seed5, seed6) = pseudo_seed();
           
-            // common: 70%, uncommon: 30%, rare: 10%
-            let mut random_index = random(seed1, 100);
-            if uncommonSize == 0 {
-                random_index = random(seed1, 70);
-            } else if rareSize == 0 && uncommonSize > 0 {
-                random_index = random(seed1, 90);
-            }
-            if random_index < 70 {
-                // commonSize is always greater than 0
-                random_index = random(seed1, commonSize);
-                shop.item1 = *common.at(random_index);
-            } else if random_index < 90 {
-                // uncommonSize is always greater than 0
-                random_index = random(seed1, uncommonSize);
-                shop.item1 = *uncommon.at(random_index);
-            } else {
-                // rareSize is always greater than 0
-                random_index = random(seed1, rareSize);
-                shop.item1 = *rare.at(random_index);
-            }
-            random_index = random(seed2, 100);
-            if uncommonSize == 0 {
-                random_index = random(seed2, 70);
-            } else if rareSize == 0 && uncommonSize > 0 {
-                random_index = random(seed2, 90);
-            }
-            if random_index < 70 {
-                random_index = random(seed2, commonSize);
-                shop.item2 = *common.at(random_index);
-            } else if random_index < 90 {
-                random_index = random(seed2, uncommonSize);
-                shop.item2 = *uncommon.at(random_index);
-            } else {
-                random_index = random(seed2, rareSize);
-                shop.item2 = *rare.at(random_index);
-            }
-
-            random_index = random(seed3, 100);
-            if uncommonSize == 0 {
-                random_index = random(seed3, 70);
-            } else if rareSize == 0 && uncommonSize > 0 {
-                random_index = random(seed3, 90);
-            }
-            if random_index < 70 {
-                random_index = random(seed3, commonSize);
-                shop.item3 = *common.at(random_index);
-            } else if random_index < 90 {
-                random_index = random(seed3, uncommonSize);
-                shop.item3 = *uncommon.at(random_index);
-            } else {
-                random_index = random(seed3, rareSize);
-                shop.item3 = *rare.at(random_index);
-            }
-
-            random_index = random(seed4, 100);
-            if uncommonSize == 0 {
-                random_index = random(seed4, 70);
-            } else if rareSize == 0 && uncommonSize > 0 {
-                random_index = random(seed4, 90);
-            }
-            if random_index < 70 {
-                random_index = random(seed4, commonSize);
-                shop.item4 = *common.at(random_index);
-            } else if random_index < 90 {
-                random_index = random(seed4, uncommonSize);
-                shop.item4 = *uncommon.at(random_index);
-            } else {
-                random_index = random(seed4, rareSize);
-                shop.item4 = *rare.at(random_index);
-            }
-
-            random_index = random(seed5, 100);
-            if uncommonSize == 0 {
-                random_index = random(seed5, 70);
-            } else if rareSize == 0 && uncommonSize > 0 {
-                random_index = random(seed5, 90);
-            }
-            if random_index < 70 {
-                random_index = random(seed5, commonSize);
-                shop.item5 = *common.at(random_index);
-            } else if random_index < 90 {
-                random_index = random(seed5, uncommonSize);
-                shop.item5 = *uncommon.at(random_index);
-            } else {
-                random_index = random(seed5, rareSize);
-                shop.item5 = *rare.at(random_index);
-            }
-
-            random_index = random(seed6, 100);
-            if uncommonSize == 0 {
-                random_index = random(seed6, 70);
-            } else if rareSize == 0 && uncommonSize > 0 {
-                random_index = random(seed6, 90);
-            }
-            if random_index < 70 {
-                random_index = random(seed6, commonSize);
-                shop.item6 = *common.at(random_index);
-            } else if random_index < 90 {
-                random_index = random(seed6, uncommonSize);
-                shop.item6 = *uncommon.at(random_index);
-            } else {
-                random_index = random(seed6, rareSize);
-                shop.item6 = *rare.at(random_index);
-            }
-
+            let (seed1, seed2, seed3, seed4, seed5) = pseudo_seed();
+            
+            // common: 70%, rare: 30%
+            shop.item1 = self.select_item(seed1, commonSize, rareSize, common.clone(), rare.clone());
+            shop.item2 = self.select_item(seed2, commonSize, rareSize, common.clone(), rare.clone());
+            shop.item3 = self.select_item(seed3, commonSize, rareSize, common.clone(), rare.clone());
+            shop.item4 = self.select_item(seed4, commonSize, rareSize, common.clone(), rare.clone());
+            shop.item5 = self.select_item(seed5, commonSize, rareSize, common.clone(), rare.clone());
+            shop.item6 = 40;
             char.gold -= 1;
 
             set!(world, (shop, char));
@@ -756,5 +649,20 @@ mod actions {
             inventoryItem.rotation = 0;
             set!(world, (inventoryItem));
         }
+
+        fn select_item(seed: u128, commonSize: usize, rareSize: usize, common: Array<usize>, rare: Array<usize>) -> u32 {
+            let mut random_index: usize = random(seed, 100);
+
+            if random_index < 70 {
+                // commonSize is always greater than 0
+                random_index = random(seed, commonSize);
+                *common.at(random_index)
+            } else {
+                // rareSize is always greater than 0
+                random_index = random(seed, rareSize);
+                *rare.at(random_index)
+            }
+        }
     }
+
 }

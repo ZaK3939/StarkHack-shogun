@@ -42,7 +42,7 @@ mod battle {
             assert(char.dummied == true, 'dummy not created');
             assert(char.loss < 5, 'max loss reached');
 
-            let (seed1, seed2, _, _, _, _) = pseudo_seed();
+            let (seed1, seed2, _, _, _) = pseudo_seed();
             let dummyCharCounter = get!(world, char.wins, (DummyCharacterCounter));
             let mut random_index = random(seed1, dummyCharCounter.count) + 1;
 
