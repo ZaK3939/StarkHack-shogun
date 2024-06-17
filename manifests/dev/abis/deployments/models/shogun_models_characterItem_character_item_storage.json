@@ -319,98 +319,30 @@
   },
   {
     "type": "impl",
-    "name": "itemImpl",
-    "interface_name": "shogun::models::item::Iitem"
+    "name": "character_item_storageImpl",
+    "interface_name": "shogun::models::characterItem::Icharacter_item_storage"
   },
   {
     "type": "struct",
-    "name": "shogun::models::item::Item",
+    "name": "shogun::models::characterItem::CharacterItemStorage",
     "members": [
+      {
+        "name": "player",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
       {
         "name": "id",
         "type": "core::integer::u32"
       },
       {
-        "name": "name",
-        "type": "core::felt252"
-      },
-      {
-        "name": "itemType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "shapeType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "width",
+        "name": "itemId",
         "type": "core::integer::u32"
-      },
-      {
-        "name": "height",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "price",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "damage",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "consumeStamina",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "chance",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "coolTime",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rarity",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "armor",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "armorType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "regen",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "regenType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "reflect",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "reflectType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "spike",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "spikeType",
-        "type": "core::integer::u8"
       }
     ]
   },
   {
     "type": "interface",
-    "name": "shogun::models::item::Iitem",
+    "name": "shogun::models::characterItem::Icharacter_item_storage",
     "items": [
       {
         "type": "function",
@@ -418,7 +350,7 @@
         "inputs": [
           {
             "name": "model",
-            "type": "shogun::models::item::Item"
+            "type": "shogun::models::characterItem::CharacterItemStorage"
           }
         ],
         "outputs": [],
@@ -428,7 +360,7 @@
   },
   {
     "type": "event",
-    "name": "shogun::models::item::item::Event",
+    "name": "shogun::models::characterItem::character_item_storage::Event",
     "kind": "enum",
     "variants": []
   }

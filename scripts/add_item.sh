@@ -23,62 +23,56 @@ echo admin : $ADMIN_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 
-# sozo execute --world <WORLD_ADDRESS> <CONTRACT> <ENTRYPOINT>
 
-# Backpack 			4783213592342258539,4,2,3,10,0,0,0,0,0,0,0,0,0,0,0,0,0
-# Pack				1348559723,4,2,2,4,0,0,0,0,2,0,0,0,0,0,0,0,0
-# Satchel 			23469575578871148,4,2,1,3,0,0,0,0,2,0,0,0,0,0,0,0,0
-# Pouch 			345467347816,4,1,1,3,0,0,0,0,2,0,0,0,0,0,0,0,0
-# Herb 				1214607970,3,1,1,1,0,0,100,0,1,0,0,1,1,0,0,0,0
-# Dagger 			75185137345906,1,1,2,2,3,0,90,4,1,0,0,0,0,0,0,0,0
-# Sword 			358486078052,1,1,3,2,5,0,80,5,1,0,0,0,0,0,0,0,0
-# Spike 			358368242533,3,1,1,2,0,0,100,0,1,0,0,0,0,1,1,0,0
-# Shield 			91707909958756,3,2,2,3,0,0,100,0,1,15,1,0,0,0,0,0,0
-# Helmet 			79600448005492,3,1,1,3,0,0,50,0,1,3,2,0,0,0,0,0,0
-# Healing Potion 	1468365686984687211050012787699566,3,1,1,4,0,0,100,0,2,0,0,3,1,0,0,0,0
-# Leather Armor 	6052716152600831465235768242034,3,2,3,5,0,0,100,0,2,35,1,0,0,0,0,0,0
-# spike Potion 	6372733319570045399349322149742,3,1,1,5,0,0,100,0,2,0,0,0,0,0,0,2,1
-# Atlas Band 		309101453348888473857636,3,2,1,5,0,0,100,0,2,25,1,0,0,0,0,0,0
-# Augmented Sword 	339880532085619196269974512114561636,1,1,3,6,10,0,80,4,2,0,0,0,0,0,0,0,0
-# Augmented Dagger 	87009416213918514245113458514029143410,1,1,2,6,6,0,90,3,2,0,0,0,0,0,0,0,0
-# Spike Shield 		25823153336537712276388801636,3,2,2,7,0,0,50,0,2,0,0,0,0,2,2,0,0
-# Elder Horns 		83927749117907346348207731,3,3,1,8,0,0,100,0,2,0,0,0,0,4,1,0,0
-# Nature Rune 		94756431764029820800167525,3,1,1,12,0,0,75,3,3,0,0,2,3,0,0,0,0
-# Plague Flower 	6371795136575658587761839400306,3,2,2,12,0,0,80,4,3,0,0,0,0,0,0,3,3
-# Mail Armor 		365419149838249439883122,3,2,3,12,0,0,100,0,3,75,1,0,0,0,0,0,0
-# Club 				1131181410,1,1,4,7,15,0,65,6,2,0,0,0,0,0,0,0,0
-# Buckler 			18706418327381362,3,2,2,8,0,0,60,0,2,10,2,0,0,0,0,0,0
-# Magic Water 		93547265267753350467970418,3,1,1,5,0,2,90,5,2,0,0,0,0,0,0,0,0
-# Vampiric Armor 	1752006227441648624131573719854962,3,2,3,8,0,0,60,0,3,0,0,0,0,2,2,0,0
+# name, itemType, shapeType, width, height, price, damage, consumeStamina, chance, coolDown, rarity, 
+# armor, armorType, regen, regenType, reflect, reflectType, spike, spikeType,
 
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 1,5180591834077951200474421290355,2,1,1,2,3,0,0,50,4,2,0,0,1,3,1,3,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 2,4290661,1,3,2,3,6,6,3,80,4,3,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 3,5259203444424212077206280496499,1,1,2,1,3,2,1,80,5,3,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 4,72986231139937,2,4,2,2,3,0,0,100,3,1,0,0,1,3,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 5,80301285249285158999778675,2,1,1,1,2,0,0,100,2,3,0,0,1,3,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 6,80315342082048483641615205,2,1,1,2,10,0,0,90,2,3,0,0,0,0,2,3,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 7,5263556786300644355717439448435,2,1,2,1,5,0,0,100,4,3,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 8,285387747181,1,1,1,4,4,3,2,70,4,1,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 9,1347942892381640102452472895336051,2,1,1,1,9,0,0,100,0,3,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 10,20567995355621704406569804140,2,1,1,1,2,0,0,90,2,3,0,0,0,0,1,3,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 11,74085810990964,2,1,2,1,3,0,0,100,3,3,0,0,1,3,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 12,20861721791574245281954293106,2,1,1,2,5,0,0,95,3,3,0,0,0,0,0,0,1,3 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 13,5344636210924047111429617185380,2,1,1,1,4,0,0,100,0,3,0,0,0,0,1,3,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 14,75185137345906,1,1,1,2,4,2,1,65,2,3,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 15,5418893226509609272860835210355,2,1,1,2,3,0,0,100,3,3,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 16,332362945406796296184683,2,1,2,1,3,0,0,100,0,3,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 17,302466035045,2,1,1,1,1,0,0,90,0,1,0,0,0,0,0,0,1,1 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 18,332566630208825912879459,2,1,1,2,3,0,0,85,5,3,0,0,1,3,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 19,78483857107299,2,1,1,2,2,0,0,80,4,1,0,0,0,0,1,3,1,3 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 20,370852408161082562541199331045897317,2,1,2,1,4,0,0,100,0,3,0,0,0,0,2,3,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 21,20107247529325172,2,1,2,2,6,0,0,70,0,3,0,0,20,4,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 22,79583284913522,1,2,3,3,8,9,4,100,6,3,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 23,5735803464783934418129584808563,2,1,2,1,4,0,0,100,0,1,0,0,1,1,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 24,5735803464986396325597128781678,2,1,1,2,4,0,0,100,0,3,20,3,2,1,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 25,6052716152600831465235768242034,2,1,2,3,7,0,0,100,0,3,45,1,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 26,92357119027722648090206567,2,1,2,2,4,0,0,100,0,1,5,4,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 27,23662774564128607029171742066,2,1,1,1,2,0,0,100,0,3,0,0,1,1,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 28,23662821873636304903706993004,2,1,1,1,2,0,0,100,4,1,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 29,5267822,1,5,1,1,4,4,2,95,4,1,0,0,1,2,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 30,1483334678964387016299,2,1,5,1,3,0,0,100,0,1,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 31,97240082215151378733559396,2,1,1,1,2,0,0,80,0,1,0,0,0,0,0,0,1,1 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 32,5398900,2,1,2,1,4,0,0,60,3,1,0,0,0,0,0,0,1,3 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 33,5937281861841806625,2,1,1,2,3,0,0,100,3,3,0,0,0,0,2,3,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 34,6010176240095489911,1,1,1,2,4,2,3,70,4,1,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 35,91708011734380,1,1,1,4,8,5,0,80,3,3,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 36,358367977842,1,1,1,4,6,5,0,90,5,3,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 37,1692344940007081970703365609319540,2,1,2,1,5,0,2,100,3,3,0,0,2,3,2,3,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 38,6610727254158539880832327576676,2,1,2,2,8,0,0,100,3,3,4,3,0,0,2,3,1,3 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 39,6012716073268438380,2,4,2,2,5,0,0,50,3,3,0,0,0,0,1,3,3,3 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 40,358435745381,1,1,1,1,1,1,1,40,4,1,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 41,398604532852954688221811,2,1,1,2,3,1,0,100,0,1,0,0,3,1,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 42,362647020392,1,1,1,2,5,2,4,80,3,3,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 43,398845370394340924024178,1,1,1,2,8,3,2,70,6,3,0,0,0,0,0,0,1,3 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 44,105636616351295929708802923,2,1,1,2,4,0,0,100,4,1,0,0,0,0,0,0,1,3 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 45,1612389281204546793061,2,1,1,1,4,0,0,100,2,1,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 46,1773398435764441280289209920021874,2,1,2,2,4,0,0,100,3,1,4,3,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
+sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 47,27059912655097065507149279844,1,1,1,2,3,1,4,70,5,1,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
 
-
-# name, itemType, width, height, price, damage, cleansespike, chance, coolTime, rarity, 
-# armor, armorType, regen, regenType, reflect, reflectType, spike, spikeType: u8,
-
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 1,4783213592342258539,4,2,3,10,0,0,0,0,0,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 2,1348559723,4,2,2,4,0,0,0,0,2,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 3,23469575578871148,4,2,1,3,0,0,0,0,2,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 4,345467347816,4,1,1,3,0,0,0,0,2,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 5,1214607970,3,1,1,1,0,0,100,0,1,0,0,1,1,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 6,75185137345906,1,1,2,2,3,0,90,4,1,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 7,358486078052,1,1,3,2,5,0,80,5,1,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 8,358368242533,3,1,1,2,0,0,100,0,1,0,0,0,0,1,1,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 9,91707909958756,3,2,2,3,0,0,100,0,1,15,1,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 10,79600448005492,3,1,1,3,0,0,50,0,1,3,2,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 11,1468365686984687211050012787699566,3,1,1,4,0,0,100,0,2,0,0,3,1,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 12,6052716152600831465235768242034,3,2,3,5,0,0,100,0,2,35,1,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 13,6372733319570045399349322149742,3,1,1,5,0,0,100,0,2,0,0,0,0,0,0,2,1 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 14,309101453348888473857636,3,2,1,5,0,0,100,0,2,25,1,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 15,339880532085619196269974512114561636,1,1,3,6,10,0,80,4,2,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 16,87009416213918514245113458514029143410,1,1,2,6,6,0,90,3,2,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 17,25823153336537712276388801636,3,2,2,7,0,0,50,0,2,0,0,0,0,2,2,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 18,83927749117907346348207731,3,3,1,8,0,0,100,0,2,0,0,0,0,4,1,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 19,94756431764029820800167525,3,1,1,12,0,0,75,3,3,0,0,2,3,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 20,6371795136575658587761839400306,3,2,2,12,0,0,80,4,3,0,0,0,0,0,0,3,3 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 21,365419149838249439883122,3,2,3,12,0,0,100,0,3,75,1,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 22,1131181410,1,1,4,7,15,0,65,6,2,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 23,18706418327381362,3,2,2,8,0,0,60,0,2,10,2,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 24,93547265267753350467970418,3,1,1,5,0,2,90,5,2,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
-sozo execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 25,1752006227441648624131573719854962,3,2,3,8,0,0,60,0,3,0,0,0,0,2,2,0,0 --wait --rpc-url $RPC_URL
 echo "Admin Add items have been successfully set."

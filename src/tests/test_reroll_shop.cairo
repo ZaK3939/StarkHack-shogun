@@ -48,6 +48,11 @@ mod tests {
 
         let shop = get!(world, owner, (Shop));
         assert(shop.item1 != 0, 'item1 should not be 0');
+        assert(shop.item2 != 0, 'item2 should not be 0');
+        assert(shop.item3 != 0, 'item3 should not be 0');
+        assert(shop.item4 != 0, 'item4 should not be 0');
+        assert(shop.item5 != 0, 'item5 should not be 0');
+        assert(shop.item6 != 0, 'item6 should not be 0');
     }
 
     #[test]

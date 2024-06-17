@@ -35,7 +35,7 @@ done
 echo "Actions authorizations have been successfully set."
 
 # enable battle system -> component authorizations
-BATTLE_COMPONENTS=("Character" "BattleLog" "BattleLogCounter" "BattleLogDetail" "BattleLogDetailCounter" "CharacterItemStorage" "CharacterItemsStorageCounter" "CharacterItemInventory" "CharacterItemsInventoryCounter" "Item" "ItemsCounter" "DummyCharacter" "DummyCharacterCounter" "DummyCharacterItem" "DummyCharacterItemsCounter")
+BATTLE_COMPONENTS=("Character" "BattleLog" "BattleLogCounter" "BattleLogDetail" "CharacterItemStorage" "CharacterItemsStorageCounter" "CharacterItemInventory" "CharacterItemsInventoryCounter" "Item" "DummyCharacter" "DummyCharacterCounter" "DummyCharacterItem" "DummyCharacterItemsCounter")
 
 for component in ${BATTLE_COMPONENTS[@]}; do
     sozo -P $PROFILE auth grant writer $component,$BATTLE_ADDRESS --world $WORLD_ADDRESS --wait

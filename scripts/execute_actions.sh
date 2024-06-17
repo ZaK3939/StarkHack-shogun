@@ -30,11 +30,14 @@ echo account : $ACCOUNT_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # spawn
+echo "Spawning...Alice with 0x616c696365..."
 sozo execute --world $WORLD_ADDRESS $ACTIONS_ADDRESS spawn -c 0x616c696365 --wait --rpc-url $RPC_URL \
 	--account-address $ACCOUNT_ADDRESS \
 	--private-key $PRIVATE_KEY
 
+
 # reroll_shop
+echo "Rerolling shop..."
 sozo execute --world $WORLD_ADDRESS $ACTIONS_ADDRESS reroll_shop --wait --rpc-url $RPC_URL \
 	--account-address $ACCOUNT_ADDRESS \
 	--private-key $PRIVATE_KEY
@@ -44,26 +47,31 @@ sozo model get Shop ${ACCOUNT_ADDRESS}
 SHOP_DATA=$(sozo model get Shop ${ACCOUNT_ADDRESS})
 
 # buy_item
-sozo execute --world $WORLD_ADDRESS $ACTIONS_ADDRESS buy_item -c 7 --wait --rpc-url $RPC_URL \
+echo "Buying item..."
+sozo execute --world $WORLD_ADDRESS $ACTIONS_ADDRESS buy_item -c 4 --wait --rpc-url $RPC_URL \
 	--account-address $ACCOUNT_ADDRESS \
 	--private-key $PRIVATE_KEY
 
 # place_item
+echo "Placing item..."
 sozo execute --world $WORLD_ADDRESS $ACTIONS_ADDRESS place_item -c 2,4,2,0 --wait --rpc-url $RPC_URL \
 	--account-address $ACCOUNT_ADDRESS \
 	--private-key $PRIVATE_KEY
 
 # undo_place_item
-sozo execute --world $WORLD_ADDRESS $ACTIONS_ADDRESS undo_place_item -c 3 --wait --rpc-url $RPC_URL \
+echo "Undoing place item..."
+sozo execute --world $WORLD_ADDRESS $ACTIONS_ADDRESS undo_place_item -c 1 --wait --rpc-url $RPC_URL \
 	--account-address $ACCOUNT_ADDRESS \
 	--private-key $PRIVATE_KEY
 
 # create_dummy
+echo "Creating dummy..."
 sozo execute --world $WORLD_ADDRESS $BATTLE_ADDRESS create_dummy --wait --rpc-url $RPC_URL \
 	--account-address $ACCOUNT_ADDRESS \
 	--private-key $PRIVATE_KEY
 
 # fight
+echo "Fighting..."
 sozo execute --world $WORLD_ADDRESS $BATTLE_ADDRESS fight --wait --rpc-url $RPC_URL \
 	--account-address $ACCOUNT_ADDRESS \
 	--private-key $PRIVATE_KEY

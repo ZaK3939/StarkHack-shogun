@@ -319,98 +319,56 @@
   },
   {
     "type": "impl",
-    "name": "itemImpl",
-    "interface_name": "shogun::models::item::Iitem"
+    "name": "dummy_character_itemImpl",
+    "interface_name": "shogun::models::dummyCharacterItem::Idummy_character_item"
   },
   {
     "type": "struct",
-    "name": "shogun::models::item::Item",
+    "name": "shogun::models::characterItem::Position",
     "members": [
       {
-        "name": "id",
+        "name": "x",
         "type": "core::integer::u32"
       },
       {
-        "name": "name",
-        "type": "core::felt252"
-      },
+        "name": "y",
+        "type": "core::integer::u32"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "shogun::models::dummyCharacterItem::DummyCharacterItem",
+    "members": [
       {
-        "name": "itemType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "shapeType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "width",
+        "name": "level",
         "type": "core::integer::u32"
       },
       {
-        "name": "height",
+        "name": "dummyCharId",
         "type": "core::integer::u32"
       },
       {
-        "name": "price",
+        "name": "counterId",
         "type": "core::integer::u32"
       },
       {
-        "name": "damage",
+        "name": "itemId",
         "type": "core::integer::u32"
       },
       {
-        "name": "consumeStamina",
+        "name": "position",
+        "type": "shogun::models::characterItem::Position"
+      },
+      {
+        "name": "rotation",
         "type": "core::integer::u32"
-      },
-      {
-        "name": "chance",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "coolTime",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "rarity",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "armor",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "armorType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "regen",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "regenType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "reflect",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "reflectType",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "spike",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "spikeType",
-        "type": "core::integer::u8"
       }
     ]
   },
   {
     "type": "interface",
-    "name": "shogun::models::item::Iitem",
+    "name": "shogun::models::dummyCharacterItem::Idummy_character_item",
     "items": [
       {
         "type": "function",
@@ -418,7 +376,7 @@
         "inputs": [
           {
             "name": "model",
-            "type": "shogun::models::item::Item"
+            "type": "shogun::models::dummyCharacterItem::DummyCharacterItem"
           }
         ],
         "outputs": [],
@@ -428,7 +386,7 @@
   },
   {
     "type": "event",
-    "name": "shogun::models::item::item::Event",
+    "name": "shogun::models::dummyCharacterItem::dummy_character_item::Event",
     "kind": "enum",
     "variants": []
   }

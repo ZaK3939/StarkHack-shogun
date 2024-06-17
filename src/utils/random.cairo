@@ -8,17 +8,16 @@ fn pseudo_seed() -> (u128, u128, u128, u128, u128, u128) {
     let blockInfo = starknet::get_block_info().unbox();
     let blockTimestamp: u128 = blockInfo.block_timestamp.into();
     let blockNumber: u128 = blockInfo.block_number.into();
-    let contractAddressBlockTimestamp: u128 = (blockTimestamp + blockTimestamp).into();
-    let blockTimestampBlockNumber: u128 = (blockTimestamp + blockNumber).into();
-    let blockNumberBlockTimestamp: u128 = (blockNumber + blockTimestampBlockNumber).into();
-    let blockTimestampBlockNumberBlockTimestamp: u128 = (blockTimestampBlockNumber + blockNumberBlockTimestamp).into();
+    let contractAddressBlockTimestamp: u128 = (blockTimestamp + 1).into();
+    let blockTimestampBlockNumber: u128 = (blockTimestamp + 1).into();
+    let blockNumberBlockTimestamp: u128 = (blockNumber + 1).into();
+    let blockTimestampBlockNumberBlockTimestamp: u128 = (blockTimestampBlockNumber + 1).into();
     (tx.low, blockTimestamp, blockNumber, blockTimestampBlockNumber,blockTimestampBlockNumberBlockTimestamp,contractAddressBlockTimestamp)
 }
 
 
 fn random(seed: u128, num: usize) -> usize {
-    let seed: u256 = seed.into();
-    let result = seed.low % num.into();
+    let result = seed % num.into();
     result.try_into().unwrap()
 }
 

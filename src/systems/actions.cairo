@@ -348,10 +348,10 @@ mod actions {
 
                 let item = get!(world, count, (Item));
 
-                if item.id == 14 || item.id == 18 || item.id == 19 {
-                    count -= 1;
-                    continue;
-                }
+                // if item.id == 14 || item.id == 18 || item.id == 19 {
+                //     count -= 1;
+                //     continue;
+                // }
 
                 let rarity: felt252 = item.rarity.into();
                 match rarity {
@@ -375,9 +375,9 @@ mod actions {
             };
 
             assert(commonSize > 0, 'No common items found');
-
+    
             let (seed1, seed2, seed3, seed4, seed5, seed6) = pseudo_seed();
-            
+          
             // common: 70%, uncommon: 30%, rare: 10%
             let mut random_index = random(seed1, 100);
             if uncommonSize == 0 {
@@ -398,7 +398,6 @@ mod actions {
                 random_index = random(seed1, rareSize);
                 shop.item1 = *rare.at(random_index);
             }
-
             random_index = random(seed2, 100);
             if uncommonSize == 0 {
                 random_index = random(seed2, 70);
