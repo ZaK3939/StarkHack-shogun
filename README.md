@@ -16,7 +16,7 @@ Change world_address into Scarb.toml
 
 sozo migrate apply
 
-torii --world 0x05366256f83748b6fcc73f74f2ad4a6d6c12bdde1f3df1910289de1ff8eaabd3 --allowed-origins "\*"
+torii --world [world address] --allowed-origins "\*"
 
 export RPC_URL=http://localhost:5050
 

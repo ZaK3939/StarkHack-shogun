@@ -17,10 +17,13 @@ const PhaserGame = forwardRef<IRefPhaserGame, IProps>(function PhaserGame(
     ref
 ) {
     const game = useRef<Phaser.Game | null>(null);
-    const { account } = useDojo();
+    const {
+        setup,
+        account: { account },
+    } = useDojo();
     useLayoutEffect(() => {
         if (game.current === null) {
-            game.current = StartGame("game-container", account);
+            game.current = StartGame("game-container", account, setup);
 
             if (ref) {
                 if (typeof ref === "function") {
@@ -40,7 +43,7 @@ const PhaserGame = forwardRef<IRefPhaserGame, IProps>(function PhaserGame(
                 game.current = null;
             }
         };
-    }, [ref, account]);
+    }, [ref, account, setup]);
 
     useEffect(() => {
         const handleSceneReady = (scene_instance: Phaser.Scene) => {
