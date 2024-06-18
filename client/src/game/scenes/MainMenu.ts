@@ -32,19 +32,19 @@ export class MainMenu extends Phaser.Scene {
         startButton.on("pointerdown", async () => {
             console.log("Start Button Clicked");
             try {
-                // await this.setup.client.actions.spawn({
-                //     account: this.player.account,
-                //     name: "0x616c696362", // need to change name
-                // });
-                // console.log("Spawn successful");
-                await this.setup.client.actions.rerollShop({
+                await this.setup.client.actions.spawn({
                     account: this.account,
+                    name: "0x616c696362", // need to change name
                 });
-                console.log("Reroll successful");
-                this.scene.start("SelectItem");
+                console.log("Spawn successful");
             } catch (error) {
                 console.error("Error spawning player:", error);
             }
+            await this.setup.client.actions.rerollShop({
+                account: this.account,
+            });
+            console.log("Reroll successful");
+            this.scene.start("SelectItem");
         });
 
         this.tweens.add({

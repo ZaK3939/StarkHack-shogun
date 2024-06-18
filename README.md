@@ -10,16 +10,22 @@ sozo clean or (rm -rf manifests)
 
 sozo build
 
-katana --disable-fee --allowed-origins "*"
+### terminal1
 
-Change world_address into Scarb.toml
+katana --disable-fee --allowed-origins "\*"
 
-sozo migrate apply
+(Change world_address into Scarb.toml)
 
-torii --world [world address] --allowed-origins "\*"
-torii --world 0x5366256f83748b6fcc73f74f2ad4a6d6c12bdde1f3df1910289de1ff8eaabd3 --allowed-origins "\*"
+### terminal2
+
+sozo clean && sozo build &&sozo migrate apply && torii --world 0x07ff6cbf3cc1f1be3bbc314e625b0f8dd554d6bc718017853dadfd7b9c772afc --allowed-origins "\*"
+
+world address is correct for ur env?
+(torii --world [world address] --allowed-origins "\*")
 
 export RPC_URL=http://localhost:5050
+
+## terminal3
 
 ./scripts/default_admin.sh dev
 (chmod +x ./scripts/default_admin.sh )
@@ -35,5 +41,6 @@ http://0.0.0.0:8080/graphql
 
 ### Client
 
-pnpm i
-pnpm dev
+## terminal4
+
+cd client && pnpm i && pnpm dev

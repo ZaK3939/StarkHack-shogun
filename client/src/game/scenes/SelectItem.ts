@@ -2,6 +2,9 @@ import Phaser from "phaser";
 import { itemData } from "../data/itemData";
 import { Account } from "starknet";
 import { DojoContextType } from "../../dojo/DojoContext";
+import { useGetCharacterQuery } from "../../graphql/generated/graphql";
+import { graphqlClient } from "../../graphql/graphqlClient";
+import { fetchCharacterData } from "../../graphql/fetchCharacterData";
 
 export class SelectItem extends Phaser.Scene {
     private account: Account;
@@ -13,6 +16,7 @@ export class SelectItem extends Phaser.Scene {
     init() {
         this.account = this.game.registry.get("account");
         console.log(`Player Address: ${this.account.address}`);
+
         this.setup = this.game.registry.get("setup");
     }
 
@@ -33,6 +37,7 @@ export class SelectItem extends Phaser.Scene {
     }
 
     create() {
+        this.loadCharacterData();
         const { width, height } = this.scale;
         const background = this.add.image(
             width / 2,
@@ -520,8 +525,12 @@ export class SelectItem extends Phaser.Scene {
             }
         };
 
-        resetButton.on("pointerdown", () => {
+        resetButton.on("pointerdown", async () => {
             console.log("Reset Button Clicked");
+            await this.setup.client.actions.rerollShop({
+                account: this.account,
+            });
+            console.log("Reroll successful");
             if (playerGold > 0) {
                 playerGold -= 1;
                 displayItems();
@@ -533,6 +542,15 @@ export class SelectItem extends Phaser.Scene {
         updateResetButtonState();
 
         console.log("SelectItem Scene Created");
+    }
+
+    async loadCharacterData() {
+        try {
+            const characterData = await fetchCharacterData(this.account);
+            console.log("Character Data:", characterData);
+        } catch (error) {
+            console.error("Error fetching character data:", error);
+        }
     }
 }
 
