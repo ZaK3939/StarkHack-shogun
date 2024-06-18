@@ -1,16 +1,19 @@
 import Phaser from "phaser";
 import { itemData } from "../data/itemData";
-import { BurnerAccount } from "@dojoengine/create-burner";
+import { Account } from "starknet";
+import { DojoContextType } from "../../dojo/DojoContext";
 
 export class SelectItem extends Phaser.Scene {
-    private player: BurnerAccount;
+    private account: Account;
+    private setup: DojoContextType;
     constructor() {
         super({ key: "SelectItem" });
     }
 
     init() {
-        this.player = this.game.registry.get("playerAddress");
-        console.log(`Player Address: ${this.player.account.address}`);
+        this.account = this.game.registry.get("account");
+        console.log(`Player Address: ${this.account.address}`);
+        this.setup = this.game.registry.get("setup");
     }
 
     preload() {

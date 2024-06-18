@@ -12,16 +12,11 @@ export function createSystemCalls(
     // eslint-disable-next-line no-empty-pattern
     {}: ClientComponents
 ) {
-    const spawn = async (
-        account: AccountInterface,
-        name: string,
-        wmClass: number
-    ) => {
+    const spawn = async (account: AccountInterface, name: string) => {
         try {
             const { transaction_hash } = await client.actions.spawn({
                 account,
                 name,
-                wmClass,
             });
             await account.waitForTransaction(transaction_hash, {
                 retryInterval: 100,
@@ -37,16 +32,11 @@ export function createSystemCalls(
         }
     };
 
-    const rebirth = async (
-        account: AccountInterface,
-        name: string,
-        wmClass: number
-    ) => {
+    const rebirth = async (account: AccountInterface, name: string) => {
         try {
             const { transaction_hash } = await client.actions.rebirth({
                 account,
                 name,
-                wmClass,
             });
             await account.waitForTransaction(transaction_hash, {
                 retryInterval: 100,
