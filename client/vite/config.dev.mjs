@@ -8,7 +8,7 @@ export default defineConfig({
     base: "./",
     plugins: [react(), wasm(), topLevelAwait()],
     server: {
-        port: 8080,
+        port: 1395,
     },
 });
 
