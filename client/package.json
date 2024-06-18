@@ -22,6 +22,7 @@
         "build": "tsc && vite build --config vite/config.dev.mjs",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview",
+        "codegen": "graphql-codegen --config codegen.yaml",
         "create-components": "npx @dojoengine/core ../manifests/dev/manifest.json src/dojo/generated/contractComponents.ts http://localhost:5050 0x4d4f3b62432c7a0ff00caa18a6402471b8d153696212ab4a44f127a71233cfa"
     },
     "dependencies": {
@@ -32,6 +33,13 @@
         "@dojoengine/state": "^0.7.0-alpha.1",
         "@dojoengine/torii-client": "^0.7.0-alpha.1",
         "@dojoengine/utils": "^0.7.0-alpha.1",
+        "@graphql-codegen/cli": "^5.0.2",
+        "@graphql-codegen/fragment-matcher": "^5.0.2",
+        "@graphql-codegen/typescript": "^4.0.7",
+        "@graphql-codegen/typescript-operations": "^4.2.1",
+        "@graphql-codegen/typescript-react-apollo": "^4.3.0",
+        "@graphql-codegen/typescript-react-query": "^6.1.0",
+        "graphql-request": "^7.0.1",
         "phaser": "^3.80.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
@@ -55,4 +63,3 @@
         "vite": "^5.2.0"
     }
 }
-

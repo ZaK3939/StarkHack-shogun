@@ -1,0 +1,12 @@
+query GetBattleLog($player: ContractAddress!) {
+    battleLogModels(where: { player: $player }) {
+        edges {
+            node {
+                id
+                dummyCharLevel
+                dummyCharId
+                winner
+            }
+        }
+    }
+}
