@@ -1,0 +1,22 @@
+query GetCharacter($player: ContractAddress!) {
+    characterModels(where: { player: $player }, limit: 1) {
+        edges {
+            node {
+                player
+                name
+                gold
+                health
+                wins
+                loss
+                dummied
+                rating
+                totalWins
+                totalLoss
+                winStreak
+                birthCount
+                updatedAt
+            }
+        }
+    }
+}
+
