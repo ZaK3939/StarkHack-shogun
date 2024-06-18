@@ -10,13 +10,13 @@ sozo clean or (rm -rf manifests)
 
 sozo build
 
-katana --disable-fee --allowed-origins "_" or( RUST_BACKTRACE=1 katana --disable-fee --allowed-origins "_")
+katana --disable-fee --allowed-origins "*"
 
 Change world_address into Scarb.toml
 
 sozo migrate apply
 
-torii --world 0x05366256f83748b6fcc73f74f2ad4a6d6c12bdde1f3df1910289de1ff8eaabd3 --allowed-origins "\*"
+torii --world 0x5366256f83748b6fcc73f74f2ad4a6d6c12bdde1f3df1910289de1ff8eaabd3 --allowed-origins "\*"
 
 export RPC_URL=http://localhost:5050
 
