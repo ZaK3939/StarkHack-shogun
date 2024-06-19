@@ -2,8 +2,6 @@ import Phaser from "phaser";
 import { itemData } from "../data/itemData";
 import { Account } from "starknet";
 import { DojoContextType } from "../../dojo/DojoContext";
-import { useGetCharacterQuery } from "../../graphql/generated/graphql";
-import { graphqlClient } from "../../graphql/graphqlClient";
 import { fetchCharacterData } from "../../graphql/fetchCharacterData";
 
 export class SelectItem extends Phaser.Scene {

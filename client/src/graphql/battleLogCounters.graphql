@@ -1,0 +1,10 @@
+query BattleLogCounters($player: ContractAddress!) {
+    battleLogCounterModels(where: { player: $player }, first: 1) {
+        edges {
+            node {
+                player
+                count
+            }
+        }
+    }
+}

@@ -30,7 +30,7 @@ echo account : $ACCOUNT_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # spawn
-echo "Spawning...Alice with 0x616c696365..."
+# echo "Spawning...Alice with 0x616c696365..."
 sozo execute --world $WORLD_ADDRESS $ACTIONS_ADDRESS spawn -c 0x616c696365 --wait --rpc-url $RPC_URL \
 	--account-address $ACCOUNT_ADDRESS \
 	--private-key $PRIVATE_KEY
@@ -64,6 +64,12 @@ sozo execute --world $WORLD_ADDRESS $ACTIONS_ADDRESS undo_place_item -c 1 --wait
 	--account-address $ACCOUNT_ADDRESS \
 	--private-key $PRIVATE_KEY
 
+# place_item
+echo "Placing item..."
+sozo execute --world $WORLD_ADDRESS $ACTIONS_ADDRESS place_item -c 2,4,2,0 --wait --rpc-url $RPC_URL \
+	--account-address $ACCOUNT_ADDRESS \
+	--private-key $PRIVATE_KEY
+	
 # create_dummy
 echo "Creating dummy..."
 sozo execute --world $WORLD_ADDRESS $BATTLE_ADDRESS create_dummy --wait --rpc-url $RPC_URL \
