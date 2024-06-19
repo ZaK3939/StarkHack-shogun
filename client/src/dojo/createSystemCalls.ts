@@ -166,6 +166,44 @@ export function createSystemCalls(
         }
     };
 
+    const createDummy = async (account: AccountInterface) => {
+        try {
+            const { transaction_hash } = await client.actions.createDummy({
+                account,
+            });
+            await account.waitForTransaction(transaction_hash, {
+                retryInterval: 100,
+            });
+            console.log(
+                await account.waitForTransaction(transaction_hash, {
+                    retryInterval: 100,
+                })
+            );
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    const fight = async (account: AccountInterface) => {
+        try {
+            const { transaction_hash } = await client.actions.fight({
+                account,
+            });
+            await account.waitForTransaction(transaction_hash, {
+                retryInterval: 100,
+            });
+            console.log(
+                await account.waitForTransaction(transaction_hash, {
+                    retryInterval: 100,
+                })
+            );
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
     return {
         spawn,
         rebirth,
@@ -174,6 +212,8 @@ export function createSystemCalls(
         rerollShop,
         placeItem,
         undoPlaceItem,
+        createDummy,
+        fight,
     };
 }
 

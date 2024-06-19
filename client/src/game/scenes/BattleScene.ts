@@ -1,6 +1,19 @@
-import Phaser from 'phaser';
+import Phaser from "phaser";
+import { Account } from "starknet";
+import { DojoContextType } from "../../dojo/DojoContext";
+import { fetchEventsOnce } from "../../services/fetchEvents";
+import {
+    Event,
+    BattleLogDetailEvent,
+    parseBattleLogDetailEvent,
+} from "../../utils/events";
+import { fetchBattleLogCounters } from "../../graphql/fetchBattleLogCounters";
+import { fetchBattleLogs } from "../../graphql/fetchBattleLogs";
 
 export class BattleScene extends Phaser.Scene {
+    private account: Account;
+    private setup: DojoContextType;
+
     private playerCurrentHP: number;
     private playerMaxHP: number;
     private playerCurrentStamina: number;
@@ -18,34 +31,50 @@ export class BattleScene extends Phaser.Scene {
     private charactorEnemy: Phaser.GameObjects.Image;
 
     constructor() {
-        super({ key: 'BattleScene' });
+        super({ key: "BattleScene" });
 
         this.resetHP();
     }
 
+    init() {
+        this.account = this.game.registry.get("account");
+        console.log(`Player Address: ${this.account.address}`);
+
+        this.setup = this.game.registry.get("setup");
+    }
+
     preload() {
-        console.log('Loading BattleScene Assets');
-        this.load.image('battleBackground', 'assets/background/battle.png');
-        this.load.image('charactorMain', 'assets/charactor/main.png');
-        this.load.image('charactorEnemy', 'assets/charactor/enemy.png');
-        this.load.image('block', 'assets/components/block.png');
-        this.load.image('battleStatus', 'assets/components/battleStatus.png');
-        this.load.image('won', 'assets/status/won.png');
-        this.load.image('lose', 'assets/status/lose.png');
+        console.log("Loading BattleScene Assets");
+        this.load.image("battleBackground", "assets/background/battle.png");
+        this.load.image("charactorMain", "assets/charactor/main.png");
+        this.load.image("charactorEnemy", "assets/charactor/enemy.png");
+        this.load.image("block", "assets/components/block.png");
+        this.load.image("battleStatus", "assets/components/battleStatus.png");
+        this.load.image("won", "assets/status/won.png");
+        this.load.image("lose", "assets/status/lose.png");
     }
 
     create() {
+        // Call the fight function
+        this.fight();
+
         this.resetHP(); // Reset HP when the scene is created
 
         const { width, height } = this.scale;
-        this.add.image(width / 2, height / 2, 'battleBackground').setOrigin(0.5, 0.5);
-        console.log('BattleScene Loaded');
+        this.add
+            .image(width / 2, height / 2, "battleBackground")
+            .setOrigin(0.5, 0.5);
+        console.log("BattleScene Loaded");
 
         // charactorMain
-        this.charactorMain = this.add.image(150, height - 150, 'charactorMain').setOrigin(0.5, 0.5);
+        this.charactorMain = this.add
+            .image(150, height - 150, "charactorMain")
+            .setOrigin(0.5, 0.5);
 
         // charactorEnemy
-        this.charactorEnemy = this.add.image(width - 150, height - 150, 'charactorEnemy').setOrigin(0.5, 0.5);
+        this.charactorEnemy = this.add
+            .image(width - 150, height - 150, "charactorEnemy")
+            .setOrigin(0.5, 0.5);
 
         // Your items
         const blockWidth = 70;
@@ -58,7 +87,13 @@ export class BattleScene extends Phaser.Scene {
 
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
-                this.add.image(startXLeft + col * blockWidth, startYLeft + row * blockHeight, 'block').setOrigin(0.5, 0.5);
+                this.add
+                    .image(
+                        startXLeft + col * blockWidth,
+                        startYLeft + row * blockHeight,
+                        "block"
+                    )
+                    .setOrigin(0.5, 0.5);
             }
         }
 
@@ -67,19 +102,45 @@ export class BattleScene extends Phaser.Scene {
 
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
-                this.add.image(startXRight + col * blockWidth, startYLeft + row * blockHeight, 'block').setOrigin(0.5, 0.5);
+                this.add
+                    .image(
+                        startXRight + col * blockWidth,
+                        startYLeft + row * blockHeight,
+                        "block"
+                    )
+                    .setOrigin(0.5, 0.5);
             }
         }
 
         // Player's status
-        this.add.image(width / 2 - 200, height - 140, 'battleStatus').setOrigin(0.5, 0.5).setScale(0.8);
-        const playerStatus = this.createStatusBars(width / 2 - 200, height - 200, this.playerCurrentHP, this.playerMaxHP, this.playerCurrentStamina, this.playerMaxStamina);
+        this.add
+            .image(width / 2 - 200, height - 140, "battleStatus")
+            .setOrigin(0.5, 0.5)
+            .setScale(0.8);
+        const playerStatus = this.createStatusBars(
+            width / 2 - 200,
+            height - 200,
+            this.playerCurrentHP,
+            this.playerMaxHP,
+            this.playerCurrentStamina,
+            this.playerMaxStamina
+        );
         this.playerHPBar = playerStatus.hpBar;
         this.playerHPText = playerStatus.hpText;
 
         // Enemy's status
-        this.add.image(width / 2 + 200, height - 140, 'battleStatus').setOrigin(0.5, 0.5).setScale(0.8);
-        const enemyStatus = this.createStatusBars(width / 2 + 200, height - 200, this.enemyCurrentHP, this.enemyMaxHP, this.enemyCurrentStamina, this.enemyMaxStamina);
+        this.add
+            .image(width / 2 + 200, height - 140, "battleStatus")
+            .setOrigin(0.5, 0.5)
+            .setScale(0.8);
+        const enemyStatus = this.createStatusBars(
+            width / 2 + 200,
+            height - 200,
+            this.enemyCurrentHP,
+            this.enemyMaxHP,
+            this.enemyCurrentStamina,
+            this.enemyMaxStamina
+        );
         this.enemyHPBar = enemyStatus.hpBar;
         this.enemyHPText = enemyStatus.hpText;
 
@@ -88,10 +149,8 @@ export class BattleScene extends Phaser.Scene {
             delay: 300, // 0.3 second
             callback: this.decreaseHP,
             callbackScope: this,
-            loop: true
+            loop: true,
         });
-
-        console.log('BattleScene Created');
     }
 
     resetHP() {
@@ -106,23 +165,72 @@ export class BattleScene extends Phaser.Scene {
         this.enemyMaxStamina = 4;
     }
 
-    createStatusBars(x: number, y: number, currentHP: number, maxHP: number, currentStamina: number, maxStamina: number) {
+    createStatusBars(
+        x: number,
+        y: number,
+        currentHP: number,
+        maxHP: number,
+        currentStamina: number,
+        maxStamina: number
+    ) {
         const barWidth = 160;
         const barHeight = 20;
         const offsetY = 20;
-        const textX = x - 130;  // Text alignment x coordinate
+        const textX = x - 130; // Text alignment x coordinate
 
         // HP Bar
-        this.add.rectangle(x - 50, y - offsetY, barWidth, barHeight, 0x000000).setOrigin(0, 0.5);
-        const hpBar = this.add.rectangle(x - 50, y - offsetY, barWidth * (currentHP / maxHP), barHeight, 0xff0000).setOrigin(0, 0.5);
-        this.add.text(textX, y - offsetY, 'HP', { fontSize: '16px', color: '#ffffff' }).setOrigin(0, 0.5);
-        const hpText = this.add.text(x - 50 + barWidth, y - offsetY, `${currentHP}/${maxHP}`, { fontSize: '16px', color: '#ffffff' }).setOrigin(1, 0.5);
+        this.add
+            .rectangle(x - 50, y - offsetY, barWidth, barHeight, 0x000000)
+            .setOrigin(0, 0.5);
+        const hpBar = this.add
+            .rectangle(
+                x - 50,
+                y - offsetY,
+                barWidth * (currentHP / maxHP),
+                barHeight,
+                0xff0000
+            )
+            .setOrigin(0, 0.5);
+        this.add
+            .text(textX, y - offsetY, "HP", {
+                fontSize: "16px",
+                color: "#ffffff",
+            })
+            .setOrigin(0, 0.5);
+        const hpText = this.add
+            .text(x - 50 + barWidth, y - offsetY, `${currentHP}/${maxHP}`, {
+                fontSize: "16px",
+                color: "#ffffff",
+            })
+            .setOrigin(1, 0.5);
 
         // Stamina Bar
-        this.add.rectangle(x - 50, y + offsetY, barWidth, barHeight, 0x000000).setOrigin(0, 0.5);
-        this.add.rectangle(x - 50, y + offsetY, barWidth * (currentStamina / maxStamina), barHeight, 0x00B75F).setOrigin(0, 0.5);
-        this.add.text(textX, y + offsetY, 'Stamina', { fontSize: '16px', color: '#ffffff' }).setOrigin(0, 0.5);
-        this.add.text(x - 50 + barWidth, y + offsetY, `${currentStamina}/${maxStamina}`, { fontSize: '16px', color: '#ffffff' }).setOrigin(1, 0.5);
+        this.add
+            .rectangle(x - 50, y + offsetY, barWidth, barHeight, 0x000000)
+            .setOrigin(0, 0.5);
+        this.add
+            .rectangle(
+                x - 50,
+                y + offsetY,
+                barWidth * (currentStamina / maxStamina),
+                barHeight,
+                0x00b75f
+            )
+            .setOrigin(0, 0.5);
+        this.add
+            .text(textX, y + offsetY, "Stamina", {
+                fontSize: "16px",
+                color: "#ffffff",
+            })
+            .setOrigin(0, 0.5);
+        this.add
+            .text(
+                x - 50 + barWidth,
+                y + offsetY,
+                `${currentStamina}/${maxStamina}`,
+                { fontSize: "16px", color: "#ffffff" }
+            )
+            .setOrigin(1, 0.5);
 
         return { hpBar, hpText };
     }
@@ -138,8 +246,11 @@ export class BattleScene extends Phaser.Scene {
             if (this.playerCurrentHP > 0) {
                 this.playerCurrentHP -= 7;
                 if (this.playerCurrentHP < 0) this.playerCurrentHP = 0;
-                this.playerHPBar.width = 160 * (this.playerCurrentHP / this.playerMaxHP);
-                this.playerHPText.setText(`${this.playerCurrentHP}/${this.playerMaxHP}`);
+                this.playerHPBar.width =
+                    160 * (this.playerCurrentHP / this.playerMaxHP);
+                this.playerHPText.setText(
+                    `${this.playerCurrentHP}/${this.playerMaxHP}`
+                );
                 this.tweens.add({
                     targets: this.charactorEnemy,
                     angle: -30,
@@ -147,7 +258,7 @@ export class BattleScene extends Phaser.Scene {
                     yoyo: true,
                     onComplete: () => {
                         this.charactorEnemy.setAngle(0); // Reset angle to 0
-                    }
+                    },
                 });
             }
         } else {
@@ -155,8 +266,11 @@ export class BattleScene extends Phaser.Scene {
             if (this.enemyCurrentHP > 0) {
                 this.enemyCurrentHP -= 7;
                 if (this.enemyCurrentHP < 0) this.enemyCurrentHP = 0;
-                this.enemyHPBar.width = 160 * (this.enemyCurrentHP / this.enemyMaxHP);
-                this.enemyHPText.setText(`${this.enemyCurrentHP}/${this.enemyMaxHP}`);
+                this.enemyHPBar.width =
+                    160 * (this.enemyCurrentHP / this.enemyMaxHP);
+                this.enemyHPText.setText(
+                    `${this.enemyCurrentHP}/${this.enemyMaxHP}`
+                );
                 this.tweens.add({
                     targets: this.charactorMain,
                     angle: 30,
@@ -164,15 +278,15 @@ export class BattleScene extends Phaser.Scene {
                     yoyo: true,
                     onComplete: () => {
                         this.charactorMain.setAngle(0); // Reset angle to 0
-                    }
+                    },
                 });
             }
         }
 
         if (this.playerCurrentHP <= 0) {
-            this.showEndScreen('lose', 'MainMenu');
+            this.showEndScreen("lose", "MainMenu");
         } else if (this.enemyCurrentHP <= 0) {
-            this.showEndScreen('won', 'SelectItem');
+            this.showEndScreen("won", "SelectItem");
         }
     }
 
@@ -180,7 +294,9 @@ export class BattleScene extends Phaser.Scene {
         const { width, height } = this.scale;
 
         // Create a semi-transparent black overlay
-        this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.7).setOrigin(0.5, 0.5);
+        this.add
+            .rectangle(width / 2, height / 2, width, height, 0x000000, 0.7)
+            .setOrigin(0.5, 0.5);
 
         // Show the appropriate end screen image
         this.add.image(width / 2, height / 2, status).setOrigin(0.5, 0.5);
@@ -188,25 +304,77 @@ export class BattleScene extends Phaser.Scene {
         // Create the button background
         const buttonBackground = this.add.graphics();
         buttonBackground.fillStyle(0xff0000, 1); // Red color
-        buttonBackground.fillRoundedRect(width / 2 - 100, height / 2 + 342, 200, 50, 5); // Rounded rectangle
+        buttonBackground.fillRoundedRect(
+            width / 2 - 100,
+            height / 2 + 342,
+            200,
+            50,
+            5
+        ); // Rounded rectangle
 
         // Add text to the button
-        const buttonText = status === 'won' ? 'Go next stage' : 'Go top';
-        const button = this.add.text(width / 2, height / 2 + 367, buttonText, { fontSize: '20px', color: '#ffffff' }).setOrigin(0.5, 0.5).setInteractive();
+        const buttonText = status === "won" ? "Go next stage" : "Go top";
+        const button = this.add
+            .text(width / 2, height / 2 + 367, buttonText, {
+                fontSize: "20px",
+                color: "#ffffff",
+            })
+            .setOrigin(0.5, 0.5)
+            .setInteractive();
 
         // Add hover effect
-        button.on('pointerover', () => {
-            button.setStyle({ fill: '#ffcc00' }); // Change text color to yellow
+        button.on("pointerover", () => {
+            button.setStyle({ fill: "#ffcc00" }); // Change text color to yellow
         });
 
-        button.on('pointerout', () => {
-            button.setStyle({ fill: '#ffffff' }); // Change text color back to white
+        button.on("pointerout", () => {
+            button.setStyle({ fill: "#ffffff" }); // Change text color back to white
         });
 
         // Add button click event
-        button.on('pointerdown', () => {
+        button.on("pointerdown", () => {
             this.resetHP();
             this.scene.start(sceneToStart);
         });
     }
+
+    async fight() {
+        try {
+            await this.setup.client.actions.createDummy({
+                account: this.account,
+            });
+            console.log("Create dummy successful");
+        } catch (error) {
+            console.error("Error during creating dummy:", error);
+        }
+        try {
+            await this.setup.client.actions.fight({ account: this.account });
+            console.log("Fight successful");
+            this.fetchBattleData();
+        } catch (error) {
+            console.error("Error during fight:", error);
+        }
+    }
+
+    async fetchBattleData() {
+        const battleLogCounters = await fetchBattleLogCounters(
+            this.account.address
+        );
+
+        const battleLogs = await fetchBattleLogs(
+            this.account.address,
+            1,
+            battleLogCounters
+        );
+        const latestBattleLog = battleLogs[0];
+        console.log("Latest Battle Log:", latestBattleLog);
+
+        const battleLogDetails: BattleLogDetailEvent[] = [];
+        // need to fetch all battle log details
+        console.log("Battle Log Details:", battleLogDetails);
+
+        // Process the battle data
+        // this.processBattleData(latestBattleLog, battleLogDetails);
+    }
 }
+

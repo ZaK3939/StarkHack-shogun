@@ -143,6 +143,36 @@ export async function setupWorld(provider: DojoProvider) {
             }
         };
 
+        const createDummy = async ({
+            account,
+        }: {
+            account: AccountInterface;
+        }) => {
+            try {
+                return await provider.execute(account, {
+                    contractName: "battle",
+                    entrypoint: "create_dummy",
+                    calldata: [],
+                });
+            } catch (error) {
+                console.error("Error executing createDummy:", error);
+                throw error;
+            }
+        };
+
+        const fight = async ({ account }: { account: AccountInterface }) => {
+            try {
+                return await provider.execute(account, {
+                    contractName: "battle",
+                    entrypoint: "fight",
+                    calldata: [],
+                });
+            } catch (error) {
+                console.error("Error executing fight:", error);
+                throw error;
+            }
+        };
+
         return {
             spawn,
             rebirth,
@@ -151,6 +181,8 @@ export async function setupWorld(provider: DojoProvider) {
             rerollShop,
             placeItem,
             undoPlaceItem,
+            createDummy,
+            fight,
         };
     }
 
