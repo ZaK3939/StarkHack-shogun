@@ -22,6 +22,7 @@ export async function fetchBattleLogs(
     playerAddress: string,
     id: number
 ): Promise<BattleLogsQuery["battleLogModels"]["edges"][0]["node"]> {
+    console.log("Fetching battle log for player:", playerAddress, "id:", id);
     const query = `
     query BattleLog($player: ContractAddress!, $id: u32!) {
       battleLogModels(where: { player: $player, id: $id }) {
@@ -51,3 +52,4 @@ export async function fetchBattleLogs(
         throw error;
     }
 }
+

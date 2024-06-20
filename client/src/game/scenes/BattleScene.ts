@@ -343,6 +343,10 @@ export class BattleScene extends Phaser.Scene {
     async startFight() {
         try {
             await this.setup.client.actions.fight({ account: this.account });
+
+            // wait for torii syncing
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+
             console.log("Fight successful");
         } catch (error) {
             console.error("Error during fight:", error);
@@ -361,7 +365,7 @@ export class BattleScene extends Phaser.Scene {
 
         const latestBattleLog = await fetchBattleLogs(
             this.account.address,
-            battleLogCounters + 1
+            battleLogCounters
         );
         console.log("Latest Battle Log:", latestBattleLog);
 
