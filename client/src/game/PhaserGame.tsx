@@ -24,7 +24,7 @@ const PhaserGame = forwardRef<IRefPhaserGame, IProps>(function PhaserGame(
     useLayoutEffect(() => {
         if (game.current === null) {
             game.current = StartGame("game-container", account, setup);
-
+            console.log(`Player Address: ${account.address}`);
             if (ref) {
                 if (typeof ref === "function") {
                     ref({ game: game.current, scene: null });
@@ -43,7 +43,7 @@ const PhaserGame = forwardRef<IRefPhaserGame, IProps>(function PhaserGame(
                 game.current = null;
             }
         };
-    }, [ref, account, setup]);
+    }, [ref]);
 
     useEffect(() => {
         const handleSceneReady = (scene_instance: Phaser.Scene) => {

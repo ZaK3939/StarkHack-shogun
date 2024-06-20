@@ -30,7 +30,7 @@ echo account : $ACCOUNT_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # spawn
-# echo "Spawning...Alice with 0x616c696365..."
+echo "Spawning...Alice with 0x616c696365..."
 sozo execute --world $WORLD_ADDRESS $ACTIONS_ADDRESS spawn -c 0x616c696365 --wait --rpc-url $RPC_URL \
 	--account-address $ACCOUNT_ADDRESS \
 	--private-key $PRIVATE_KEY

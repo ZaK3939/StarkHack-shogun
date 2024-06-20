@@ -20,6 +20,7 @@ const StartGame = (
 ) => {
     const game = new Phaser.Game({ ...config, parent });
     game.registry.set("account", account);
+    console.log(`Player Address: ${account.address}`);
     game.registry.set("setup", setup);
     return game;
 };

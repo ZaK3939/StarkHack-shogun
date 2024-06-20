@@ -3,7 +3,7 @@ import PhaserGame, { IRefPhaserGame } from "./game/PhaserGame";
 
 function App() {
     // The sprite can only be moved in the MainMenu Scene
-    const [canMoveSprite, setCanMoveSprite] = useState(true);
+    const [, setCanMoveSprite] = useState(true);
 
     // References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef<IRefPhaserGame | null>(null);
@@ -13,7 +13,7 @@ function App() {
         setCanMoveSprite(scene.scene.key !== "MainMenu");
     };
 
-    console.log(canMoveSprite);
+    // console.log(canMoveSprite);
 
     return (
         <div id="app">

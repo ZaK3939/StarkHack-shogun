@@ -12,7 +12,7 @@ export type Event = {
 //---------------------------------------------------------------------
 // Battle event
 export interface BattleLogDetailEvent {
-    timestamp: string;
+    // timestamp: string;
     player: string;
     battleLogId: number;
     id: number;

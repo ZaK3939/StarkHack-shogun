@@ -1,38 +1,44 @@
 import { Account } from "starknet";
 import { graphqlClient } from "./graphqlClient";
 
-interface CharacterData {
-    characterModels: {
-        edges: {
-            node: {
-                player: string;
-                name: string;
-                gold: number;
-                health: number;
-                wins: number;
-                loss: number;
-                dummied: boolean;
-                rating: number;
-                totalWins: number;
-                totalLoss: number;
-                winStreak: number;
-                birthCount: number;
-                updatedAt: string;
-            };
-        }[];
-    };
+export interface CharacterData {
+    player: string;
+    name: string;
+    gold: number;
+    health: number;
+    wins: number;
+    loss: number;
+    dummied: boolean;
+    rating: number;
+    totalWins: number;
+    totalLoss: number;
+    winStreak: number;
+    birthCount: number;
+    updatedAt: string;
 }
 
-export async function fetchCharacterData(account: Account) {
+export async function fetchCharacterData(
+    account: Account
+): Promise<CharacterData | null> {
     try {
         const query = `
       query GetCharacter($player: ContractAddress!) {
         characterModels(where: { playerEQ: $player }, limit: 1) {
           edges {
             node {
+              player
+              name
               gold
               health
+              wins
+              loss
+              dummied
+              rating
               totalWins
+              totalLoss
+              winStreak
+              birthCount
+              updatedAt
             }
           }
         }
@@ -43,22 +49,17 @@ export async function fetchCharacterData(account: Account) {
             player: account.address,
         };
 
-        const data = await graphqlClient.request<CharacterData>(
-            query,
-            variables
-        );
+        const data = await graphqlClient.request<{
+            characterModels: { edges: [{ node: CharacterData }] };
+        }>(query, variables);
 
         if (data?.characterModels?.edges?.[0]?.node) {
-            const character = data.characterModels.edges[0].node;
-            return {
-                gold: character.gold,
-                vitality: character.health,
-                victories: character.totalWins,
-            };
+            return data.characterModels.edges[0].node;
+        } else {
+            return null;
         }
     } catch (error) {
         console.error("Error fetching character data:", error);
         return null;
     }
 }
-
