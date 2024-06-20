@@ -20,12 +20,11 @@ type BattleLogsQuery = {
 
 export async function fetchBattleLogs(
     playerAddress: string,
-    first: number,
-    skip: number
-): Promise<BattleLogsQuery["battleLogModels"]["edges"]> {
+    id: number
+): Promise<BattleLogsQuery["battleLogModels"]["edges"][0]["node"]> {
     const query = `
-    query BattleLogs($player: ContractAddress!, $first: Int!) {
-      battleLogModels(where: { player: $player }, first: $first, order: { direction: DESC, field: ID }) {
+    query BattleLog($player: ContractAddress!, $id: u32!) {
+      battleLogModels(where: { player: $player, id: $id }) {
         edges {
           node {
             id
@@ -41,16 +40,14 @@ export async function fetchBattleLogs(
 
     const variables = {
         player: playerAddress,
-        first,
-        skip,
+        id,
     };
 
     try {
         const data: BattleLogsQuery = await client.request(query, variables);
-        return data.battleLogModels.edges;
+        return data.battleLogModels.edges[0].node;
     } catch (error) {
-        console.error("Failed to fetch battle logs:", error);
+        console.error("Failed to fetch battle log:", error);
         throw error;
     }
 }
-

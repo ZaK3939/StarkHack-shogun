@@ -3,17 +3,18 @@ import { itemData } from "../data/itemData";
 import { Account } from "starknet";
 import { DojoContextType } from "../../dojo/DojoContext";
 import { fetchCharacterData } from "../../graphql/fetchCharacterData";
+import { CharacterData } from "../../graphql/fetchCharacterData";
 
 export class SelectItem extends Phaser.Scene {
     private account: Account;
     private setup: DojoContextType;
+    private characterData: CharacterData;
     constructor() {
         super({ key: "SelectItem" });
     }
 
     init() {
         this.account = this.game.registry.get("account");
-        console.log(`Player Address: ${this.account.address}`);
 
         this.setup = this.game.registry.get("setup");
     }
@@ -100,9 +101,18 @@ export class SelectItem extends Phaser.Scene {
             goBattleButton.clearTint(); // Remove the tint
         });
 
-        goBattleButton.on("pointerdown", () => {
+        goBattleButton.on("pointerdown", async () => {
             console.log("Go Battle Button Clicked");
-            this.scene.start("BattleScene");
+            try {
+                if (this.characterData && !this.characterData.dummied) {
+                    await this.createDummy();
+                    console.log("Create dummy successful");
+                }
+
+                this.scene.start("BattleScene");
+            } catch (error) {
+                console.error("Error creating dummy:", error);
+            }
         });
 
         const boxImage = this.add
@@ -517,9 +527,28 @@ export class SelectItem extends Phaser.Scene {
     async loadCharacterData() {
         try {
             const characterData = await fetchCharacterData(this.account);
-            console.log("Character Data:", characterData);
+            if (characterData !== null) {
+                this.characterData = characterData;
+                console.log("Character Data:", this.characterData);
+            } else {
+                console.error("Character data is null");
+            }
         } catch (error) {
             console.error("Error fetching character data:", error);
+        }
+    }
+
+    async createDummy() {
+        try {
+            await this.setup.client.actions.createDummy({
+                account: this.account,
+            });
+            console.log("Create dummy successful");
+
+            // Refresh character data after creating dummy
+            await this.loadCharacterData();
+        } catch (error) {
+            console.error("Error during creating dummy:", error);
         }
     }
 }

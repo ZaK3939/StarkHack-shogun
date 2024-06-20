@@ -1,14 +1,9 @@
 import Phaser from "phaser";
 import { Account } from "starknet";
 import { DojoContextType } from "../../dojo/DojoContext";
-import { fetchEventsOnce } from "../../services/fetchEvents";
-import {
-    Event,
-    BattleLogDetailEvent,
-    parseBattleLogDetailEvent,
-} from "../../utils/events";
 import { fetchBattleLogCounters } from "../../graphql/fetchBattleLogCounters";
 import { fetchBattleLogs } from "../../graphql/fetchBattleLogs";
+import { fetchBattleLogDetail } from "../../graphql/fetchBattleLogDetail";
 
 export class BattleScene extends Phaser.Scene {
     private account: Account;
@@ -38,8 +33,6 @@ export class BattleScene extends Phaser.Scene {
 
     init() {
         this.account = this.game.registry.get("account");
-        console.log(`Player Address: ${this.account.address}`);
-
         this.setup = this.game.registry.get("setup");
     }
 
@@ -340,19 +333,20 @@ export class BattleScene extends Phaser.Scene {
 
     async fight() {
         try {
-            await this.setup.client.actions.createDummy({
-                account: this.account,
-            });
-            console.log("Create dummy successful");
+            await this.startFight();
         } catch (error) {
-            console.error("Error during creating dummy:", error);
+            console.error("Error during fight or creating dummy:", error);
         }
+        await this.fetchBattleData();
+    }
+
+    async startFight() {
         try {
             await this.setup.client.actions.fight({ account: this.account });
             console.log("Fight successful");
-            this.fetchBattleData();
         } catch (error) {
             console.error("Error during fight:", error);
+            throw error;
         }
     }
 
@@ -360,17 +354,22 @@ export class BattleScene extends Phaser.Scene {
         const battleLogCounters = await fetchBattleLogCounters(
             this.account.address
         );
+        // if (battleLogCounters === 0) {
+        //     error("No battle logs found");
+        // }
+        console.log("Battle Log Counters:", battleLogCounters);
 
-        const battleLogs = await fetchBattleLogs(
+        const latestBattleLog = await fetchBattleLogs(
             this.account.address,
-            1,
-            battleLogCounters
+            battleLogCounters + 1
         );
-        const latestBattleLog = battleLogs[0];
         console.log("Latest Battle Log:", latestBattleLog);
 
-        const battleLogDetails: BattleLogDetailEvent[] = [];
-        // need to fetch all battle log details
+        const battleLogDetails = await fetchBattleLogDetail(
+            this.account.address,
+            latestBattleLog.id
+        );
+
         console.log("Battle Log Details:", battleLogDetails);
 
         // Process the battle data

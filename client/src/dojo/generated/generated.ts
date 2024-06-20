@@ -14,10 +14,13 @@ export async function setupWorld(provider: DojoProvider) {
             name: string;
         }) => {
             try {
-                return await provider.execute(account, {
+                const { transaction_hash } = await provider.execute(account, {
                     contractName: "actions",
                     entrypoint: "spawn",
                     calldata: [name],
+                });
+                await account.waitForTransaction(transaction_hash, {
+                    retryInterval: 100,
                 });
             } catch (error) {
                 console.error("Error executing spawn:", error);
@@ -33,10 +36,13 @@ export async function setupWorld(provider: DojoProvider) {
             name: string;
         }) => {
             try {
-                return await provider.execute(account, {
+                const { transaction_hash } = await provider.execute(account, {
                     contractName: "actions",
                     entrypoint: "rebirth",
                     calldata: [name],
+                });
+                await account.waitForTransaction(transaction_hash, {
+                    retryInterval: 100,
                 });
             } catch (error) {
                 console.error("Error executing rebirth:", error);
@@ -52,10 +58,13 @@ export async function setupWorld(provider: DojoProvider) {
             itemId: number;
         }) => {
             try {
-                return await provider.execute(account, {
+                const { transaction_hash } = await provider.execute(account, {
                     contractName: "actions",
                     entrypoint: "buy_item",
                     calldata: [itemId],
+                });
+                await account.waitForTransaction(transaction_hash, {
+                    retryInterval: 100,
                 });
             } catch (error) {
                 console.error("Error executing buyItem:", error);
@@ -71,10 +80,13 @@ export async function setupWorld(provider: DojoProvider) {
             storageItemId: number;
         }) => {
             try {
-                return await provider.execute(account, {
+                const { transaction_hash } = await provider.execute(account, {
                     contractName: "actions",
                     entrypoint: "sell_item",
                     calldata: [storageItemId],
+                });
+                await account.waitForTransaction(transaction_hash, {
+                    retryInterval: 100,
                 });
             } catch (error) {
                 console.error("Error executing sellItem:", error);
@@ -88,10 +100,13 @@ export async function setupWorld(provider: DojoProvider) {
             account: AccountInterface;
         }) => {
             try {
-                return await provider.execute(account, {
+                const { transaction_hash } = await provider.execute(account, {
                     contractName: "actions",
                     entrypoint: "reroll_shop",
                     calldata: [],
+                });
+                await account.waitForTransaction(transaction_hash, {
+                    retryInterval: 100,
                 });
             } catch (error) {
                 console.error("Error executing rerollShop:", error);
@@ -113,10 +128,13 @@ export async function setupWorld(provider: DojoProvider) {
             rotation: number;
         }) => {
             try {
-                return await provider.execute(account, {
+                const { transaction_hash } = await provider.execute(account, {
                     contractName: "actions",
                     entrypoint: "place_item",
                     calldata: [storageItemId, x, y, rotation],
+                });
+                await account.waitForTransaction(transaction_hash, {
+                    retryInterval: 100,
                 });
             } catch (error) {
                 console.error("Error executing placeItem:", error);
@@ -132,10 +150,13 @@ export async function setupWorld(provider: DojoProvider) {
             inventoryItemId: number;
         }) => {
             try {
-                return await provider.execute(account, {
+                const { transaction_hash } = await provider.execute(account, {
                     contractName: "actions",
                     entrypoint: "undo_place_item",
                     calldata: [inventoryItemId],
+                });
+                await account.waitForTransaction(transaction_hash, {
+                    retryInterval: 100,
                 });
             } catch (error) {
                 console.error("Error executing undoPlaceItem:", error);
@@ -149,10 +170,13 @@ export async function setupWorld(provider: DojoProvider) {
             account: AccountInterface;
         }) => {
             try {
-                return await provider.execute(account, {
+                const { transaction_hash } = await provider.execute(account, {
                     contractName: "battle",
                     entrypoint: "create_dummy",
                     calldata: [],
+                });
+                await account.waitForTransaction(transaction_hash, {
+                    retryInterval: 100,
                 });
             } catch (error) {
                 console.error("Error executing createDummy:", error);
@@ -162,11 +186,15 @@ export async function setupWorld(provider: DojoProvider) {
 
         const fight = async ({ account }: { account: AccountInterface }) => {
             try {
-                return await provider.execute(account, {
+                const { transaction_hash } = await provider.execute(account, {
                     contractName: "battle",
                     entrypoint: "fight",
                     calldata: [],
                 });
+                await account.waitForTransaction(transaction_hash, {
+                    retryInterval: 100,
+                });
+                console.log("transaction_hash", transaction_hash);
             } catch (error) {
                 console.error("Error executing fight:", error);
                 throw error;

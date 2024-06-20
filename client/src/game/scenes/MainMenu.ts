@@ -10,7 +10,6 @@ export class MainMenu extends Phaser.Scene {
     }
     init() {
         this.account = this.game.registry.get("account");
-        console.log(`Player Address: ${this.account.address}`);
         this.setup = this.game.registry.get("setup");
     }
 
@@ -38,7 +37,7 @@ export class MainMenu extends Phaser.Scene {
                 });
                 console.log("Spawn successful");
             } catch (error) {
-                console.error("Error spawning player:", error);
+                console.log("Error spawning player:", error);
             }
             await this.setup.client.actions.rerollShop({
                 account: this.account,
