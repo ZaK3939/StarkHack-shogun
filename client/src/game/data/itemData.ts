@@ -5,7 +5,7 @@ export enum ItemType {
   Backpack = 4,
   Artifact = 5
 }
-export interface ItemData {
+export interface ItemDataType {
   width: number;
   height: number;
   name: string;
