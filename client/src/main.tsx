@@ -37,6 +37,7 @@ async function init() {
         );
     } catch (error) {
         console.error("Error during setup:", error);
+        console.log(import.meta.env.VITE_PUBLIC_TORII + "/graphql");
         root.render(<div>Error</div>);
     }
 }
