@@ -8,9 +8,10 @@
 
         /* Bundler mode */
         "moduleResolution": "bundler",
-        "paths": {
-            "@dojoengine/recs": ["./node_modules/@dojoengine/recs/src/index.ts"]
-        },
+        // "paths": {
+        //     "@dojoengine/recs": ["./node_modules/@dojoengine/recs/src/index.ts"]
+        // },
+        /* Linting */
         "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
@@ -25,7 +26,7 @@
         "noFallthroughCasesInSwitch": true
     },
     "include": ["src"],
-
+    "exclude": ["node_modules", "**/*.test.ts", "src/graphql/generated/"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }
 

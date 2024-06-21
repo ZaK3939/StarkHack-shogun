@@ -22,6 +22,7 @@ export async function setupWorld(provider: DojoProvider) {
                 await account.waitForTransaction(transaction_hash, {
                     retryInterval: 100,
                 });
+                return { transaction_hash };
             } catch (error) {
                 console.error("Error executing spawn:", error);
                 throw error;
@@ -44,6 +45,7 @@ export async function setupWorld(provider: DojoProvider) {
                 await account.waitForTransaction(transaction_hash, {
                     retryInterval: 100,
                 });
+                return { transaction_hash };
             } catch (error) {
                 console.error("Error executing rebirth:", error);
                 throw error;
@@ -66,6 +68,7 @@ export async function setupWorld(provider: DojoProvider) {
                 await account.waitForTransaction(transaction_hash, {
                     retryInterval: 100,
                 });
+                return { transaction_hash };
             } catch (error) {
                 console.error("Error executing buyItem:", error);
                 throw error;
@@ -88,6 +91,7 @@ export async function setupWorld(provider: DojoProvider) {
                 await account.waitForTransaction(transaction_hash, {
                     retryInterval: 100,
                 });
+                return { transaction_hash };
             } catch (error) {
                 console.error("Error executing sellItem:", error);
                 throw error;
@@ -108,6 +112,7 @@ export async function setupWorld(provider: DojoProvider) {
                 await account.waitForTransaction(transaction_hash, {
                     retryInterval: 100,
                 });
+                return { transaction_hash };
             } catch (error) {
                 console.error("Error executing rerollShop:", error);
                 throw error;
@@ -136,6 +141,7 @@ export async function setupWorld(provider: DojoProvider) {
                 await account.waitForTransaction(transaction_hash, {
                     retryInterval: 100,
                 });
+                return { transaction_hash };
             } catch (error) {
                 console.error("Error executing placeItem:", error);
                 throw error;
@@ -158,6 +164,7 @@ export async function setupWorld(provider: DojoProvider) {
                 await account.waitForTransaction(transaction_hash, {
                     retryInterval: 100,
                 });
+                return { transaction_hash };
             } catch (error) {
                 console.error("Error executing undoPlaceItem:", error);
                 throw error;
@@ -178,6 +185,7 @@ export async function setupWorld(provider: DojoProvider) {
                 await account.waitForTransaction(transaction_hash, {
                     retryInterval: 100,
                 });
+                return { transaction_hash };
             } catch (error) {
                 console.error("Error executing createDummy:", error);
                 throw error;
@@ -195,6 +203,7 @@ export async function setupWorld(provider: DojoProvider) {
                     retryInterval: 100,
                 });
                 console.log("transaction_hash", transaction_hash);
+                return { transaction_hash };
             } catch (error) {
                 console.error("Error executing fight:", error);
                 throw error;
@@ -218,4 +227,3 @@ export async function setupWorld(provider: DojoProvider) {
         actions: actions(),
     };
 }
-
