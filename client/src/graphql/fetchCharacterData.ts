@@ -1,5 +1,11 @@
 import { Account } from "starknet";
-import { graphqlClient } from "./graphqlClient";
+import { GraphQLClient } from "graphql-request";
+
+const client = new GraphQLClient(
+    import.meta.env.VITE_PUBLIC_TORII
+        ? import.meta.env.VITE_PUBLIC_TORII + "/graphql"
+        : "http://0.0.0.0:8080/graphql"
+);
 
 export interface CharacterData {
     player: string;
@@ -49,7 +55,7 @@ export async function fetchCharacterData(
             player: account.address,
         };
 
-        const data = await graphqlClient.request<{
+        const data = await client.request<{
             characterModels: { edges: [{ node: CharacterData }] };
         }>(query, variables);
 
@@ -63,3 +69,4 @@ export async function fetchCharacterData(
         return null;
     }
 }
+
