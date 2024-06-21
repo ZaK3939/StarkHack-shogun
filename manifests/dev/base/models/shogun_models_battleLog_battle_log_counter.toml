@@ -1,0 +1,15 @@
+kind = "DojoModel"
+class_hash = "0x5c3511b77662c8d50eb93f9c6ccf14be642364269391c256c950cdc3bd7ee75"
+original_class_hash = "0x5c3511b77662c8d50eb93f9c6ccf14be642364269391c256c950cdc3bd7ee75"
+abi = "manifests/dev/abis/base/models/shogun_models_battleLog_battle_log_counter.json"
+name = "shogun::models::battleLog::battle_log_counter"
+
+[[members]]
+name = "player"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "count"
+type = "usize"
+key = false

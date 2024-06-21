@@ -1,0 +1,30 @@
+kind = "DojoModel"
+class_hash = "0x4e9cc95177574875a7c45b26aea65f5842842e9fc43416a1a1c85f57d10a7f5"
+original_class_hash = "0x4e9cc95177574875a7c45b26aea65f5842842e9fc43416a1a1c85f57d10a7f5"
+abi = "manifests/dev/abis/base/models/shogun_models_characterItem_character_item_inventory.json"
+name = "shogun::models::characterItem::character_item_inventory"
+
+[[members]]
+name = "player"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "id"
+type = "usize"
+key = true
+
+[[members]]
+name = "itemId"
+type = "usize"
+key = false
+
+[[members]]
+name = "position"
+type = "Position"
+key = false
+
+[[members]]
+name = "rotation"
+type = "usize"
+key = false
