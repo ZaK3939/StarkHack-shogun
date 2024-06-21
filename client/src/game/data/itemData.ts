@@ -1,3 +1,20 @@
+export enum ItemType {
+  Weapon = 1,
+  Armor = 2,
+  Consumable = 3,
+  Backpack = 4,
+  Artifact = 5
+}
+export interface ItemDataType {
+  width: number;
+  height: number;
+  name: string;
+  effect: string;
+  itemType: ItemType;
+  cost: number;
+  rarity: string;
+}
+
 export const itemData: { [key: string]: { width: number, height: number, name: string, effect: string, itemType: number, cost: number, rarity: string } } = {
   1: { width: 1, height: 2, name: 'Ace of Spades', effect: 'On reveal: Your next hit is critical. If the number of cards before is odd, gain 2  and 2 .', itemType: 3, cost: 3, rarity: 'Rare' },
   2: { width: 2, height: 3, name: 'Axe', effect: 'On hit: Gain 1 damage.', itemType: 1, cost: 6, rarity: 'Rare' },
