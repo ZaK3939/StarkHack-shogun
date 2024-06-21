@@ -1,6 +1,10 @@
 import { GraphQLClient } from "graphql-request";
 
-const client = new GraphQLClient("http://0.0.0.0:8080/graphql");
+const client = new GraphQLClient(
+    import.meta.env.VITE_PUBLIC_TEST
+        ? "http://0.0.0.0:8080/graphql"
+        : import.meta.env.VITE_PUBLIC_TORII + "/graphql"
+);
 
 type BattleLogsQuery = {
     battleLogModels: {

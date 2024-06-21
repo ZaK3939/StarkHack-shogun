@@ -1,0 +1,20 @@
+kind = "DojoModel"
+class_hash = "0x3ce98b95beb6e091df2bf237318ccb1fb9e5ba765662d28afdcfe20310acdd0"
+original_class_hash = "0x3ce98b95beb6e091df2bf237318ccb1fb9e5ba765662d28afdcfe20310acdd0"
+abi = "manifests/slot/abis/base/models/shogun_models_dummyCharacterItem_dummy_character_items_counter.json"
+name = "shogun::models::dummyCharacterItem::dummy_character_items_counter"
+
+[[members]]
+name = "level"
+type = "usize"
+key = true
+
+[[members]]
+name = "dummyCharId"
+type = "u32"
+key = true
+
+[[members]]
+name = "count"
+type = "usize"
+key = false

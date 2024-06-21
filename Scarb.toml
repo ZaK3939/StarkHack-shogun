@@ -27,12 +27,20 @@ account_address = "0xb3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e582
 private_key = "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a"
 world_address = "0x07ff6cbf3cc1f1be3bbc314e625b0f8dd554d6bc718017853dadfd7b9c772afc" # Update this line with your world address
 
+# Slot
+[profile.slot.tool.dojo.env]
+rpc_url = "https://api.cartridge.gg/x/shogun-game/katana"
+account_address = "0x3de11d4a1542549ce86322e3ab31ed5b3940eba79dc11a680e88d8de6dd78aa"
+private_key = "0x60d2f82c93b4a00b1d35a17ead44fb40c93980ea07d86ebfd4cc8c4bd9bb728"
+
 [tool.dojo.world]
 name = "Shogun"
 description = "The official Shogun guide, the quickest and most streamlined way to get your Dojo Autonomous World up and running. This guide will assist you with the initial setup, from cloning the repository to deploying your world."
 cover_uri = "file://assets/cover.png"
 icon_uri = "file://assets/icon.png"
 website = "https://github.com/dojoengine/dojo-starter"
+
+
 
 [tool.dojo.world.socials]
 x = "https://x.com/ohayo_dojo"

@@ -4,6 +4,7 @@ import { Account } from "starknet";
 import { DojoContextType } from "../../dojo/DojoContext";
 import { fetchCharacterData } from "../../graphql/fetchCharacterData";
 import { CharacterData } from "../../graphql/fetchCharacterData";
+import { fetchCharacterItemStorage } from "../../graphql/fetchCharacterItemStorage";
 
 export class SelectItem extends Phaser.Scene {
     private account: Account;
@@ -613,6 +614,11 @@ export class SelectItem extends Phaser.Scene {
             if (characterData !== null) {
                 this.characterData = characterData;
                 console.log("Character Data:", this.characterData);
+
+                const characterItemStorage = await fetchCharacterItemStorage(
+                    this.account.address
+                );
+                console.log("Character Item Storage:", characterItemStorage);
             } else {
                 console.error("Character data is null");
             }
