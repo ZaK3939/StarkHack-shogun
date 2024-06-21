@@ -1,0 +1,30 @@
+kind = "DojoModel"
+class_hash = "0xf4d18bed7476ca73883665b1125f868e9bc2d325c1e88a99d13084bd8e2826"
+original_class_hash = "0xf4d18bed7476ca73883665b1125f868e9bc2d325c1e88a99d13084bd8e2826"
+abi = "manifests/dev/abis/base/models/shogun_models_battleLog_battle_log.json"
+name = "shogun::models::battleLog::battle_log"
+
+[[members]]
+name = "player"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "id"
+type = "usize"
+key = true
+
+[[members]]
+name = "dummyCharLevel"
+type = "usize"
+key = false
+
+[[members]]
+name = "dummyCharId"
+type = "usize"
+key = false
+
+[[members]]
+name = "winner"
+type = "felt252"
+key = false

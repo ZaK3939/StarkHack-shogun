@@ -1,0 +1,25 @@
+kind = "DojoModel"
+class_hash = "0x1782f4e01b8cddd5b7965885eecc9a04c3d0b7b3b9c68dadcb3f0bdfc4c8210"
+original_class_hash = "0x1782f4e01b8cddd5b7965885eecc9a04c3d0b7b3b9c68dadcb3f0bdfc4c8210"
+abi = "manifests/dev/abis/base/models/shogun_models_dummyCharacter_dummy_character.json"
+name = "shogun::models::dummyCharacter::dummy_character"
+
+[[members]]
+name = "level"
+type = "usize"
+key = true
+
+[[members]]
+name = "id"
+type = "u32"
+key = true
+
+[[members]]
+name = "name"
+type = "felt252"
+key = false
+
+[[members]]
+name = "health"
+type = "usize"
+key = false

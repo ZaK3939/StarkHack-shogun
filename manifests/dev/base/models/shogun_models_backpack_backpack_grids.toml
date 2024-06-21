@@ -1,0 +1,30 @@
+kind = "DojoModel"
+class_hash = "0x326a28566091039352f1a762aba947321431e31fb8a1c94565477b6cc826f9f"
+original_class_hash = "0x326a28566091039352f1a762aba947321431e31fb8a1c94565477b6cc826f9f"
+abi = "manifests/dev/abis/base/models/shogun_models_backpack_backpack_grids.json"
+name = "shogun::models::backpack::backpack_grids"
+
+[[members]]
+name = "player"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "x"
+type = "usize"
+key = true
+
+[[members]]
+name = "y"
+type = "usize"
+key = true
+
+[[members]]
+name = "enabled"
+type = "bool"
+key = false
+
+[[members]]
+name = "occupied"
+type = "bool"
+key = false
