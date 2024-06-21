@@ -1,10 +1,10 @@
 [world]
 kind = "WorldContract"
-class_hash = "0x3f63cecdc4964acafb921ba2934c6507d1b3c344edb64c2762cf08053169ab9"
-original_class_hash = "0x3f63cecdc4964acafb921ba2934c6507d1b3c344edb64c2762cf08053169ab9"
+class_hash = "0xf6f44afb3cacbcc01a371aff62c86ca9a45feba065424c99f7cd8637514d8f"
+original_class_hash = "0xf6f44afb3cacbcc01a371aff62c86ca9a45feba065424c99f7cd8637514d8f"
 abi = "manifests/dev/abis/deployments/dojo_world_world.json"
-address = "0x7ff6cbf3cc1f1be3bbc314e625b0f8dd554d6bc718017853dadfd7b9c772afc"
-transaction_hash = "0x37f78a235fd68e360faa902d0d92fa2bc0f64b5cf7920899cc4d05023cac724"
+address = "0x5366256f83748b6fcc73f74f2ad4a6d6c12bdde1f3df1910289de1ff8eaabd3"
+transaction_hash = "0x5b61b1e50f1174829c88d440431c2f0937f8f4cec0f683ab9fa39813d1d2ed0"
 block_number = 3
 seed = "shogun"
 name = "dojo::world::world"
@@ -21,7 +21,7 @@ name = "dojo::base::base"
 
 [[contracts]]
 kind = "DojoContract"
-address = "0x7404efa89ec1d5cb6195c4be04d64cc990286b39c805730bc800a32b848aaa1"
+address = "0x4906496b43470476db03880fdf615f6c0c02575ba105677fcb2efde18765f1"
 class_hash = "0x5f818c0759105e8bfa8300d8de3f25927d220583c1c8f299384293db0c19607"
 original_class_hash = "0x5f818c0759105e8bfa8300d8de3f25927d220583c1c8f299384293db0c19607"
 base_class_hash = "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46"
@@ -34,7 +34,7 @@ name = "shogun::systems::actions::actions"
 
 [[contracts]]
 kind = "DojoContract"
-address = "0x17bae0a8dee69bad0e231d10ca2ba55fa3e4eda52ee1637eb0f535fb580fe89"
+address = "0x2d7bd1e60a00edb91cd1803edc0852726a58c027d1a202dd73c73b85d41d874"
 class_hash = "0x7c297933a1d39c5130aacf63d2e5e1202edc19947e7b8ddb134c05f4e6b8af6"
 original_class_hash = "0x7c297933a1d39c5130aacf63d2e5e1202edc19947e7b8ddb134c05f4e6b8af6"
 base_class_hash = "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46"
@@ -47,7 +47,7 @@ name = "shogun::systems::admin::admin"
 
 [[contracts]]
 kind = "DojoContract"
-address = "0x42ab2c00238b944871a3aeadca3b7f149c7479881620170aaffc1b9c28db4e4"
+address = "0x4c1b8f4594df31c45422a07ca38e588d07423466f48f06af62a731794fdd971"
 class_hash = "0x66956b68fe8a901c30b57635738c4c9ffd86234b527a0422e91f1225370b7a4"
 original_class_hash = "0x66956b68fe8a901c30b57635738c4c9ffd86234b527a0422e91f1225370b7a4"
 base_class_hash = "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46"
