@@ -23,10 +23,9 @@ sozo clean && sozo build &&sozo migrate apply && torii --world 0x07ff6cbf3cc1f1b
 world address is correct for ur env?
 (torii --world [world address] --allowed-origins "\*")
 
-export RPC_URL=http://localhost:5050
-
 ## terminal3
 
+export RPC_URL=http://localhost:5050
 ./scripts/default_admin.sh dev or slot
 (chmod +x ./scripts/default_admin.sh )
 (chmod +x ./scripts/add_item.sh )
