@@ -27,11 +27,11 @@ export RPC_URL=http://localhost:5050
 
 ## terminal3
 
-./scripts/default_admin.sh dev
+./scripts/default_admin.sh dev or slot
 (chmod +x ./scripts/default_admin.sh )
 (chmod +x ./scripts/add_item.sh )
 
-./scripts/execute_actions.sh dev
+./scripts/execute_actions.sh dev or slot
 (chmod +x ./scripts/execute_actions.sh )
 
 npx @dojoengine/core ../manifests/dev/manifest.json src/dojo/generated/contractComponents.ts http://localhost:5050
@@ -44,3 +44,20 @@ http://0.0.0.0:8080/graphql
 ## terminal4
 
 cd client && pnpm i && pnpm dev
+
+### Slot
+
+<!-- https://github.com/z-korp/zconqueror-contracts/blob/main/Scarb.toml -->
+
+slot deployments logs shogun-game katana -f
+sozo --profile slot build && sozo --profile slot migrate plan --name v0 && sozo --profile slot migrate apply --name v0 && ./scripts/default_admin.sh slot
+
+(create)
+slot d create shogun-game katana -a 3
+slot d accounts shogun-game katana
+slot d create shogun-game torii --world 0x26663f285f4571e8b1f980cb6537f1a6eeb63291e2aed8216bf4ea5678ffc8a --rpc https://api.cartridge.gg/x/shogun-game/katana --start-block 1
+
+(torii)
+Endpoints:
+GRAPHQL: https://api.cartridge.gg/x/shogun-game/torii/graphql
+GRPC: https://api.cartridge.gg/x/shogun-game/torii

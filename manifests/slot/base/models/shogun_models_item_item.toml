@@ -1,0 +1,105 @@
+kind = "DojoModel"
+class_hash = "0x21c58e427f9c6c21782ad99451bbcea4f9ca5a10d2bb301e391cc97ff086aa2"
+original_class_hash = "0x21c58e427f9c6c21782ad99451bbcea4f9ca5a10d2bb301e391cc97ff086aa2"
+abi = "manifests/slot/abis/base/models/shogun_models_item_item.json"
+name = "shogun::models::item::item"
+
+[[members]]
+name = "id"
+type = "usize"
+key = true
+
+[[members]]
+name = "name"
+type = "felt252"
+key = false
+
+[[members]]
+name = "itemType"
+type = "u8"
+key = false
+
+[[members]]
+name = "shapeType"
+type = "u8"
+key = false
+
+[[members]]
+name = "width"
+type = "usize"
+key = false
+
+[[members]]
+name = "height"
+type = "usize"
+key = false
+
+[[members]]
+name = "price"
+type = "usize"
+key = false
+
+[[members]]
+name = "damage"
+type = "usize"
+key = false
+
+[[members]]
+name = "consumeStamina"
+type = "usize"
+key = false
+
+[[members]]
+name = "chance"
+type = "usize"
+key = false
+
+[[members]]
+name = "coolTime"
+type = "u8"
+key = false
+
+[[members]]
+name = "rarity"
+type = "u8"
+key = false
+
+[[members]]
+name = "armor"
+type = "usize"
+key = false
+
+[[members]]
+name = "armorType"
+type = "u8"
+key = false
+
+[[members]]
+name = "regen"
+type = "usize"
+key = false
+
+[[members]]
+name = "regenType"
+type = "u8"
+key = false
+
+[[members]]
+name = "reflect"
+type = "usize"
+key = false
+
+[[members]]
+name = "reflectType"
+type = "u8"
+key = false
+
+[[members]]
+name = "spike"
+type = "usize"
+key = false
+
+[[members]]
+name = "spikeType"
+type = "u8"
+key = false

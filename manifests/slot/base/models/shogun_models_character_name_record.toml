@@ -1,0 +1,15 @@
+kind = "DojoModel"
+class_hash = "0x5a59e6280c2e375a5151824349b014d379ca6c5bcafe693c7c5888709a79072"
+original_class_hash = "0x5a59e6280c2e375a5151824349b014d379ca6c5bcafe693c7c5888709a79072"
+abi = "manifests/slot/abis/base/models/shogun_models_character_name_record.json"
+name = "shogun::models::character::name_record"
+
+[[members]]
+name = "name"
+type = "felt252"
+key = true
+
+[[members]]
+name = "player"
+type = "ContractAddress"
+key = false
