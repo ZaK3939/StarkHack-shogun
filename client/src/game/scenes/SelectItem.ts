@@ -125,7 +125,7 @@ export class SelectItem extends Phaser.Scene {
                 const block = this.add
                     .image(
                         startX + col * blockWidth,
-                        startY + row * blockHeight,
+                        startY + (rows - row - 1) * blockHeight,
                         "block"
                     )
                     .setOrigin(0.5, 0.5);
@@ -243,61 +243,40 @@ export class SelectItem extends Phaser.Scene {
                     }
                 });
 
-                itemImage.on(
-                    "drag",
-                    (
-                        pointer: Phaser.Input.Pointer,
-                        dragX: number,
-                        dragY: number
-                    ) => {
-                        if (item.cost > playerGold) {
-                            return;
-                        }
-
-                        itemImage.x = dragX;
-                        itemImage.y = dragY;
-
-                        highlightedBlocks.forEach((block) => block.clearTint());
-                        highlightedBlocks = [];
-
-                        const block = blocks.find(
-                            (block) =>
-                                Phaser.Math.Distance.Between(
-                                    block.x,
-                                    block.y,
-                                    dragX,
-                                    dragY
-                                ) <
-                                blockWidth / 2
-                        );
-                        if (block) {
-                            const { width, height } = item;
-                            const startCol = Math.floor(
-                                (block.x - startX) / blockWidth
-                            );
-                            const startRow = Math.floor(
-                                (block.y - startY) / blockHeight
-                            );
-
-                            if (
-                                startCol + width <= cols &&
-                                startRow + height <= rows
-                            ) {
-                                for (let r = 0; r < height; r++) {
-                                    for (let c = 0; c < width; c++) {
-                                        const idx =
-                                            (startRow + r) * cols +
-                                            (startCol + c);
-                                        if (blocks[idx]) {
-                                            blocks[idx].setTint(0x0000ff);
-                                            highlightedBlocks.push(blocks[idx]);
-                                        }
+                itemImage.on("drag", (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+                    if (item.cost > playerGold) {
+                        return;
+                    }
+                
+                    itemImage.x = dragX;
+                    itemImage.y = dragY;
+                
+                    highlightedBlocks.forEach((block) => block.clearTint());
+                    highlightedBlocks = [];
+                
+                    const block = blocks.find(
+                        (block) =>
+                            Phaser.Math.Distance.Between(block.x, block.y, dragX, dragY) <
+                            blockWidth / 2
+                    );
+                    if (block) {
+                        const { width, height } = item;
+                        const startCol = Math.floor((block.x - startX) / blockWidth);
+                        const startRow = rows - Math.floor((block.y - startY) / blockHeight) - 1;
+                
+                        if (startCol + width <= cols && startRow - height + 1 >= 0) {
+                            for (let r = 0; r < height; r++) {
+                                for (let c = 0; c < width; c++) {
+                                    const idx = (startRow - r) * cols + (startCol + c);
+                                    if (blocks[idx]) {
+                                        blocks[idx].setTint(0x0000ff);
+                                        highlightedBlocks.push(blocks[idx]);
                                     }
                                 }
                             }
                         }
                     }
-                );
+                });
 
                 itemImage.on("dragend", (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
                     console.log(`Drag ended at: (${dragX}, ${dragY})`);
@@ -343,8 +322,8 @@ export class SelectItem extends Phaser.Scene {
                     console.log(`Dropped on block at: (${droppedBlock.x}, ${droppedBlock.y})`);
                     const { width, height, cost } = item;
                     const startCol = Math.floor((droppedBlock.x - startX) / blockWidth);
-                    const startRow = Math.floor((droppedBlock.y - startY) / blockHeight);
-                
+                    const startRow = rows - Math.floor((droppedBlock.y - startY) / blockHeight) - 1;
+
                     if (canPlaceItem(startCol, startRow, width, height, blocks)) {
                         const overlappingItems = findOverlappingItems(startCol, startRow, width, height, itemPositions);
                         moveOverlappingItemsToBox(overlappingItems, boxImage, itemPositions, scene);
@@ -353,6 +332,7 @@ export class SelectItem extends Phaser.Scene {
                         resetItemPosition(itemImage);
                     }
                 }
+
                 
                 function canPlaceItem(
                     startCol: number,
