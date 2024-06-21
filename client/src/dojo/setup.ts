@@ -6,7 +6,7 @@ import { createSystemCalls } from "./createSystemCalls";
 import { defineContractComponents } from "./generated/contractComponents";
 import { world } from "./world";
 import { setupWorld } from "./generated/generated";
-import { Account, TypedData, WeierstrassSignatureType } from "starknet";
+import { Account } from "starknet";
 import { BurnerManager } from "@dojoengine/create-burner";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
@@ -68,15 +68,15 @@ export async function setup({ ...config }: DojoConfig) {
             contractComponents,
             clientComponents
         ),
-        publish: (
-            typedData: TypedData,
-            signature: WeierstrassSignatureType
-        ) => {
-            toriiClient.publishMessage(typedData, {
-                r: signature.r.toString(),
-                s: signature.s.toString(),
-            });
-        },
+        // publish: (
+        //     typedData: TypedData,
+        //     signature: WeierstrassSignatureType
+        // ) => {
+        //     toriiClient.publishMessage(typedData, {
+        //         r: signature.r.toString(),
+        //         s: signature.s.toString(),
+        //     });
+        // },
         config,
         dojoProvider,
         burnerManager,
