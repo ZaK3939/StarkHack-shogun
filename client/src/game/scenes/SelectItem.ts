@@ -12,7 +12,9 @@ export class SelectItem extends Phaser.Scene {
     private characterData: CharacterData;
     private playerGold: number;
     private itemsOnBlock: Set<string>;
-    private itemPositions: { [key: string]: { x: number; y: number; width: number; height: number } };
+    private itemPositions: {
+        [key: string]: { x: number; y: number; width: number; height: number };
+    };
     private startX: number;
     private startY: number;
     private blockWidth: number;
@@ -155,7 +157,7 @@ export class SelectItem extends Phaser.Scene {
                 blocks.push(block);
             }
         }
-        this.blocks = blocks; 
+        this.blocks = blocks;
 
         const itemStartX = width - 300 - 150;
         const itemStartY = 320 - 150;
@@ -257,31 +259,48 @@ export class SelectItem extends Phaser.Scene {
                     }
                 });
 
-                itemImage.on("drag", (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+                itemImage.on("drag", (dragX: number, dragY: number) => {
                     if (item.cost > this.playerGold) {
                         return;
                     }
-                
+
                     itemImage.x = dragX;
                     itemImage.y = dragY;
-                
+
                     highlightedBlocks.forEach((block) => block.clearTint());
                     highlightedBlocks = [];
-                
+
                     const block = blocks.find(
                         (block) =>
-                            Phaser.Math.Distance.Between(block.x, block.y, dragX, dragY) <
+                            Phaser.Math.Distance.Between(
+                                block.x,
+                                block.y,
+                                dragX,
+                                dragY
+                            ) <
                             this.blockWidth / 2
                     );
                     if (block) {
                         const { width, height } = item;
-                        const startCol = Math.floor((block.x - this.startX) / this.blockWidth);
-                        const startRow = this.rows - Math.floor((block.y - this.startY) / this.blockHeight) - 1;
-                
-                        if (startCol + width <= this.cols && startRow - height + 1 >= 0) {
+                        const startCol = Math.floor(
+                            (block.x - this.startX) / this.blockWidth
+                        );
+                        const startRow =
+                            this.rows -
+                            Math.floor(
+                                (block.y - this.startY) / this.blockHeight
+                            ) -
+                            1;
+
+                        if (
+                            startCol + width <= this.cols &&
+                            startRow - height + 1 >= 0
+                        ) {
                             for (let r = 0; r < height; r++) {
                                 for (let c = 0; c < width; c++) {
-                                    const idx = (startRow - r) * this.cols + (startCol + c);
+                                    const idx =
+                                        (startRow - r) * this.cols +
+                                        (startCol + c);
                                     if (blocks[idx]) {
                                         blocks[idx].setTint(0x0000ff);
                                         highlightedBlocks.push(blocks[idx]);
@@ -292,44 +311,68 @@ export class SelectItem extends Phaser.Scene {
                     }
                 });
 
-                itemImage.on("dragend", async (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
-                    console.log(`Drag ended at: (${dragX}, ${dragY})`);
-                    highlightedBlocks.forEach((block) => block.clearTint());
-                    highlightedBlocks = [];
-                
-                    const droppedBlock = findDroppedBlock(itemImage, blocks, this.blockWidth);
-                    const droppedBox = isDroppedInBox(itemImage, boxImage);
-                
-                    if (droppedBlock) {
-                        await this.handleDropOnBlock(droppedBlock, item, itemImage, boxImage);
-                    } else if (droppedBox) {
-                        this.handleDropInBox(itemImage, boxImage);
-                    } else {
-                        this.handleDropOutside(itemImage);
+                itemImage.on(
+                    "dragend",
+                    async (dragX: number, dragY: number) => {
+                        console.log(`Drag ended at: (${dragX}, ${dragY})`);
+                        highlightedBlocks.forEach((block) => block.clearTint());
+                        highlightedBlocks = [];
+
+                        const droppedBlock = findDroppedBlock(
+                            itemImage,
+                            blocks,
+                            this.blockWidth
+                        );
+                        const droppedBox = isDroppedInBox(itemImage, boxImage);
+
+                        if (droppedBlock) {
+                            await this.handleDropOnBlock(
+                                droppedBlock,
+                                item,
+                                itemImage,
+                                boxImage
+                            );
+                        } else if (droppedBox) {
+                            this.handleDropInBox(itemImage, boxImage);
+                        } else {
+                            this.handleDropOutside(itemImage);
+                        }
+
+                        updateStatsText();
                     }
-                
-                    updateStatsText();
-                });
-                
+                );
+
                 const findDroppedBlock = (
                     itemImage: Phaser.GameObjects.Image,
                     blocks: Phaser.GameObjects.Image[],
                     blockWidth: number
                 ): Phaser.GameObjects.Image | undefined => {
-                    return blocks.find((block) =>
-                        Phaser.Math.Distance.Between(block.x, block.y, itemImage.x, itemImage.y) < blockWidth / 2
+                    return blocks.find(
+                        (block) =>
+                            Phaser.Math.Distance.Between(
+                                block.x,
+                                block.y,
+                                itemImage.x,
+                                itemImage.y
+                            ) <
+                            blockWidth / 2
                     );
                 };
-                
+
                 const isDroppedInBox = (
                     itemImage: Phaser.GameObjects.Image,
                     boxImage: Phaser.GameObjects.Image
                 ): boolean => {
                     return (
-                        Phaser.Math.Distance.Between(itemImage.x, itemImage.y, boxImage.x, boxImage.y) < boxImage.width / 2
+                        Phaser.Math.Distance.Between(
+                            itemImage.x,
+                            itemImage.y,
+                            boxImage.x,
+                            boxImage.y
+                        ) <
+                        boxImage.width / 2
                     );
                 };
-                
             });
         };
 
@@ -410,15 +453,33 @@ export class SelectItem extends Phaser.Scene {
         itemImage: Phaser.GameObjects.Image,
         boxImage: Phaser.GameObjects.Image
     ) {
-        console.log(`Dropped on block at: (${droppedBlock.x}, ${droppedBlock.y})`);
+        console.log(
+            `Dropped on block at: (${droppedBlock.x}, ${droppedBlock.y})`
+        );
         const { width, height, cost } = item;
-        const startCol = Math.floor((droppedBlock.x - this.startX) / this.blockWidth);
-        const startRow = Math.floor((droppedBlock.y - this.startY) / this.blockHeight);
-    
+        const startCol = Math.floor(
+            (droppedBlock.x - this.startX) / this.blockWidth
+        );
+        const startRow = Math.floor(
+            (droppedBlock.y - this.startY) / this.blockHeight
+        );
+
         if (this.canPlaceItem(startCol, startRow, width, height)) {
-            const overlappingItems = this.findOverlappingItems(startCol, startRow, width, height);
+            const overlappingItems = this.findOverlappingItems(
+                startCol,
+                startRow,
+                width,
+                height
+            );
             this.moveOverlappingItemsToBox(overlappingItems, boxImage);
-            await this.placeItem(itemImage, startCol, startRow, width, height, cost);
+            await this.placeItem(
+                itemImage,
+                startCol,
+                startRow,
+                width,
+                height,
+                cost
+            );
         } else {
             this.resetItemPosition(itemImage);
         }
@@ -443,11 +504,22 @@ export class SelectItem extends Phaser.Scene {
         //     console.error("@@@Error during PlaceItem:", error);
         //     throw error;
         // }
-        const centerX = this.startX + (startCol + width / 2) * this.blockWidth - this.blockWidth / 2;
-        const centerY = this.startY + (startRow + height / 2) * this.blockHeight - this.blockHeight / 2;
+        const centerX =
+            this.startX +
+            (startCol + width / 2) * this.blockWidth -
+            this.blockWidth / 2;
+        const centerY =
+            this.startY +
+            (startRow + height / 2) * this.blockHeight -
+            this.blockHeight / 2;
         itemImage.x = centerX;
         itemImage.y = centerY;
-        this.itemPositions[`item${itemImage.name}`] = { x: centerX, y: centerY, width, height };
+        this.itemPositions[`item${itemImage.name}`] = {
+            x: centerX,
+            y: centerY,
+            width,
+            height,
+        };
 
         if (!this.itemsOnBlock.has(`item${itemImage.name}`)) {
             this.playerGold -= cost;
@@ -461,7 +533,8 @@ export class SelectItem extends Phaser.Scene {
         width: number,
         height: number
     ): boolean {
-        if (startCol + width > this.cols || startRow + height > this.rows) return false;
+        if (startCol + width > this.cols || startRow + height > this.rows)
+            return false;
         for (let r = 0; r < height; r++) {
             for (let c = 0; c < width; c++) {
                 const idx = (startRow + r) * this.cols + (startCol + c);
@@ -480,17 +553,25 @@ export class SelectItem extends Phaser.Scene {
         const overlappingItems = new Set<string>();
         for (let r = 0; r < height; r++) {
             for (let c = 0; c < width; c++) {
-                const existingItemKey = Object.keys(this.itemPositions).find((key) => {
-                    const pos = this.itemPositions[key];
-                    const itemStartCol = Math.floor((pos.x - this.startX) / this.blockWidth);
-                    const itemStartRow = Math.floor((pos.y - this.startY) / this.blockHeight);
-                    const itemEndCol = itemStartCol + pos.width - 1;
-                    const itemEndRow = itemStartRow + pos.height - 1;
-                    return (
-                        itemStartCol <= startCol + c && startCol + c <= itemEndCol &&
-                        itemStartRow <= startRow + r && startRow + r <= itemEndRow
-                    );
-                });
+                const existingItemKey = Object.keys(this.itemPositions).find(
+                    (key) => {
+                        const pos = this.itemPositions[key];
+                        const itemStartCol = Math.floor(
+                            (pos.x - this.startX) / this.blockWidth
+                        );
+                        const itemStartRow = Math.floor(
+                            (pos.y - this.startY) / this.blockHeight
+                        );
+                        const itemEndCol = itemStartCol + pos.width - 1;
+                        const itemEndRow = itemStartRow + pos.height - 1;
+                        return (
+                            itemStartCol <= startCol + c &&
+                            startCol + c <= itemEndCol &&
+                            itemStartRow <= startRow + r &&
+                            startRow + r <= itemEndRow
+                        );
+                    }
+                );
                 if (existingItemKey) overlappingItems.add(existingItemKey);
             }
         }
@@ -502,7 +583,9 @@ export class SelectItem extends Phaser.Scene {
         boxImage: Phaser.GameObjects.Image
     ) {
         overlappingItems.forEach((existingItemKey) => {
-            const existingItemImage = this.children.getByName(existingItemKey) as Phaser.GameObjects.Image;
+            const existingItemImage = this.children.getByName(
+                existingItemKey
+            ) as Phaser.GameObjects.Image;
             if (existingItemImage) {
                 existingItemImage.x = boxImage.x;
                 existingItemImage.y = boxImage.y;
@@ -510,10 +593,11 @@ export class SelectItem extends Phaser.Scene {
                     x: boxImage.x,
                     y: boxImage.y,
                     width: this.itemPositions[existingItemKey].width,
-                    height: this.itemPositions[existingItemKey].height
+                    height: this.itemPositions[existingItemKey].height,
                 };
                 if (this.itemsOnBlock.has(existingItemKey)) {
-                    this.playerGold += itemData[existingItemKey.replace('item', '')].cost;
+                    this.playerGold +=
+                        itemData[existingItemKey.replace("item", "")].cost;
                     this.itemsOnBlock.delete(existingItemKey);
                 }
             }
@@ -525,7 +609,10 @@ export class SelectItem extends Phaser.Scene {
         itemImage.y = this.itemPositions[`item${itemImage.name}`].y;
     }
 
-    handleDropInBox(itemImage: Phaser.GameObjects.Image, boxImage: Phaser.GameObjects.Image) {
+    handleDropInBox(
+        itemImage: Phaser.GameObjects.Image,
+        boxImage: Phaser.GameObjects.Image
+    ) {
         console.log(`Dropped in box at: (${boxImage.x}, ${boxImage.y})`);
         itemImage.x = boxImage.x;
         itemImage.y = boxImage.y;
@@ -533,7 +620,7 @@ export class SelectItem extends Phaser.Scene {
             x: boxImage.x,
             y: boxImage.y,
             width: this.itemPositions[`item${itemImage.name}`].width,
-            height: this.itemPositions[`item${itemImage.name}`].height
+            height: this.itemPositions[`item${itemImage.name}`].height,
         };
 
         if (this.itemsOnBlock.has(`item${itemImage.name}`)) {
@@ -547,3 +634,4 @@ export class SelectItem extends Phaser.Scene {
         itemImage.y = this.itemPositions[`item${itemImage.name}`].y;
     }
 }
+
