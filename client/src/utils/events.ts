@@ -1,6 +1,3 @@
-import { parse } from "date-fns";
-import { EventType, LogType } from "./useLogs";
-
 export type Event = {
     id: string;
     keys: string[];
@@ -55,7 +52,6 @@ export const parseBattleLogDetailEvent = (
     const dummy_spike_stacks = parseInt(event.data[13]);
 
     return {
-        timestamp: event.createdAt,
         player,
         battleLogId,
         id,
@@ -73,18 +69,6 @@ export const parseBattleLogDetailEvent = (
         dummy_regen_stacks,
         dummy_reflect_stacks,
         dummy_spike_stacks,
-    };
-};
-
-export const createBattleLogDetailLog = (
-    result: BattleLogDetailEvent
-): LogType => {
-    const date = parse(result.timestamp, "yyyy-MM-dd HH:mm:ss", new Date());
-    return {
-        key: `${result.timestamp}-battleLogDetail`,
-        timestamp: date.getTime(),
-        log: result,
-        type: EventType.BattleLogDetail,
     };
 };
 
