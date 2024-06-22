@@ -41,10 +41,15 @@ export class MainMenu extends Phaser.Scene {
             } catch (error) {
                 console.log("Error spawning player:", error);
             }
-            await this.setup.client.actions.rerollShop({
-                account: this.account,
-            });
-            console.log("Reroll successful");
+
+            try {
+                await this.setup.client.actions.rerollShop({
+                    account: this.account,
+                });
+                console.log("Reroll successful");
+            } catch (error) {
+                console.log("rerollShop:", error);
+            }
             this.scene.start("SelectItem");
         });
 
