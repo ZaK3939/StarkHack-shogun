@@ -442,9 +442,8 @@ export class SelectItem extends Phaser.Scene {
         const { width, height, cost } = item;
         const startCol = Math.round((droppedBlock.x - this.startX) / this.blockWidth);
         
-        // アイテムの下端を基準にして startRow を計算し、下からカウント
         const bottomEdge = droppedBlock.y + this.blockHeight / 2;
-        const startRow = this.rows - Math.floor((bottomEdge - this.startY) / this.blockHeight) - (height - 1);
+        const startRow = this.rows - Math.floor((bottomEdge - this.startY + height * 70) / this.blockHeight); // To be fixed
     
         console.log(`Calculated position: col=${startCol}, row=${startRow}, height=${height}`);
     
@@ -486,7 +485,6 @@ export class SelectItem extends Phaser.Scene {
     
         const centerX = this.startX + (startCol + width / 2) * this.blockWidth - this.blockWidth / 2;
         const centerY = this.startY + (this.rows - startRow - height / 2) * this.blockHeight - this.blockHeight / 2;
-        
         itemImage.x = centerX;
         itemImage.y = centerY;
         this.itemPositions[itemImage.name] = {
@@ -495,7 +493,7 @@ export class SelectItem extends Phaser.Scene {
             width,
             height,
         };
-    
+        
         if (!this.itemsOnBlock.has(itemImage.name)) {
             this.playerGold -= cost;
             this.itemsOnBlock.add(itemImage.name);
