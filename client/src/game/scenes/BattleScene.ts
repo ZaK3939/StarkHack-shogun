@@ -7,6 +7,8 @@ import { fetchBattleLogs } from "../../graphql/fetchBattleLogs";
 import { fetchBattleLogDetail } from "../../graphql/fetchBattleLogDetail";
 import { fetchDummyCharacterItems } from "../../graphql/fetchDummyCharacterItems";
 import { fetchCharacterItemInventory } from "../../graphql/fetchCharacterItemInventory";
+import { fetchCharacterData } from "../../graphql/fetchCharacterData";
+import { CharacterData } from "../../graphql/fetchCharacterData";
 
 interface Position {
     x: number;
@@ -72,8 +74,13 @@ export class BattleScene extends Phaser.Scene {
 
     async create() {
         // Call the fight function
-        this.fight();
-
+        await this.fight();
+        const battleWinner = await this.fetchBattleData();
+        const characterData = await fetchCharacterData(this.account);
+        if (!characterData) {
+            console.error("Character data not found");
+            return;
+        }
         this.resetHP(); // Reset HP when the scene is created
 
         const { width, height } = this.scale;
@@ -174,8 +181,8 @@ export class BattleScene extends Phaser.Scene {
 
         // Set up a timer to decrease HP randomly
         this.time.addEvent({
-            delay: 300, // 0.3 second
-            callback: this.decreaseHP,
+            delay: 300,
+            callback: () => this.decreaseHP(characterData, battleWinner),
             callbackScope: this,
             loop: true,
         });
@@ -263,62 +270,78 @@ export class BattleScene extends Phaser.Scene {
         return { hpBar, hpText };
     }
 
-    decreaseHP() {
+    decreaseHP(characterData: CharacterData, winner: string) {
         if (this.playerCurrentHP <= 0 || this.enemyCurrentHP <= 0) {
-            // Stop decreasing HP if either character's HP is 0
             return;
         }
 
+        const playerDamage = winner === "0x706c61796572" ? 3 : 7;
+        const enemyDamage = winner === "0x64756d6d79" ? 3 : 7;
+
+        // Decrease player's HP
+        this.playerCurrentHP -= playerDamage;
+        if (this.playerCurrentHP < 0) this.playerCurrentHP = 0;
+        this.playerHPBar.width =
+            160 * (this.playerCurrentHP / this.playerMaxHP);
+        this.playerHPText.setText(
+            `${this.playerCurrentHP}/${this.playerMaxHP}`
+        );
+
+        // Decrease enemy's HP
+        this.enemyCurrentHP -= enemyDamage;
+        if (this.enemyCurrentHP < 0) this.enemyCurrentHP = 0;
+        this.enemyHPBar.width = 160 * (this.enemyCurrentHP / this.enemyMaxHP);
+        this.enemyHPText.setText(`${this.enemyCurrentHP}/${this.enemyMaxHP}`);
+
+        // Animate characters
         if (Math.random() < 0.5) {
-            // Decrease player's HP by 7 and animate charactorEnemy
-            if (this.playerCurrentHP > 0) {
-                this.playerCurrentHP -= 7;
-                if (this.playerCurrentHP < 0) this.playerCurrentHP = 0;
-                this.playerHPBar.width =
-                    160 * (this.playerCurrentHP / this.playerMaxHP);
-                this.playerHPText.setText(
-                    `${this.playerCurrentHP}/${this.playerMaxHP}`
-                );
-                this.tweens.add({
-                    targets: this.charactorEnemy,
-                    angle: -30,
-                    duration: 100,
-                    yoyo: true,
-                    onComplete: () => {
-                        this.charactorEnemy.setAngle(0); // Reset angle to 0
-                    },
-                });
-            }
+            this.tweens.add({
+                targets: this.charactorEnemy,
+                angle: -30,
+                duration: 100,
+                yoyo: true,
+                onComplete: () => {
+                    this.charactorEnemy.setAngle(0);
+                },
+            });
         } else {
-            // Decrease enemy's HP by 7 and animate charactorMain
-            if (this.enemyCurrentHP > 0) {
-                this.enemyCurrentHP -= 7;
-                if (this.enemyCurrentHP < 0) this.enemyCurrentHP = 0;
-                this.enemyHPBar.width =
-                    160 * (this.enemyCurrentHP / this.enemyMaxHP);
-                this.enemyHPText.setText(
-                    `${this.enemyCurrentHP}/${this.enemyMaxHP}`
-                );
-                this.tweens.add({
-                    targets: this.charactorMain,
-                    angle: 30,
-                    duration: 100,
-                    yoyo: true,
-                    onComplete: () => {
-                        this.charactorMain.setAngle(0); // Reset angle to 0
-                    },
-                });
-            }
+            this.tweens.add({
+                targets: this.charactorMain,
+                angle: 30,
+                duration: 100,
+                yoyo: true,
+                onComplete: () => {
+                    this.charactorMain.setAngle(0);
+                },
+            });
         }
 
+        // Check for battle end
         if (this.playerCurrentHP <= 0) {
-            this.showEndScreen("lose", "MainMenu");
+            const newTotalLoss = characterData.loss + 1;
+            const nextScene = newTotalLoss >= 5 ? "MainMenu" : "SelectItem";
+            this.showEndScreen(
+                "lose",
+                nextScene,
+                characterData.wins,
+                newTotalLoss
+            );
         } else if (this.enemyCurrentHP <= 0) {
-            this.showEndScreen("won", "SelectItem");
+            this.showEndScreen(
+                "won",
+                "SelectItem",
+                characterData.wins + 1,
+                characterData.loss
+            );
         }
     }
 
-    showEndScreen(status: string, sceneToStart: string) {
+    showEndScreen(
+        status: string,
+        sceneToStart: string,
+        totalWins: number,
+        totalLoss: number
+    ) {
         const { width, height } = this.scale;
 
         // Create a semi-transparent black overlay
@@ -328,6 +351,20 @@ export class BattleScene extends Phaser.Scene {
 
         // Show the appropriate end screen image
         this.add.image(width / 2, height / 2, status).setOrigin(0.5, 0.5);
+
+        this.add
+            .text(width / 2, height - 100, `Total Wins: ${totalWins}`, {
+                fontSize: "24px",
+                color: "#ffffff",
+            })
+            .setOrigin(0.5);
+
+        this.add
+            .text(width / 2, height - 60, `Total Losses: ${totalLoss}`, {
+                fontSize: "24px",
+                color: "#ffffff",
+            })
+            .setOrigin(0.5);
 
         // Create the button background
         const buttonBackground = this.add.graphics();
@@ -341,7 +378,12 @@ export class BattleScene extends Phaser.Scene {
         ); // Rounded rectangle
 
         // Add text to the button
-        const buttonText = status === "won" ? "Go next stage" : "Go top";
+        const buttonText =
+            status === "won"
+                ? "Go next stage"
+                : totalLoss >= 5
+                ? "Go to Main Menu"
+                : "Try Again";
         const button = this.add
             .text(width / 2, height / 2 + 367, buttonText, {
                 fontSize: "20px",
@@ -434,20 +476,22 @@ export class BattleScene extends Phaser.Scene {
     async fight() {
         try {
             await this.startFight();
+            await this.fetchBattleData();
         } catch (error) {
             console.error("Error during fight or creating dummy:", error);
+            throw error;
         }
-        await this.fetchBattleData();
     }
 
     async startFight() {
         try {
-            await this.setup.client.actions.fight({ account: this.account });
-
+            const result = await this.setup.client.actions.fight({
+                account: this.account,
+            });
             // wait for torii syncing
             await new Promise((resolve) => setTimeout(resolve, 3000));
-
-            console.log("Fight successful");
+            console.log("Fight result:", result);
+            return result;
         } catch (error) {
             console.error("Error during fight:", error);
             throw error;
@@ -472,8 +516,7 @@ export class BattleScene extends Phaser.Scene {
         );
         console.log("Battle Log Details:", battleLogDetails);
 
-        // Process the battle data if needed
-        // this.processBattleData(latestBattleLog, battleLogDetails);
+        return latestBattleLog.winner;
     }
 
     async fetchDummyItems(): Promise<Item[]> {
