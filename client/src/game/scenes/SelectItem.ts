@@ -500,9 +500,27 @@ export class SelectItem extends Phaser.Scene {
         cost: number
     ) {
 
-        console.log("parseInt(itemImage.name.replace('item', '')=", parseInt(itemImage.name.replace('item', '')));
         try {
-            // TODO: Got some error 'Execution failed. Failure reason: 0x6974656d206e6f74206f776e6564 ('item not owned').'
+            await this.setup.client.actions.buyItem({ 
+                account: this.account,
+                itemId: parseInt(itemImage.name.replace('item', '')),
+            });
+            
+            // wait for torii syncing
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+    
+            console.log("@@@BuyItem successful");
+        } catch (error) {
+            console.error("@@@Error during BuyItem:", error);
+            throw error;
+        }
+
+        try {
+            await this.setup.client.actions.buyItem({ 
+                account: this.account,
+                itemId: parseInt(itemImage.name.replace('item', '')),
+            });
+            
             await this.setup.client.actions.placeItem({ 
                 account: this.account,
                 storageItemId: parseInt(itemImage.name.replace('item', '')),
