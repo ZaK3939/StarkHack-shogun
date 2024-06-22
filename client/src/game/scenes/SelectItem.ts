@@ -506,31 +506,31 @@ export class SelectItem extends Phaser.Scene {
                 itemId: parseInt(itemImage.name.replace('item', '')),
             });
             
-            // wait for torii syncing
-            await new Promise((resolve) => setTimeout(resolve, 3000));
-    
+            // wait for buyItem to complete and torii syncing
+            await new Promise((resolve) => setTimeout(resolve, 5000));
+        
             console.log("@@@BuyItem successful");
+        
+            try {            
+                await this.setup.client.actions.placeItem({ 
+                    account: this.account,
+                    storageItemId: parseInt(itemImage.name.replace('item', '')),
+                    x: startCol,
+                    y: startRow,
+                    rotation: 0 
+                });
+        
+                // wait for placeItem to complete and torii syncing
+                await new Promise((resolve) => setTimeout(resolve, 3000));
+        
+                console.log("@@@PlaceItem successful");
+            } catch (error) {
+                console.error("@@@Error during PlaceItem:", error);
+                this.resetItemPosition(itemImage);
+                throw error;
+            }
         } catch (error) {
             console.error("@@@Error during BuyItem:", error);
-            this.resetItemPosition(itemImage);
-            throw error;
-        }
-
-        try {            
-            await this.setup.client.actions.placeItem({ 
-                account: this.account,
-                storageItemId: parseInt(itemImage.name.replace('item', '')),
-                x: startCol,
-                y: startRow,
-                rotation: 0 
-            });
-    
-            // wait for torii syncing
-            await new Promise((resolve) => setTimeout(resolve, 3000));
-    
-            console.log("@@@PlaceItem successful");
-        } catch (error) {
-            console.error("@@@Error during PlaceItem:", error);
             this.resetItemPosition(itemImage);
             throw error;
         }
