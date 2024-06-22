@@ -92,7 +92,7 @@ export class MainMenu extends Phaser.Scene {
                 }
             });
 
-        this.add.text(width - 100, height - 50, "Rebirth", {
+        this.add.text(width - 90, height - 50, "Rebirth", {
             fontSize: "20px",
             color: "#ffffff",
         }).setOrigin(0.5, 0.5);
