@@ -275,7 +275,7 @@ export class SelectItem extends Phaser.Scene {
                     const block = blocks.find((block) => {
                         const distance = Phaser.Math.Distance.Between(block.x, block.y, dragX, dragY);
                         console.log(`Block at (${block.x}, ${block.y}), Distance: ${distance}`);
-                        return distance < this.blockWidth;  // 距離の閾値を広げる
+                        return distance < this.blockWidth; // Extend the distance threshold.
                     });
                 
                     console.log("Found block:", block);
