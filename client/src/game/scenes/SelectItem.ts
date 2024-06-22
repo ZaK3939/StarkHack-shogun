@@ -2,14 +2,15 @@ import Phaser from "phaser";
 import { itemData, ItemDataType } from "../data/itemData";
 import { Account } from "starknet";
 import { DojoContextType } from "../../dojo/DojoContext";
-import { fetchCharacterData } from "../../graphql/fetchCharacterData";
-import { CharacterData } from "../../graphql/fetchCharacterData";
+import { fetchCharacterData, CharacterData } from "../../graphql/fetchCharacterData";
+import { fetchItemShop, ShopItemData } from "../../graphql/fetchItemShop";
 import { fetchCharacterItemStorage } from "../../graphql/fetchCharacterItemStorage";
 
 export class SelectItem extends Phaser.Scene {
     private account: Account;
     private setup: DojoContextType;
     private characterData: CharacterData;
+    private shopItemData: ShopItemData;
     private playerGold: number;
     private itemsOnBlock: Set<string>;
     private itemPositions: {
@@ -58,8 +59,9 @@ export class SelectItem extends Phaser.Scene {
         });
     }
 
-    create() {
+    async create() {
         this.loadCharacterData();
+        this.loadShopData();
         const { width, height } = this.scale;
         const background = this.add.image(
             width / 2,
@@ -105,6 +107,8 @@ export class SelectItem extends Phaser.Scene {
                 `Address: ${playerAddress}\nGold: ${this.playerGold}\nVitality: ${playerVitality}\nStamina: ${playerStamina}\nVictories: ${playerVictories}`
             );
         };
+
+        
 
         const goBattleButton = this.add
             .image(width / 2, 200, "goBattle")
@@ -175,9 +179,7 @@ export class SelectItem extends Phaser.Scene {
             .text(width / 2, height / 2, "", hoverTextStyle)
             .setOrigin(0.5)
             .setVisible(false);
-
-        let selectedItems: string[] = [];
-
+            
         const displayItems = () => {
             // Clear previous items
             this.children.each((child) => {
@@ -185,12 +187,27 @@ export class SelectItem extends Phaser.Scene {
                     child.destroy();
                 }
             });
-            selectedItems = Phaser.Utils.Array.Shuffle(
-                Object.keys(itemData)
-            ).slice(0, 6);
+            if (!this.shopItemData) {
+                console.error("Shop data is not loaded");
+                return;
+            }
+        
+            const shopItems = [
+                this.shopItemData.item1,
+                this.shopItemData.item2,
+                this.shopItemData.item3,
+                this.shopItemData.item4,
+                this.shopItemData.item5,
+                this.shopItemData.item6
+            ];
 
-            selectedItems.forEach((id, index) => {
-                const item = itemData[id];
+            shopItems.forEach((id, index) => {
+                const item = itemData[id.toString()];
+                if (!item) {
+                    console.error(`Item with id ${id} not found in itemData`);
+                    return;
+                }
+
                 console.log(`Displaying item: ${item.name}`);
                 const x = itemStartX + (index % 2) * itemSpacingX;
                 const y = itemStartY + Math.floor(index / 2) * itemSpacingY;
@@ -418,6 +435,20 @@ export class SelectItem extends Phaser.Scene {
         }
     }
 
+    async loadShopData() {
+        try {
+            const shopData = await fetchItemShop(this.account);
+            if (shopData !== null) {
+                this.shopItemData = shopData;
+                console.log("Shop Data:", this.shopItemData);
+            } else {
+                console.error("Shop data is null");
+            }
+        } catch (error) {
+            console.error("Error fetching shop data:", error);
+        }
+    }
+
     async createDummy() {
         try {
             await this.setup.client.actions.createDummy({
@@ -427,6 +458,7 @@ export class SelectItem extends Phaser.Scene {
 
             // Refresh character data after creating dummy
             await this.loadCharacterData();
+            await this.loadShopData();
         } catch (error) {
             console.error("Error during creating dummy:", error);
         }
@@ -493,7 +525,7 @@ export class SelectItem extends Phaser.Scene {
             width,
             height,
         };
-        
+
         if (!this.itemsOnBlock.has(itemImage.name)) {
             this.playerGold -= cost;
             this.itemsOnBlock.add(itemImage.name);
