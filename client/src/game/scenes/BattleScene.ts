@@ -4,6 +4,7 @@ import { DojoContextType } from "../../dojo/DojoContext";
 import { fetchBattleLogCounters } from "../../graphql/fetchBattleLogCounters";
 import { fetchBattleLogs } from "../../graphql/fetchBattleLogs";
 import { fetchBattleLogDetail } from "../../graphql/fetchBattleLogDetail";
+import { fetchDummyCharacterItems } from "../../graphql/fetchDummyCharacterItems";
 
 export class BattleScene extends Phaser.Scene {
     private account: Account;
@@ -375,6 +376,22 @@ export class BattleScene extends Phaser.Scene {
         );
 
         console.log("Battle Log Details:", battleLogDetails);
+
+        if (
+            latestBattleLog &&
+            latestBattleLog.dummyCharLevel !== undefined &&
+            latestBattleLog.dummyCharId !== undefined
+        ) {
+            try {
+                const dummyCharItems = await fetchDummyCharacterItems(
+                    latestBattleLog.dummyCharLevel,
+                    latestBattleLog.dummyCharId
+                );
+                console.log("Dummy Character Items:", dummyCharItems);
+            } catch (error) {
+                console.error("Error fetching dummy character items:", error);
+            }
+        }
 
         // Process the battle data
         // this.processBattleData(latestBattleLog, battleLogDetails);
