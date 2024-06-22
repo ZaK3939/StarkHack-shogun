@@ -259,7 +259,8 @@ export class SelectItem extends Phaser.Scene {
                     }
                 });
 
-                itemImage.on("drag", (dragX: number, dragY: number) => {
+                itemImage.on("drag", (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+                    console.log(pointer) // To build success
                     if (item.cost > this.playerGold) {
                         return;
                     }
