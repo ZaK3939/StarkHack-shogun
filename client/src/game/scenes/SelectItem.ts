@@ -547,19 +547,36 @@ export class SelectItem extends Phaser.Scene {
         itemImage.y = this.itemPositions[`item${itemImage.name}`].y;
     }
 
-    handleDropInBox(itemImage: Phaser.GameObjects.Image, boxImage: Phaser.GameObjects.Image) {
+    async handleDropInBox(itemImage: Phaser.GameObjects.Image, boxImage: Phaser.GameObjects.Image) {
         console.log(`Dropped in box at: (${boxImage.x}, ${boxImage.y})`);
-        itemImage.x = boxImage.x;
-        itemImage.y = boxImage.y;
-        this.itemPositions[`item${itemImage.name}`] = {
-            x: boxImage.x,
-            y: boxImage.y,
-            width: this.itemPositions[`item${itemImage.name}`].width,
-            height: this.itemPositions[`item${itemImage.name}`].height,
-        };
 
-        if (this.itemsOnBlock.has(`item${itemImage.name}`)) {
-            this.itemsOnBlock.delete(`item${itemImage.name}`);
+        try {
+            await this.setup.client.actions.undoPlaceItem({
+                account: this.account,
+                inventoryItemId: parseInt(itemImage.name.replace("item", "")),
+            });
+
+            // wait for placeItem to complete and torii syncing
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+
+            console.log("@@@UnplaceItem successful");
+
+            itemImage.x = boxImage.x;
+            itemImage.y = boxImage.y;
+            this.itemPositions[`item${itemImage.name}`] = {
+                x: boxImage.x,
+                y: boxImage.y,
+                width: this.itemPositions[`item${itemImage.name}`].width,
+                height: this.itemPositions[`item${itemImage.name}`].height,
+            };
+
+            if (this.itemsOnBlock.has(`item${itemImage.name}`)) {
+                this.itemsOnBlock.delete(`item${itemImage.name}`);
+            }
+        } catch (error) {
+            console.error("@@@Error during UnplaceItem:", error);
+            this.resetItemPosition(itemImage);
+            throw error;
         }
     }
 
