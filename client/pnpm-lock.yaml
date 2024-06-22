@@ -13,7 +13,6 @@ importers:
         version: 0.7.1(starknet@6.9.0(encoding@0.1.13))(typescript@5.4.5)
       '@dojoengine/create-burner':
         specifier: ^0.7.0-alpha.1
-        version: 0.7.1(react@18.3.1)(starknet@6.9.0(encoding@0.1.13))(typescript@5.4.5)
       '@dojoengine/react':
         specifier: ^0.7.0-alpha.1
         version: 0.7.1(@types/react@18.3.3)(react@18.3.1)(starknet@6.9.0(encoding@0.1.13))(type-fest@4.20.1)(typescript@5.4.5)(zod@3.23.8)
