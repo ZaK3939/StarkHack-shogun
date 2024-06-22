@@ -512,6 +512,7 @@ export class SelectItem extends Phaser.Scene {
             console.log("@@@BuyItem successful");
         } catch (error) {
             console.error("@@@Error during BuyItem:", error);
+            this.resetItemPosition(itemImage);
             throw error;
         }
 
@@ -530,6 +531,7 @@ export class SelectItem extends Phaser.Scene {
             console.log("@@@PlaceItem successful");
         } catch (error) {
             console.error("@@@Error during PlaceItem:", error);
+            this.resetItemPosition(itemImage);
             throw error;
         }
     
