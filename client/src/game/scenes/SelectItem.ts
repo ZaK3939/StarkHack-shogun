@@ -5,6 +5,8 @@ import { DojoContextType } from "../../dojo/DojoContext";
 import { fetchCharacterData, CharacterData } from "../../graphql/fetchCharacterData";
 import { fetchItemShop, ShopItemData } from "../../graphql/fetchItemShop";
 import { fetchCharacterItemStorage } from "../../graphql/fetchCharacterItemStorage";
+import { LoadingScreen } from "./LoadingScreen";
+import { ErrorScreen } from "./ErrorScreen";
 
 export class SelectItem extends Phaser.Scene {
     private account: Account;
@@ -23,6 +25,12 @@ export class SelectItem extends Phaser.Scene {
     private rows: number;
     private cols: number;
     private blocks: Phaser.GameObjects.Image[];
+    private loadingScreen: LoadingScreen;
+    private errorScreen: ErrorScreen;
+
+    private returnToMainMenu() {
+        this.scene.start("MainMenu");
+    }
 
     constructor() {
         super({ key: "SelectItem" });
@@ -59,10 +67,20 @@ export class SelectItem extends Phaser.Scene {
     }
 
     async create() {
-        await this.loadCharacterData();
-        await this.loadShopData();
-
         const { width, height } = this.scale;
+        this.loadingScreen = new LoadingScreen(this, width, height);
+        this.errorScreen = new ErrorScreen(this, this.returnToMainMenu.bind(this))
+        this.loadingScreen.show();
+        try {
+            await this.loadCharacterData();
+            await this.loadShopData();
+        } catch (error) {
+            console.error("Failed to load necessary data:", error);
+            this.errorScreen.show();
+        } finally {
+            this.loadingScreen.hide();
+        }
+
         const background = this.add.image(width / 2, height / 2, "selectItemBackground");
         background.setOrigin(0.5, 0.5);
         console.log("SelectItem Background Loaded");
@@ -361,17 +379,18 @@ export class SelectItem extends Phaser.Scene {
             if (characterData !== null) {
                 this.characterData = characterData;
                 console.log("Character Data:", this.characterData);
-
+    
                 const characterItemStorage = await fetchCharacterItemStorage(this.account.address);
                 console.log("Character Item Storage:", characterItemStorage);
             } else {
-                console.error("Character data is null");
+                throw new Error("Character data is null");
             }
         } catch (error) {
             console.error("Error fetching character data:", error);
+            throw error;
         }
     }
-
+    
     async loadShopData() {
         try {
             const shopData = await fetchItemShop(this.account);
@@ -379,10 +398,11 @@ export class SelectItem extends Phaser.Scene {
                 this.shopItemData = shopData;
                 console.log("Shop Data:", this.shopItemData);
             } else {
-                console.error("Shop data is null");
+                throw new Error("Shop data is null");
             }
         } catch (error) {
             console.error("Error fetching shop data:", error);
+            throw error;
         }
     }
 
@@ -483,6 +503,20 @@ export class SelectItem extends Phaser.Scene {
         if (!this.itemsOnBlock.has(itemImage.name)) {
             this.playerGold -= cost;
             this.itemsOnBlock.add(itemImage.name);
+        }
+    }
+
+    async loadDataWithLoading() {
+        this.loadingScreen.show();
+        this.errorScreen.hide();
+        try {
+            await this.loadCharacterData();
+            await this.loadShopData();
+        } catch (error) {
+            console.error("Failed to load necessary data:", error);
+            this.errorScreen.show();
+        } finally {
+            this.loadingScreen.hide();
         }
     }
 
