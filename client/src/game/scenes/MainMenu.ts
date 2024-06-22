@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { DojoContextType } from "../../dojo/DojoContext";
 import { Account } from "starknet";
 import { LoadingScreen } from "./LoadingScreen";
+import { fetchNameRecord } from "../../graphql/fetchNameRecord";
 
 export class MainMenu extends Phaser.Scene {
     private account: Account;
@@ -41,11 +42,21 @@ export class MainMenu extends Phaser.Scene {
             this.loadingScreen.show();
 
             try {
-                await this.setup.client.actions.spawn({
-                    account: this.account,
-                    name: "0x616c696362", // need to change name
-                });
-                console.log("Spawn successful");
+                const name = "0x616c696362";
+                const player = this.account.address;
+                const existingNameRecord = await fetchNameRecord(name, player);
+
+                if (existingNameRecord === null) {
+                    // in case of not existing name record
+                    await this.setup.client.actions.spawn({
+                        account: this.account,
+                        name: name,
+                    });
+                    console.log("Spawn successful");
+                } else {
+                    // 既に同じ名前とプレイヤーの組み合わせが存在する場合
+                    console.log("Player already spawned with this name");
+                }
             } catch (error) {
                 console.log("Error spawning player:", error);
             }
@@ -92,9 +103,12 @@ export class MainMenu extends Phaser.Scene {
                 }
             });
 
-        this.add.text(width - 100, height - 50, "Rebirth", {
-            fontSize: "20px",
-            color: "#ffffff",
-        }).setOrigin(0.5, 0.5);
+        this.add
+            .text(width - 100, height - 50, "Rebirth", {
+                fontSize: "20px",
+                color: "#ffffff",
+            })
+            .setOrigin(0.5, 0.5);
     }
 }
+

@@ -63,13 +63,6 @@ mod actions {
 
             let player_exists = get!(world, player, (Character));
             assert(player_exists.name == '', 'player already exists');
-
-            // Default the player has 2 Backpacks
-            // Must add two backpack items when setup the game
-            // let item = get!(world, Backpack1::id, (Item));
-            // assert(item.itemType == 4, 'Invalid item type');
-            // let item = get!(world, Backpack2::id, (Item));
-            // assert(item.itemType == 4, 'Invalid item type');
             
             let item = get!(world, Item40::id, (Item));
             set!(
@@ -80,8 +73,6 @@ mod actions {
                 )
             );
 
-            // self.place_item(1, 4, 2, 0);
-            // self.place_item(2, 2, 2, 0);
             let mut i: usize = 0;
 
             loop {
@@ -142,7 +133,7 @@ mod actions {
 
             let mut char = get!(world, player, (Character));
 
-            assert(char.loss >= 5, 'loss not reached');
+            // assert(char.loss >= 5, 'loss not reached');
 
             // To allow others to use the player's privous name
             if char.name != name {

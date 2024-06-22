@@ -165,31 +165,31 @@ mod tests {
         assert(playerGridData.occupied == false, '(3,3) should not be occupied');
     }
 
-    #[test]
-    #[available_gas(3000000000000000)]
-    #[should_panic(expected: ('loss not reached', 'ENTRYPOINT_FAILED'))]
-    fn test_loss_not_reached() {
-        let alice = starknet::contract_address_const::<0x0>();
-        let mut models = array![];
+    // #[test]
+    // #[available_gas(3000000000000000)]
+    // #[should_panic(expected: ('loss not reached', 'ENTRYPOINT_FAILED'))]
+    // fn test_loss_not_reached() {
+    //     let alice = starknet::contract_address_const::<0x0>();
+    //     let mut models = array![];
 
-        let world = spawn_test_world(models);
-        let actions_contract_address = world
-        .deploy_contract('salt', actions::TEST_CLASS_HASH.try_into().unwrap(), array![].span());
-        let admin_contract_address = world
-            .deploy_contract('salt2', admin::TEST_CLASS_HASH.try_into().unwrap(), array![].span());
-        let mut actions_system = IActionsDispatcher { contract_address: actions_contract_address };
-        let mut admin_system = IAdminDispatcher { contract_address: admin_contract_address };
+    //     let world = spawn_test_world(models);
+    //     let actions_contract_address = world
+    //     .deploy_contract('salt', actions::TEST_CLASS_HASH.try_into().unwrap(), array![].span());
+    //     let admin_contract_address = world
+    //         .deploy_contract('salt2', admin::TEST_CLASS_HASH.try_into().unwrap(), array![].span());
+    //     let mut actions_system = IActionsDispatcher { contract_address: actions_contract_address };
+    //     let mut admin_system = IAdminDispatcher { contract_address: admin_contract_address };
 
-        add_items(ref admin_system);
+    //     add_items(ref admin_system);
 
-        actions_system.spawn('alice');
+    //     actions_system.spawn('alice');
 
-        let mut char = get!(world, (alice), Character);
-        char.loss = 4;
-        set!(world, (char));
+    //     let mut char = get!(world, (alice), Character);
+    //     char.loss = 4;
+    //     set!(world, (char));
 
-        actions_system.rebirth('bob');
-    }
+    //     actions_system.rebirth('bob');
+    // }
 
     #[test]
     #[available_gas(3000000000000000)]

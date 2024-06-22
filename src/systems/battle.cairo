@@ -246,7 +246,7 @@ mod battle {
 
             loop {
                 seconds += 1;
-                if seconds >= 20_u8 {
+                if seconds >= 12_u8 {
                     if char_health <= dummy_health {
                         winner = 'dummy';
                     } else {
