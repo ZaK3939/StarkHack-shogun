@@ -89,14 +89,17 @@ export async function fetchDummyCharacterItems(
         ) {
           edges {
             node {
-              level
-              dummyCharId
-              counterId
-              itemId
-              position
-              rotation
+                level
+                dummyCharId
+                counterId
+                itemId
+                position {
+                    x
+                    y
+                }
+                rotation
+                }
             }
-          }
         }
       }
     `;
@@ -118,3 +121,4 @@ export async function fetchDummyCharacterItems(
         throw error;
     }
 }
+

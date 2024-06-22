@@ -1,10 +1,24 @@
 import Phaser from "phaser";
 import { Account } from "starknet";
+import { itemData } from "../data/itemData";
 import { DojoContextType } from "../../dojo/DojoContext";
 import { fetchBattleLogCounters } from "../../graphql/fetchBattleLogCounters";
 import { fetchBattleLogs } from "../../graphql/fetchBattleLogs";
 import { fetchBattleLogDetail } from "../../graphql/fetchBattleLogDetail";
 import { fetchDummyCharacterItems } from "../../graphql/fetchDummyCharacterItems";
+import { fetchCharacterItemInventory } from "../../graphql/fetchCharacterItemInventory";
+
+interface Position {
+    x: number;
+    y: number;
+}
+
+interface Item {
+    id: number;
+    itemId: number;
+    position: Position;
+    rotation: number;
+}
 
 export class BattleScene extends Phaser.Scene {
     private account: Account;
@@ -26,9 +40,12 @@ export class BattleScene extends Phaser.Scene {
     private charactorMain: Phaser.GameObjects.Image;
     private charactorEnemy: Phaser.GameObjects.Image;
 
+    private itemPositions: {
+        [key: string]: { x: number; y: number; width: number; height: number };
+    };
     constructor() {
         super({ key: "BattleScene" });
-
+        this.itemPositions = {};
         this.resetHP();
     }
 
@@ -46,9 +63,14 @@ export class BattleScene extends Phaser.Scene {
         this.load.image("battleStatus", "assets/components/battleStatus.png");
         this.load.image("won", "assets/status/won.png");
         this.load.image("lose", "assets/status/lose.png");
+
+        // Load item images based on their ids
+        Object.keys(itemData).forEach((id) => {
+            this.load.image(`item${id}`, `assets/items/${id}.png`);
+        });
     }
 
-    create() {
+    async create() {
         // Call the fight function
         this.fight();
 
@@ -75,36 +97,48 @@ export class BattleScene extends Phaser.Scene {
         const blockHeight = 70;
         const startXLeft = 50;
         const startYLeft = 50;
+        const startXRight = width - (blockWidth * 9 + 50) + 200;
 
         const rows = 7;
         const cols = 7;
 
-        for (let row = 0; row < rows; row++) {
-            for (let col = 0; col < cols; col++) {
-                this.add
-                    .image(
-                        startXLeft + col * blockWidth,
-                        startYLeft + row * blockHeight,
-                        "block"
-                    )
-                    .setOrigin(0.5, 0.5);
-            }
-        }
+        const inventoryItemsData = await fetchCharacterItemInventory(
+            this.account.address
+        );
+        const inventoryItems: Item[] = inventoryItemsData.map((item) => ({
+            id: item.id,
+            itemId: item.itemId,
+            position: item.position,
+            rotation: item.rotation,
+            player: item.player,
+        }));
+        console.log("Character Item Inventory:", inventoryItems);
+
+        // Fetch dummy character items
+        const dummyItems = await this.fetchDummyItems();
+        console.log("Dummy Character Items:", dummyItems);
+
+        // Player's items
+        this.createItemGrid(
+            startXLeft,
+            startYLeft,
+            rows,
+            cols,
+            blockWidth,
+            blockHeight,
+            inventoryItems
+        );
 
         // Enemy's items
-        const startXRight = width - (blockWidth * 9 + 50) + 200;
-
-        for (let row = 0; row < rows; row++) {
-            for (let col = 0; col < cols; col++) {
-                this.add
-                    .image(
-                        startXRight + col * blockWidth,
-                        startYLeft + row * blockHeight,
-                        "block"
-                    )
-                    .setOrigin(0.5, 0.5);
-            }
-        }
+        this.createItemGrid(
+            startXRight,
+            startYLeft,
+            rows,
+            cols,
+            blockWidth,
+            blockHeight,
+            dummyItems
+        );
 
         // Player's status
         this.add
@@ -332,6 +366,71 @@ export class BattleScene extends Phaser.Scene {
         });
     }
 
+    createItemGrid(
+        startX: number,
+        startY: number,
+        rows: number,
+        cols: number,
+        blockWidth: number,
+        blockHeight: number,
+        items: Item[]
+    ) {
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                this.add
+                    .image(
+                        startX + col * blockWidth + blockWidth / 2,
+                        startY + row * blockHeight + blockHeight / 2,
+                        "block"
+                    )
+                    .setOrigin(0.5, 0.5);
+            }
+        }
+
+        items.forEach((item) => {
+            const itemDetails = itemData[item.itemId.toString()];
+            if (!itemDetails) {
+                console.error(
+                    `Item details not found for itemId: ${item.itemId}`
+                );
+                return;
+            }
+
+            const itemWidth = itemDetails.width * blockWidth;
+            const itemHeight = itemDetails.height * blockHeight;
+
+            const itemImage = this.add
+                .image(
+                    startX +
+                        (item.position.x + itemDetails.width / 2) * blockWidth,
+                    startY +
+                        (item.position.y + itemDetails.height / 2) *
+                            blockHeight,
+                    `item${item.itemId}`
+                )
+                .setOrigin(0.5, 0.5)
+                .setName(`item${item.itemId}`);
+
+            const scaleX = itemWidth / itemImage.width;
+            const scaleY = itemHeight / itemImage.height;
+            const scale = Math.min(scaleX, scaleY);
+            itemImage.setScale(scale);
+
+            itemImage.setAngle(item.rotation * 90);
+
+            this.itemPositions[`item${item.itemId}`] = {
+                x: itemImage.x,
+                y: itemImage.y,
+                width: itemWidth,
+                height: itemHeight,
+            };
+
+            console.log(
+                `Item ${item.itemId} placed at (${item.position.x}, ${item.position.y})`
+            );
+        });
+    }
+
     async fight() {
         try {
             await this.startFight();
@@ -359,9 +458,6 @@ export class BattleScene extends Phaser.Scene {
         const battleLogCounters = await fetchBattleLogCounters(
             this.account.address
         );
-        // if (battleLogCounters === 0) {
-        //     error("No battle logs found");
-        // }
         console.log("Battle Log Counters:", battleLogCounters);
 
         const latestBattleLog = await fetchBattleLogs(
@@ -374,27 +470,46 @@ export class BattleScene extends Phaser.Scene {
             this.account.address,
             latestBattleLog.id
         );
-
         console.log("Battle Log Details:", battleLogDetails);
 
+        // Process the battle data if needed
+        // this.processBattleData(latestBattleLog, battleLogDetails);
+    }
+
+    async fetchDummyItems(): Promise<Item[]> {
+        const battleLogCounters = await fetchBattleLogCounters(
+            this.account.address
+        );
+        const latestBattleLog = await fetchBattleLogs(
+            this.account.address,
+            battleLogCounters
+        );
+        console.log("Latest Battle Log:", latestBattleLog);
         if (
             latestBattleLog &&
             latestBattleLog.dummyCharLevel !== undefined &&
             latestBattleLog.dummyCharId !== undefined
         ) {
             try {
-                const dummyCharItems = await fetchDummyCharacterItems(
+                const dummyItemsData = await fetchDummyCharacterItems(
                     latestBattleLog.dummyCharLevel,
                     latestBattleLog.dummyCharId
                 );
-                console.log("Dummy Character Items:", dummyCharItems);
+                return dummyItemsData.map((item) => ({
+                    id: item.counterId,
+                    itemId: item.itemId,
+                    position: item.position,
+                    rotation: item.rotation,
+                    level: item.level,
+                    dummyCharId: item.dummyCharId,
+                    counterId: item.counterId,
+                }));
             } catch (error) {
                 console.error("Error fetching dummy character items:", error);
+                return [];
             }
         }
-
-        // Process the battle data
-        // this.processBattleData(latestBattleLog, battleLogDetails);
+        return [];
     }
 }
 
