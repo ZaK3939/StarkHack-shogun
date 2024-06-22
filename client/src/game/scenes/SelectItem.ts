@@ -179,7 +179,9 @@ export class SelectItem extends Phaser.Scene {
             .text(width / 2, height / 2, "", hoverTextStyle)
             .setOrigin(0.5)
             .setVisible(false);
-            
+        
+        await Promise.all([this.loadCharacterData(), this.loadShopData()]);
+
         const displayItems = () => {
             // Clear previous items
             this.children.each((child) => {
@@ -497,23 +499,26 @@ export class SelectItem extends Phaser.Scene {
         height: number,
         cost: number
     ) {
-        // try {
-        //     await this.setup.client.actions.placeItem({ 
-        //         account: this.account,
-        //         storageItemId: parseInt(itemImage.name.replace('item', '')),
-        //         x: startCol,
-        //         y: startRow,
-        //         rotation: 0 
-        //     });
+
+        console.log("parseInt(itemImage.name.replace('item', '')=", parseInt(itemImage.name.replace('item', '')));
+        try {
+            // TODO: Got some error 'Execution failed. Failure reason: 0x6974656d206e6f74206f776e6564 ('item not owned').'
+            await this.setup.client.actions.placeItem({ 
+                account: this.account,
+                storageItemId: parseInt(itemImage.name.replace('item', '')),
+                x: startCol,
+                y: startRow,
+                rotation: 0 
+            });
     
-        //     // wait for torii syncing
-        //     await new Promise((resolve) => setTimeout(resolve, 3000));
+            // wait for torii syncing
+            await new Promise((resolve) => setTimeout(resolve, 3000));
     
-        //     console.log("@@@PlaceItem successful");
-        // } catch (error) {
-        //     console.error("@@@Error during PlaceItem:", error);
-        //     throw error;
-        // }
+            console.log("@@@PlaceItem successful");
+        } catch (error) {
+            console.error("@@@Error during PlaceItem:", error);
+            throw error;
+        }
     
         const centerX = this.startX + (startCol + width / 2) * this.blockWidth - this.blockWidth / 2;
         const centerY = this.startY + (this.rows - startRow - height / 2) * this.blockHeight - this.blockHeight / 2;
