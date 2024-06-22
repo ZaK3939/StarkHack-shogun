@@ -150,7 +150,7 @@ export class SelectItem extends Phaser.Scene {
                 const block = this.add
                     .image(
                         this.startX + col * this.blockWidth,
-                        this.startY + (this.rows - row - 1) * this.blockHeight,
+                        this.startY + row * this.blockHeight,
                         "block"
                     )
                     .setOrigin(0.5, 0.5);
@@ -259,7 +259,7 @@ export class SelectItem extends Phaser.Scene {
                     }
                 });
 
-                itemImage.on("drag", (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+                itemImage.on("drag", (dragX: number, dragY: number) => {
                     if (item.cost > this.playerGold) {
                         return;
                     }
@@ -274,8 +274,7 @@ export class SelectItem extends Phaser.Scene {
                 
                     const block = blocks.find((block) => {
                         const distance = Phaser.Math.Distance.Between(block.x, block.y, dragX, dragY);
-                        console.log(`Block at (${block.x}, ${block.y}), Distance: ${distance}`);
-                        return distance < this.blockWidth; // Extend the distance threshold.
+                        return distance < this.blockWidth;
                     });
                 
                     console.log("Found block:", block);
@@ -283,14 +282,14 @@ export class SelectItem extends Phaser.Scene {
                     if (block) {
                         const { width, height } = item;
                         const startCol = Math.floor((block.x - this.startX) / this.blockWidth);
-                        const startRow = this.rows - Math.floor((block.y - this.startY) / this.blockHeight) - 1;
+                        const startRow = Math.floor((block.y + this.blockHeight / 2 - this.startY) / this.blockHeight);
                 
                         console.log(`StartCol: ${startCol}, StartRow: ${startRow}`);
                 
-                        if (startCol + width <= this.cols && startRow - height + 1 >= 0) {
+                        if (this.canPlaceItem(startCol, startRow, width, height)) {
                             for (let r = 0; r < height; r++) {
                                 for (let c = 0; c < width; c++) {
-                                    const idx = (startRow - r) * this.cols + (startCol + c);
+                                    const idx = (startRow + r) * this.cols + (startCol + c);
                                     if (blocks[idx]) {
                                         blocks[idx].setTint(0x0000ff);
                                         highlightedBlocks.push(blocks[idx]);
@@ -441,9 +440,12 @@ export class SelectItem extends Phaser.Scene {
         console.log(`Dropped on block at: (${droppedBlock.x}, ${droppedBlock.y})`);
         const { width, height, cost } = item;
         const startCol = Math.round((droppedBlock.x - this.startX) / this.blockWidth);
-        const startRow = Math.round((droppedBlock.y - this.startY) / this.blockHeight);
+        
+        // アイテムの下端を基準にして startRow を計算し、下からカウント
+        const bottomEdge = droppedBlock.y + this.blockHeight / 2;
+        const startRow = this.rows - Math.floor((bottomEdge - this.startY) / this.blockHeight) - (height - 1);
     
-        console.log(`Calculated position: col=${startCol}, row=${startRow}`);
+        console.log(`Calculated position: col=${startCol}, row=${startRow}, height=${height}`);
     
         if (this.canPlaceItem(startCol, startRow, width, height)) {
             const overlappingItems = this.findOverlappingItems(startCol, startRow, width, height);
@@ -466,40 +468,36 @@ export class SelectItem extends Phaser.Scene {
         // try {
         //     await this.setup.client.actions.placeItem({ 
         //         account: this.account,
-        //         storageItemId: 1,
-        //         x: 0,
-        //         y: 0,
+        //         storageItemId: parseInt(itemImage.name.replace('item', '')),
+        //         x: startCol,
+        //         y: startRow,
         //         rotation: 0 
         //     });
-
+    
         //     // wait for torii syncing
         //     await new Promise((resolve) => setTimeout(resolve, 3000));
-
+    
         //     console.log("@@@PlaceItem successful");
         // } catch (error) {
         //     console.error("@@@Error during PlaceItem:", error);
         //     throw error;
         // }
-        const centerX =
-            this.startX +
-            (startCol + width / 2) * this.blockWidth -
-            this.blockWidth / 2;
-        const centerY =
-            this.startY +
-            (startRow + height / 2) * this.blockHeight -
-            this.blockHeight / 2;
+    
+        const centerX = this.startX + (startCol + width / 2) * this.blockWidth - this.blockWidth / 2;
+        const centerY = this.startY + (this.rows - startRow - height / 2) * this.blockHeight - this.blockHeight / 2;
+        
         itemImage.x = centerX;
         itemImage.y = centerY;
-        this.itemPositions[`item${itemImage.name}`] = {
+        this.itemPositions[itemImage.name] = {
             x: centerX,
             y: centerY,
             width,
             height,
         };
-
-        if (!this.itemsOnBlock.has(`item${itemImage.name}`)) {
+    
+        if (!this.itemsOnBlock.has(itemImage.name)) {
             this.playerGold -= cost;
-            this.itemsOnBlock.add(`item${itemImage.name}`);
+            this.itemsOnBlock.add(itemImage.name);
         }
     }
 
@@ -509,11 +507,12 @@ export class SelectItem extends Phaser.Scene {
         width: number,
         height: number
     ): boolean {
-        if (startCol + width > this.cols || startRow + height > this.rows)
+        if (startCol < 0 || startRow < 0 || startCol + width > this.cols || startRow + height > this.rows) {
             return false;
+        }
         for (let r = 0; r < height; r++) {
             for (let c = 0; c < width; c++) {
-                const idx = (startRow + r) * this.cols + (startCol + c);
+                const idx = (this.rows - 1 - (startRow + r)) * this.cols + (startCol + c);
                 if (!this.blocks[idx]) return false;
             }
         }
@@ -535,9 +534,9 @@ export class SelectItem extends Phaser.Scene {
                         const itemStartCol = Math.floor(
                             (pos.x - this.startX) / this.blockWidth
                         );
-                        const itemStartRow = Math.floor(
+                        const itemStartRow = this.rows - Math.floor(
                             (pos.y - this.startY) / this.blockHeight
-                        );
+                        ) - pos.height;
                         const itemEndCol = itemStartCol + pos.width - 1;
                         const itemEndRow = itemStartRow + pos.height - 1;
                         return (
