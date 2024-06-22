@@ -1,10 +1,12 @@
 import Phaser from "phaser";
 import { DojoContextType } from "../../dojo/DojoContext";
 import { Account } from "starknet";
+import { LoadingScreen } from "./LoadingScreen";
 
 export class MainMenu extends Phaser.Scene {
     private account: Account;
     private setup: DojoContextType;
+    private loadingScreen: LoadingScreen;
 
     constructor() {
         super({ key: "MainMenu" });
@@ -18,6 +20,7 @@ export class MainMenu extends Phaser.Scene {
     preload() {
         this.load.image("topBackground", "assets/background/top.png");
         this.load.image("startButton", "assets/logo.png");
+        this.load.image("sakuraPetal", "assets/sakuraPetal.png");
     }
 
     create() {
@@ -30,8 +33,13 @@ export class MainMenu extends Phaser.Scene {
             .image(width / 2, height / 2, "startButton")
             .setOrigin(0.5, 0.5);
         startButton.setInteractive();
+
+        this.loadingScreen = new LoadingScreen(this, width, height);
+
         startButton.on("pointerdown", async () => {
             console.log("Start Button Clicked");
+            this.loadingScreen.show();
+
             try {
                 await this.setup.client.actions.spawn({
                     account: this.account,
@@ -50,7 +58,11 @@ export class MainMenu extends Phaser.Scene {
             } catch (error) {
                 console.log("rerollShop:", error);
             }
-            this.scene.start("SelectItem");
+
+            this.time.delayedCall(3000, () => {
+                this.loadingScreen.hide();
+                this.scene.start("SelectItem");
+            });
         });
 
         this.tweens.add({
@@ -80,7 +92,7 @@ export class MainMenu extends Phaser.Scene {
                 }
             });
 
-        this.add.text(width - 100, height - 50, "Rebirth", {
+        this.add.text(width - 90, height - 50, "Rebirth", {
             fontSize: "20px",
             color: "#ffffff",
         }).setOrigin(0.5, 0.5);
