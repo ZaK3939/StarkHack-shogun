@@ -515,12 +515,7 @@ export class SelectItem extends Phaser.Scene {
             throw error;
         }
 
-        try {
-            await this.setup.client.actions.buyItem({ 
-                account: this.account,
-                itemId: parseInt(itemImage.name.replace('item', '')),
-            });
-            
+        try {            
             await this.setup.client.actions.placeItem({ 
                 account: this.account,
                 storageItemId: parseInt(itemImage.name.replace('item', '')),

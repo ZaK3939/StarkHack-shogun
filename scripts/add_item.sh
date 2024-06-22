@@ -28,7 +28,7 @@ echo "--------------------------------------------------------------------------
 # id, name, itemType, shapeType, width, height, price, damage, consumeStamina, chance, coolTime, rarity, 
 # armor, armorType, regen, regenType, reflect, reflectType, spike, spikeType,
 
-# sozo -P $PROFILE execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 1,5180591834077951200474421290355,2,1,1,2,3,0,0,50,4,2,0,0,1,3,1,3,0,0 --wait --rpc-url $RPC_URL
+sozo -P $PROFILE execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 1,5180591834077951200474421290355,2,1,1,2,3,0,0,50,4,2,0,0,1,3,1,3,0,0 --wait --rpc-url $RPC_URL
 sozo -P $PROFILE execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 2,4290661,1,3,2,3,6,6,3,80,4,2,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
 sozo -P $PROFILE execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 3,5259203444424212077206280496499,1,1,2,1,3,2,1,80,5,2,0,0,0,0,0,0,0,0 --wait --rpc-url $RPC_URL
 sozo -P $PROFILE execute --world $WORLD_ADDRESS $ADMIN_ADDRESS add_item -c 4,72986231139937,2,4,2,2,3,0,0,100,3,1,0,0,1,3,0,0,0,0 --wait --rpc-url $RPC_URL
