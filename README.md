@@ -1,8 +1,10 @@
 # ShogunGame in StarkHack
 Fully onchain autonomous auto battle game on Dojo inspired by BackPack Battles.
-![タイトル画面](https://github.com/ZaK3939/StarkHack-shogun/assets/8872443/49ee0c73-645e-44de-88be-f6c366ad6dd8)
 
-ShogunBattole is a game that is very compatible with very on-chain games and AutonomousWorld, where you can enjoy full on-chain auto-battles.
+![タイトル画面](https://github.com/ZaK3939/StarkHack-shogun/assets/8872443/2f704d5c-538d-4a1c-a86b-c21292949d41)
+
+
+Shogun Battle is a super casual game that is very compatible with very on-chain games and AutonomousWorld, where you can enjoy full on-chain auto-battles.
 
 The theme of the game was developed on the theme that the items (characters) you set up can continue to battle permanently.
 
@@ -15,9 +17,11 @@ The theme of the game was developed on the theme that the items (characters) you
 
 ## Tech Stack
 - [Dojo v0.7.0-alpha.5 ](https://www.dojoengine.org/)
+
 We adopted Dojo to make game development on Starknet more stable and to speed up implementation. In relation to Dojo we use the following (Katana, Sozo, Torii, Slot)
 
 - [Phaser v3.8](https://phaser.io/)
+
 In order to make it easy for users to participate with browser games, Phaser3 was adopted, which works well with browser games.
 
 
@@ -67,9 +71,7 @@ npx @dojoengine/core ../manifests/dev/manifest.json src/dojo/generated/contractC
 https://worlds.dev/torii?tab=entities&url=http%3A%2F%2Flocalhost%3A8080%2Fgraphql
 http://0.0.0.0:8080/graphql
 
-### Client
-
-## terminal4
+## terminal4 (Client)
 
 cd client && pnpm i && pnpm dev
 
