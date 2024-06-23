@@ -4,8 +4,8 @@ class_hash = "0x3f63cecdc4964acafb921ba2934c6507d1b3c344edb64c2762cf08053169ab9"
 original_class_hash = "0x3f63cecdc4964acafb921ba2934c6507d1b3c344edb64c2762cf08053169ab9"
 abi = "manifests/dev/abis/deployments/dojo_world_world.json"
 address = "0x7ff6cbf3cc1f1be3bbc314e625b0f8dd554d6bc718017853dadfd7b9c772afc"
-transaction_hash = "0x37f78a235fd68e360faa902d0d92fa2bc0f64b5cf7920899cc4d05023cac724"
-block_number = 3
+transaction_hash = "0x72d041ab99fda42c553e8240ec5df0e014aa309f5b6ec258f02db6bd5cc6b68"
+block_number = 5
 seed = "shogun"
 name = "dojo::world::world"
 

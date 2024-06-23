@@ -353,14 +353,14 @@ export class BattleScene extends Phaser.Scene {
         this.add.image(width / 2, height / 2, status).setOrigin(0.5, 0.5);
 
         this.add
-            .text(width / 2, height - 100, `Total Wins: ${totalWins}`, {
+            .text(width / 2, height - 150, `Total Wins: ${totalWins}`, {
                 fontSize: "24px",
                 color: "#ffffff",
             })
             .setOrigin(0.5);
 
         this.add
-            .text(width / 2, height - 60, `Total Losses: ${totalLoss}`, {
+            .text(width / 2, height - 130, `Total Losses: ${totalLoss}`, {
                 fontSize: "24px",
                 color: "#ffffff",
             })
