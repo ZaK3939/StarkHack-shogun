@@ -4,8 +4,8 @@ class_hash = "0x3f63cecdc4964acafb921ba2934c6507d1b3c344edb64c2762cf08053169ab9"
 original_class_hash = "0x3f63cecdc4964acafb921ba2934c6507d1b3c344edb64c2762cf08053169ab9"
 abi = "manifests/dev/abis/deployments/dojo_world_world.json"
 address = "0x7ff6cbf3cc1f1be3bbc314e625b0f8dd554d6bc718017853dadfd7b9c772afc"
-transaction_hash = "0x72d041ab99fda42c553e8240ec5df0e014aa309f5b6ec258f02db6bd5cc6b68"
-block_number = 5
+transaction_hash = "0x37f78a235fd68e360faa902d0d92fa2bc0f64b5cf7920899cc4d05023cac724"
+block_number = 3
 seed = "shogun"
 name = "dojo::world::world"
 
@@ -48,8 +48,8 @@ name = "shogun::systems::admin::admin"
 [[contracts]]
 kind = "DojoContract"
 address = "0x42ab2c00238b944871a3aeadca3b7f149c7479881620170aaffc1b9c28db4e4"
-class_hash = "0x29ef74e443ca3f512dd8a1263b9d9436201ed4ef579e43dad517214dfd8d8ef"
-original_class_hash = "0x29ef74e443ca3f512dd8a1263b9d9436201ed4ef579e43dad517214dfd8d8ef"
+class_hash = "0x78297086c18486bdbad7c6fdf7ac713c78a513ad0231942dcd2bdae91db33d6"
+original_class_hash = "0x78297086c18486bdbad7c6fdf7ac713c78a513ad0231942dcd2bdae91db33d6"
 base_class_hash = "0x22f3e55b61d86c2ac5239fa3b3b8761f26b9a5c0b5f61ddbd5d756ced498b46"
 abi = "manifests/dev/abis/deployments/contracts/shogun_systems_battle_battle.json"
 reads = []

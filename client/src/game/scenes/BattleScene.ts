@@ -417,6 +417,16 @@ export class BattleScene extends Phaser.Scene {
         blockHeight: number,
         items: Item[]
     ) {
+        console.log(
+            "Creating item grid",
+            startX,
+            startY,
+            rows,
+            cols,
+            blockWidth,
+            blockHeight,
+            items
+        );
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
                 this.add

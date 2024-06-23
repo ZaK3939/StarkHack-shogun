@@ -37,7 +37,13 @@ export class SelectItem extends Phaser.Scene {
     private playerGold: number;
     private itemsOnBlock: Set<string>;
     private itemPositions: {
-        [key: string]: { x: number; y: number; width: number; height: number };
+        [key: string]: {
+            x: number;
+            y: number;
+            width: number;
+            height: number;
+            scale?: number;
+        };
     };
     private startX: number;
     private startY: number;
@@ -103,6 +109,28 @@ export class SelectItem extends Phaser.Scene {
             await this.loadCharacterData();
             await this.loadShopData();
 
+            const inventoryItemsData = await fetchCharacterItemInventory(
+                this.account.address
+            );
+            const inventoryItems: Item[] = inventoryItemsData.map((item) => ({
+                id: item.id,
+                itemId: item.itemId,
+                position: item.position,
+                rotation: item.rotation,
+                player: item.player,
+            }));
+            console.log("Inventory Items:", inventoryItems);
+            // unplace all of Inventory Items
+            for (let i = 0; i < inventoryItems.length; i++) {
+                console.log("Unplace Item:", inventoryItems[i]);
+                if (inventoryItems[i].itemId !== 0)
+                    await this.setup.client.actions.undoPlaceItem({
+                        account: this.account,
+                        inventoryItemId: inventoryItems[i].id,
+                    });
+            }
+            // sleep for 1 second
+            await new Promise((resolve) => setTimeout(resolve, 2000));
             const storageItemsData = await fetchCharacterItemStorage(
                 this.account.address
             );
@@ -118,12 +146,9 @@ export class SelectItem extends Phaser.Scene {
             this.updateStatsText = this.setupPlayerInfo();
             this.setupGoBattleButton();
 
-            await this.setupBlocksAndItems();
+            this.setupBlocksAndItems();
 
-            this.setupResetButton(
-                this.updateStatsText,
-                this.displayItems.bind(this)
-            );
+            this.setupResetButton(this.updateStatsText, this.displayItems);
 
             console.log("SelectItem Scene Created");
         } catch (error) {
@@ -446,8 +471,17 @@ export class SelectItem extends Phaser.Scene {
     }
 
     resetItemPosition(itemImage: Phaser.GameObjects.Image) {
-        itemImage.x = this.itemPositions[`item${itemImage.name}`].x;
-        itemImage.y = this.itemPositions[`item${itemImage.name}`].y;
+        const itemPosition = this.itemPositions[`item${itemImage.name}`];
+        if (itemPosition) {
+            itemImage.x = itemPosition.x;
+            itemImage.y = itemPosition.y;
+            itemImage.setScale(itemPosition.scale);
+            console.log("reset item position");
+        } else {
+            console.error(
+                `Item position not found for item: ${itemImage.name}`
+            );
+        }
     }
 
     private setupBackgroundAndPlayer() {
@@ -582,18 +616,6 @@ export class SelectItem extends Phaser.Scene {
             .setScale(2 / 3);
         this.displayBoxItems(boxImage);
         await Promise.all([this.loadCharacterData(), this.loadShopData()]);
-
-        const inventoryItemsData = await fetchCharacterItemInventory(
-            this.account.address
-        );
-        const inventoryItems: Item[] = inventoryItemsData.map((item) => ({
-            id: item.id,
-            itemId: item.itemId,
-            position: item.position,
-            rotation: item.rotation,
-            player: item.player,
-        }));
-        console.log("Inventory Items:", inventoryItems);
 
         const itemStartX = width - 300 - 150;
         const itemStartY = 320 - 150;
@@ -1099,72 +1121,6 @@ export class SelectItem extends Phaser.Scene {
             return (
                 distanceX < this.blockWidth * 0.75 &&
                 distanceY < this.blockWidth * 0.75
-            );
-        });
-    }
-    createItemGrid(
-        startX: number,
-        startY: number,
-        rows: number,
-        cols: number,
-        blockWidth: number,
-        blockHeight: number,
-        items: Item[]
-    ) {
-        for (let row = 0; row < rows; row++) {
-            for (let col = 0; col < cols; col++) {
-                this.add
-                    .image(
-                        startX + col * blockWidth + blockWidth / 2,
-                        startY +
-                            (rows - 1 - row) * blockHeight +
-                            blockHeight / 2,
-                        "block"
-                    )
-                    .setOrigin(0.5, 0.5);
-            }
-        }
-
-        items.forEach((item) => {
-            const itemDetails = itemData[item.itemId.toString()];
-            if (!itemDetails) {
-                console.error(
-                    `Item details not found for itemId: ${item.itemId}`
-                );
-                return;
-            }
-
-            const itemWidth = itemDetails.width * blockWidth;
-            const itemHeight = itemDetails.height * blockHeight;
-
-            const itemImage = this.add
-                .image(
-                    startX +
-                        (item.position.x + itemDetails.width / 2) * blockWidth,
-                    startY +
-                        (rows - item.position.y - itemDetails.height / 2) *
-                            blockHeight,
-                    `item${item.itemId}`
-                )
-                .setOrigin(0.5, 0.5)
-                .setName(`item${item.itemId}`);
-
-            const scaleX = itemWidth / itemImage.width;
-            const scaleY = itemHeight / itemImage.height;
-            const scale = Math.min(scaleX, scaleY);
-            itemImage.setScale(scale);
-
-            itemImage.setAngle(item.rotation * 90);
-
-            this.itemPositions[`item${item.itemId}`] = {
-                x: itemImage.x,
-                y: itemImage.y,
-                width: itemWidth,
-                height: itemHeight,
-            };
-
-            console.log(
-                `Item ${item.itemId} placed at (${item.position.x}, ${item.position.y})`
             );
         });
     }
