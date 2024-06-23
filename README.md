@@ -1,6 +1,35 @@
-# StarkHack-shogun
+# ShogunGame in StarkHack
+Fully onchain autonomous auto battle game on Dojo inspired by BackPack Battles.
+![タイトル画面](https://github.com/ZaK3939/StarkHack-shogun/assets/8872443/49ee0c73-645e-44de-88be-f6c366ad6dd8)
 
-## How to build
+ShogunBattole is a game that is very compatible with very on-chain games and AutonomousWorld, where you can enjoy full on-chain auto-battles.
+
+The theme of the game was developed on the theme that the items (characters) you set up can continue to battle permanently.
+
+### User Flow
+1. Click start game (your burnable wallet created automatically)
+2. Choose Item
+3. Click Batttle Start!
+4. If you win, you can go next stage!!!!
+
+
+## Tech Stack
+- [Dojo v0.7.0-alpha.5 ](https://www.dojoengine.org/)
+We adopted Dojo to make game development on Starknet more stable and to speed up implementation. In relation to Dojo we use the following (Katana, Sozo, Torii, Slot)
+
+- [Phaser v3.8](https://phaser.io/)
+In order to make it easy for users to participate with browser games, Phaser3 was adopted, which works well with browser games.
+
+
+## Future Work
+- Automatic matching system with enemies
+- Development of an AI-based MPC
+- Leaderboards
+- Number of items and character selection
+- Improved battle scene selection
+
+
+## How to build in your local
 
 ### Whole
 
@@ -60,3 +89,21 @@ slot d create shogun-game torii --world 0x26663f285f4571e8b1f980cb6537f1a6eeb632
 Endpoints:
 GRAPHQL: https://api.cartridge.gg/x/shogun-game/torii/graphql
 GRPC: https://api.cartridge.gg/x/shogun-game/torii
+
+
+## Great reference
+Creating onchain games and developing them on Starknet is not easy. Thanks to the excellent references available.
+
+### Game idea
+
+https://store.steampowered.com/app/2427700/Backpack_Battles/
+
+### dojo rererence
+
+https://github.com/ponderingdemocritus/boot-camp
+
+https://github.com/cartridge-gg/dopewars
+
+https://github.com/0xAsten/Warpack-Masters
+
+https://github.com/z-korp/zkastle　
