@@ -259,6 +259,7 @@ mod battle {
                 
                 let mut rand = 0;
                 let mut v = 0;
+                let mut stamina = 6;
                 loop {
                     if i == items_length {
                         break;
@@ -272,7 +273,14 @@ mod battle {
                     let consumeStamina = curr_item_data.consumeStamina;
                     let chance = curr_item_data.chance;
                     let coolTime = curr_item_data.coolTime;
+                    let consumeStamina = curr_item_data.consumeStamina;
 
+                    if consumeStamina > 0 {
+                        if stamina < consumeStamina {
+                            break;
+                        }
+                        stamina -= consumeStamina;
+                    }
                     // each second is treated as 1 unit of coolTime 
                     if seconds % coolTime == 0 {
                         v += seconds.into() + 17;
@@ -576,6 +584,9 @@ mod battle {
                         }
                     }
 
+                    if(stamina < 4) {
+                        stamina += 2;
+                    }
                     i += 1;
                 };
 
