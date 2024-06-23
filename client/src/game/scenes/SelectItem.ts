@@ -930,6 +930,104 @@ export class SelectItem extends Phaser.Scene {
         }
     }
 
+    async handleStorageItemDrop(
+        itemImage: Phaser.GameObjects.Image,
+        item: Storage,
+        droppedBlock: Phaser.GameObjects.Image
+    ) {
+        console.log(
+            `Dropped storage item on block at: (${droppedBlock.x}, ${droppedBlock.y})`
+        );
+        this.goBattleButton.disableInteractive();
+        this.goBattleButton.setAlpha(0.5);
+        this.loadingScreen.show();
+
+        const itemd = itemData[item.itemId.toString()];
+        const { width, height } = itemd;
+        const startCol = Math.round(
+            (droppedBlock.x - this.startX) / this.blockWidth
+        );
+        const startRow =
+            this.rows -
+            Math.floor((droppedBlock.y - this.startY) / this.blockHeight) -
+            1;
+
+        console.log(
+            `Calculated position: col=${startCol}, row=${startRow}, width=${width}, height=${height}`
+        );
+
+        if (this.canPlaceItem(startCol, startRow, width, height)) {
+            const overlappingItems = this.findOverlappingItems(
+                startCol,
+                startRow,
+                width,
+                height
+            );
+            const boxImage = this.children.getByName(
+                "box"
+            ) as Phaser.GameObjects.Image;
+            this.moveOverlappingItemsToBox(overlappingItems, boxImage);
+
+            try {
+                console.log(`Placing storage item: ${item.id}`);
+                await this.setup.client.actions.placeItem({
+                    account: this.account,
+                    storageItemId: item.id,
+                    x: startCol,
+                    y: startRow,
+                    rotation: 0,
+                });
+
+                // wait for placeItem to complete and torii syncing
+                await new Promise((resolve) => setTimeout(resolve, 3000));
+
+                console.log("@@@PlaceItem from storage successful");
+
+                const centerX =
+                    this.startX +
+                    (startCol + width / 2) * this.blockWidth -
+                    this.blockWidth / 2;
+                const centerY =
+                    this.startY +
+                    (this.rows - startRow - height / 2) * this.blockHeight -
+                    this.blockHeight / 2;
+                itemImage.x = centerX;
+                itemImage.y = centerY;
+                this.itemPositions[`item${item.itemId}`] = {
+                    x: centerX,
+                    y: centerY,
+                    width,
+                    height,
+                };
+
+                if (!this.itemsOnBlock.has(`item${item.itemId}`)) {
+                    this.itemsOnBlock.add(`item${item.itemId}`);
+                }
+
+                // Remove item from storage
+                this.storageItems = this.storageItems.filter(
+                    (storageItem) => storageItem.id !== item.id
+                );
+
+                // Refresh the box display
+                this.displayBoxItems(boxImage);
+
+                await this.loadCharacterData();
+            } catch (error) {
+                console.error("@@@Error during PlaceItem from storage:", error);
+                this.resetItemPosition(itemImage);
+            }
+        } else {
+            console.log("Cannot place item at this position");
+            this.resetItemPosition(itemImage);
+        }
+
+        this.goBattleButton.setInteractive();
+        this.goBattleButton.setAlpha(1);
+        this.loadingScreen.hide();
+        this.updateStatsText();
+    }
+
     handleDropOutside(itemImage: Phaser.GameObjects.Image) {
         console.log("Dropped outside any block or box");
         const itemKey = `${itemImage.name}`;
@@ -940,12 +1038,13 @@ export class SelectItem extends Phaser.Scene {
             console.error(`No position found for item: ${itemKey}`);
         }
     }
+
     displayBoxItems(boxImage: Phaser.GameObjects.Image) {
         const boxItems = this.storageItems.filter(
             (item) => !this.itemsOnBlock.has(`item${item.itemId}`)
         );
         boxItems.forEach((item, index) => {
-            this.add
+            const itemImage = this.add
                 .image(
                     boxImage.x + (index - boxItems.length / 2 + 0.5) * 40,
                     boxImage.y,
@@ -953,7 +1052,51 @@ export class SelectItem extends Phaser.Scene {
                 )
                 .setOrigin(0.5, 0.5)
                 .setScale(0.3)
-                .setName(`boxItem${item.itemId}`);
+                .setName(`boxItem${item.id}`);
+
+            this.setupStorageItemInteraction(itemImage, item);
+        });
+    }
+    setupStorageItemInteraction(
+        itemImage: Phaser.GameObjects.Image,
+        item: Storage
+    ) {
+        itemImage.setInteractive({ draggable: true });
+
+        itemImage.on("dragstart", () => {
+            itemImage.setScale(0.5);
+        });
+
+        itemImage.on(
+            "drag",
+            (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+                console.log("pinter", pointer);
+                itemImage.x = dragX;
+                itemImage.y = dragY;
+            }
+        );
+
+        itemImage.on("dragend", async (pointer: Phaser.Input.Pointer) => {
+            console.log("dragend", pointer);
+            const droppedBlock = this.findDroppedBlock(itemImage);
+            if (droppedBlock) {
+                await this.handleStorageItemDrop(itemImage, item, droppedBlock);
+            } else {
+                this.resetItemPosition(itemImage);
+            }
+        });
+    }
+
+    findDroppedBlock(
+        itemImage: Phaser.GameObjects.Image
+    ): Phaser.GameObjects.Image | undefined {
+        return this.blocks.find((block) => {
+            const distanceX = Math.abs(block.x - itemImage.x);
+            const distanceY = Math.abs(block.y - itemImage.y);
+            return (
+                distanceX < this.blockWidth * 0.75 &&
+                distanceY < this.blockWidth * 0.75
+            );
         });
     }
 }

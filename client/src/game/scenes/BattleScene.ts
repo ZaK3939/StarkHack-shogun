@@ -422,7 +422,9 @@ export class BattleScene extends Phaser.Scene {
                 this.add
                     .image(
                         startX + col * blockWidth + blockWidth / 2,
-                        startY + row * blockHeight + blockHeight / 2,
+                        startY +
+                            (rows - 1 - row) * blockHeight +
+                            blockHeight / 2,
                         "block"
                     )
                     .setOrigin(0.5, 0.5);
@@ -446,7 +448,7 @@ export class BattleScene extends Phaser.Scene {
                     startX +
                         (item.position.x + itemDetails.width / 2) * blockWidth,
                     startY +
-                        (item.position.y + itemDetails.height / 2) *
+                        (rows - item.position.y - itemDetails.height / 2) *
                             blockHeight,
                     `item${item.itemId}`
                 )
