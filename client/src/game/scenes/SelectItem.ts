@@ -142,7 +142,7 @@ export class SelectItem extends Phaser.Scene {
             )}...${this.characterData.player.substring(
                 this.characterData.player.length - 4
             )}`;
-            const playerGold = this.characterData.gold;
+            this.playerGold = this.characterData.gold;
             const playerVitality = this.characterData.health;
             const playerBirthCount = this.characterData.birthCount;
             const playerVictories = this.characterData.wins;
@@ -163,7 +163,7 @@ export class SelectItem extends Phaser.Scene {
                 statsBoxHeight
             );
 
-            const statsText = `Address: ${playerAddress}\nGold: ${playerGold}\nVitality: ${playerVitality}\nBirthCount: ${playerBirthCount}\nVictories: ${playerVictories}\nLoss: ${playerTotalLoss}`;
+            const statsText = `Address: ${playerAddress}\nGold: ${this.playerGold}\nVitality: ${playerVitality}\nBirthCount: ${playerBirthCount}\nVictories: ${playerVictories}\nLoss: ${playerTotalLoss}`;
             const statsTextStyle = {
                 fontSize: "14px",
                 color: "#ffffff",
@@ -178,7 +178,7 @@ export class SelectItem extends Phaser.Scene {
 
             const updateStatsText = () => {
                 statsTextObject.setText(
-                    `Address: ${playerAddress}\nGold: ${playerGold}\nVitality: ${playerVitality}\nBirthCount: ${playerBirthCount}\nVictories: ${playerVictories}`
+                    `Address: ${playerAddress}\nGold: ${this.playerGold}\nVitality: ${playerVitality}\nBirthCount: ${playerBirthCount}\nVictories: ${playerVictories}`
                 );
             };
 
